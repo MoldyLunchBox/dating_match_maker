@@ -1,7 +1,8 @@
 
 const { db } = require('./db'); // Assuming you have a separate file for your database connection (db.js)
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
+const { jwtSecret } = require('../config');
 const query = (sql, values) => {
     return new Promise((resolve, reject) => {
         db.query(sql, values, (err, results) => {
@@ -72,6 +73,47 @@ const fetchUser = async (req, res) => {
     }
 }
 
+const login = async (req, res)=>{
+    const {id} = req.query
+       // Create a JWT token and send it in a cookie
+       const token = jwt.sign({ userId: id }, jwtSecret, {
+        expiresIn: '1h', // Set the token expiration time (adjust as needed)
+      });
+      console.log("token:", token)
+  
+      res.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 3600000, // Set the cookie expiration time (1 hour in this case)
+      });
+    // const { username } = req.query;
+    // if (!username) {
+    //     return res.status(400).json({ error: 'All fields are required.' });
+    // }
+    // try {
+    //     // Check if the user already exists in the database
+    //     const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
+    //     let user = await query(userExistsQuery, [username]);
+    //     if (user.length ) {
+    //         user = user[0]
+        res.status(201).json({ message: "login" });
+
+    // }
+    //     else
+        // return res.status(409).json({ error: 'Username doesnt exist.' });
+
+     
+    // } catch (err) {
+    //     console.error('Error during user registration:', err);
+    //     res.status(500).json({ error: 'Something went wrong. Please try again later.' });
+    // }
+}
+
+const home = (req, res)=>{
+    console.log("im home")
+    res.status(201).json({ message: "yay im home" });
+
+    
+}
 const indexHandler = (req, res) => {
     res.send('Hello, World!');
 };
@@ -80,4 +122,6 @@ module.exports = {
     indexHandler,
     registerUser,
     fetchUser,
+    login,
+    home,
 };

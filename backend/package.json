@@ -20,8 +20,10 @@
   "homepage": "https://github.com/MoldyLunchBox/dating_match_maker#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.1",
     "mysql": "^2.18.1",
     "nodemon": "^3.0.1"
   }

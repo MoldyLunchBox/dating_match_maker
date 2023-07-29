@@ -4,8 +4,6 @@ const { registerUser,login, indexHandler, fetchUser, home } = require('../models
 const { jwtSecret } = require('../config');
 const { authenticateUser } = require('../models/middleware');
 
-// Endpoint for user registration
-router.post('/register',registerUser );
-router.get('/fetchUser',fetchUser );
-router.post('/login',login );
+
+router.get('/home', authenticateUser, home)
 module.exports = router;
