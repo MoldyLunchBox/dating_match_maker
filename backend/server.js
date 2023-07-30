@@ -1,13 +1,15 @@
 const express = require('express');
-const { db, connectToDatabase } = require('./models/db');
+const {  connectToDatabase } = require('./models/db');
 const port = 3001; // Set your desired port number
 const userRoutes = require('./controllers/userRoutes'); // Import the userRoutes.js file
 const indexRoute = require('./controllers/indexRoute'); // Import the userRoutes.js file
-const home = require('./controllers/home'); // Import the userRoutes.js file
 const cookieParser = require('cookie-parser');
-
+const cors = require('cors'); // Import the cors package
 
 const app = express();
+app.use(cors({
+  origin: '*', // Replace with your frontend domain
+}));
 app.use(express.json())
 app.use(cookieParser())
 app.use((err, req, res, next) => {
@@ -20,7 +22,7 @@ app.use((err, req, res, next) => {
     // Wait for the database connection to be established before starting the server
     await connectToDatabase();
     app.use('/', indexRoute);
-    app.use('/', home);
+    // app.use('/', home);
     app.use('/users', userRoutes);
 
     app.listen(port, () => {

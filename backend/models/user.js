@@ -6,6 +6,7 @@ const { jwtSecret } = require('../config');
 const query = (sql, values) => {
     return new Promise((resolve, reject) => {
         db.query(sql, values, (err, results) => {
+            console.log("what the fuck")
             if (err)
                 reject(err)
             else
@@ -58,65 +59,87 @@ const fetchUser = async (req, res) => {
         // Check if the user already exists in the database
         const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
         let user = await query(userExistsQuery, [username]);
-        if (user.length ) {
+        if (user.length) {
             user = user[0]
-        res.status(201).json({ message: user });
+            res.status(201).json({ message: user });
 
-    }
+        }
         else
-        return res.status(409).json({ error: 'Username already exists.' });
+            return res.status(409).json({ error: 'Username already exists.' });
 
-     
+
     } catch (err) {
         console.error('Error during user registration:', err);
         res.status(500).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 
-const login = async (req, res)=>{
-    const {id} = req.query
-       // Create a JWT token and send it in a cookie
-       const token = jwt.sign({ userId: id }, jwtSecret, {
-        expiresIn: '1h', // Set the token expiration time (adjust as needed)
-      });
-      console.log("token:", token)
-  
-      res.cookie('token', token, {
-        httpOnly: true,
-        maxAge: 3600000, // Set the cookie expiration time (1 hour in this case)
-      });
-    // const { username } = req.query;
-    // if (!username) {
-    //     return res.status(400).json({ error: 'All fields are required.' });
-    // }
-    // try {
-    //     // Check if the user already exists in the database
-    //     const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
-    //     let user = await query(userExistsQuery, [username]);
-    //     if (user.length ) {
-    //         user = user[0]
-        res.status(201).json({ message: "login" });
+const login = async (req, res) => {
+    const { username, password } = req.body
+    console.log("yoooooooooo", username, password )
+    // Create a JWT token and send it in a cookie
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Username and password are required.' });
+      }
+    try {
+        // Check if the user already exists in the database
+        const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
+        let user = await query(userExistsQuery, [username]);
+        const passwordMatch = user.length ?  await bcrypt.compare(password, user[0].password) : false
+        if (user.length && passwordMatch) {
+            const token = jwt.sign({ userId: user[0].id }, jwtSecret, {
+                expiresIn: '1h', // Set the token expiration time (adjust as needed)
+              });
+        
+              res.cookie('token', token, {
+                httpOnly: true,
+                maxAge: 3600000, // Set the cookie expiration time (1 hour in this case)
+              });
 
-    // }
-    //     else
-        // return res.status(409).json({ error: 'Username doesnt exist.' });
+            res.status(201).json({ message: true });
 
-     
-    // } catch (err) {
-    //     console.error('Error during user registration:', err);
-    //     res.status(500).json({ error: 'Something went wrong. Please try again later.' });
-    // }
+        }
+        else
+            return             res.status(201).json({ error: "user doesnt exist" });
+
+
+
+    } catch (err) {
+        console.error('Error during user registration:', err);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
+    }
 }
 
-const home = (req, res)=>{
+const home = (req, res) => {
     console.log("im home")
     res.status(201).json({ message: "yay im home" });
 
-    
+
 }
 const indexHandler = (req, res) => {
     res.send('Hello, World!');
 };
+
+const me = (req, res) => {
+    const token = req.cookies.token;
+    console.log("authenticator")
+    if (!token) {
+        // Token is missing, user not logged in
+        return res.status(401).json({ error: 'Unauthorized - Please log in.' });
+    }
+
+    try {
+        // Verify the token and extract the user ID from it
+        const decodedToken = jwt.verify(token, jwtSecret);
+        req.userId = decodedToken.userId; // Attach the user ID to the request object
+        res.status(201).json({ message: true });
+
+    } catch (err) {
+        // Token is invalid or expired, user not logged in
+        return res.status(401).json({ error: 'Unauthorized - Please log in.' });
+    }
+};
+
 
 module.exports = {
     indexHandler,

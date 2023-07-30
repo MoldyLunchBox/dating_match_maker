@@ -4,7 +4,7 @@ const { jwtSecret } = require('../config');
 // Middleware function to check if the user is logged in
 const authenticateUser = (req, res, next) => {
   const token = req.cookies.token;
-console.log("authenticator")
+  console.log("authenticator")
   if (!token) {
     // Token is missing, user not logged in
     return res.status(401).json({ error: 'Unauthorized - Please log in.' });

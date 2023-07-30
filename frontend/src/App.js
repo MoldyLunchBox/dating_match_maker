@@ -1,18 +1,21 @@
+// App.js
 import './App.css';
-import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Login } from './components/Login';
-import { Home } from './components/Home';
 import PrivateRoute from './PrivateRoute';
+
+function Home() {
+  return <h1>Welcome to the Home Page</h1>;
+}
+
 function App() {
   return (
     <Router>
-    <Routes>
-      <Route path="/login" component={Login} />
-      <Route path="/" component={Login} />
-
-      <PrivateRoute path="/home" element={<Home />} />
-    </Routes>
-  </Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/home" element={<PrivateRoute element={<Home />} />} />      </Routes>
+    </Router>
   );
 }
 

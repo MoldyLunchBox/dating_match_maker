@@ -1,16 +1,16 @@
-// src/PrivateRoute.js
-import { Route, Navigate } from 'react-router-dom';
+// PrivateRoute.js
+import React from 'react';
+import {  Navigate } from 'react-router-dom';
 
-const sisAuthenticated = () => {
-  // Implement your logic to check if the user is authenticated here
-  // For example, check if the user has a valid JWT token in localStorage
-  return localStorage.getItem('token') !== null;
+// This function can be implemented based on how you handle user authentication in your application.
+function isAuthenticated() {
+  // Replace this with your logic to check if the user is authenticated (e.g., check the presence of a valid token).
+  // Return true if the user is authenticated, and false otherwise.
+  return false; // Change this to your actual authentication logic
+}
+
+const PrivateRoute = ({ element }) => {
+  return isAuthenticated() ? element : <Navigate to="/login" />;
 };
 
-function PrivateRoute({ path, element }) {
-    const isAuthenticated = true; // Replace this with your actual authentication logic
-  console.log(path, element )
-    return isAuthenticated ? <Route path={path} element={element} /> :  <Route path="/login" element={element} />;
-  }
-  
-  export default PrivateRoute;
+export default PrivateRoute;
