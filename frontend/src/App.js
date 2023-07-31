@@ -3,10 +3,8 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Login } from './components/Login';
 import PrivateRoute from './PrivateRoute';
+import { Home } from './components/Home';
 
-function Home() {
-  return <h1>Welcome to the Home Page</h1>;
-}
 
 function App() {
   return (
