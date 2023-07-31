@@ -91,12 +91,13 @@ const login = async (req, res) => {
                 expiresIn: '1h', // Set the token expiration time (adjust as needed)
               });
         
-              res.cookie('token', token, {
-                httpOnly: true,
-                maxAge: 3600000, // Set the cookie expiration time (1 hour in this case)
-              });
+            //   res.cookie('token', token, {
+            //     httpOnly: true,
+            //     maxAge: 3600000, // Set the cookie expiration time (1 hour in this case)
+            //   });
 
-            res.status(201).json({ message: true });
+            // res.status(201).json({ message: true });
+            res.status(201).json({ token: token });
 
         }
         else
