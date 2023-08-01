@@ -1,31 +1,53 @@
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { X } from 'react-feather';
+import * as Icon from 'react-feather';
 export const Navbar = () => {
+  const [showMenu, setShowMenu] = useState(false);
+  useEffect(()=>{
+    
+  })
+  const toggleMenu = () => {
+    const navLinks = document.querySelector('.nav-links')
+    navLinks.classList.toggle('top-[9%]')
+    setShowMenu(!showMenu);
+  };
   return (
     <header className='bg-white'>
-      <nav className='flex  flex-col justify-between items-center w-[92%]'>
-    <div >
-      <ul className='flex items-center gap-[4vw]'>
-        <li>
-          <a className='hover:text-gray-500' href="#">Home</a>
-        </li>
-        <li>
-          <a className='hover:text-gray-500' href="#">Chat</a>
-        </li>
-        <li>
-          <a className='hover:text-gray-500' href="#">Find someone</a>
-        </li>
-        <li>
-          <a className='hover:text-gray-500' href="#">Something</a>
-        </li>
-        <li>
-          <a className='hover:text-gray-500' href="#">Log out</a>
-        </li>
-        <button className='bg-[#a6c1ee] text-white  px-5 py-2 rounded  hover:bg-[#87acec] '>Sign in</button>
-      </ul>
-      <div className=''>
-      </div>
-    </div>
+      <nav className='flex   justify-between mx-auto items-center w-[92%]'>
+        <div>
+          profil pic
+        </div>
+        <div className='nav-links duration-500 md:static absolute bg-white md:min-h-fit  min-h-[60vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-5'>
+
+          <ul className='flex  md:flex-row flex-col md:items-center md:gap-[4vw] gap-8'>
+            <li>
+              <a className='hover:text-gray-500' href="#">Home</a>
+            </li>
+            <li>
+              <a className='hover:text-gray-500' href="#">Chat</a>
+            </li>
+            <li>
+              <a className='hover:text-gray-500' href="#">Find someone</a>
+            </li>
+            <li>
+              <a className='hover:text-gray-500' href="#">Something</a>
+            </li>
+            <li>
+              <a className='hover:text-gray-500' href="#">Log out</a>
+            </li>
+          </ul>
+        </div>
+        <div className='flex items-center gap-6'>
+          <button className='bg-[#a6c1ee] text-white my-2 px-5 py-2 rounded  hover:bg-[#87acec] '>Sign in</button>
+          <div className='md:hidden cursor-pointer'>
+
+          {showMenu ? (
+            <Icon.X onClick={toggleMenu} />
+            ) : (
+              <Icon.Menu onClick={toggleMenu} />
+              )}
+              </div>
+        </div>
       </nav>
     </header>
   )
