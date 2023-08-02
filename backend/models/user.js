@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
         await db.query(insertUserQuery, [username, fname, lname, gender, hashedPassword, email]);
 
         // Send a successful response
-        res.status(201).json({ message: 'User registered successfully.' });
+        res.status(201).json({ msg: 'User registered successfully.' });
     } catch (err) {
         console.error('Error during user registration:', err);
         res.status(201).json({ error: 'Something went wrong. Please try again later.' });
