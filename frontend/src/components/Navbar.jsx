@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { X } from 'react-feather';
 import * as Icon from 'react-feather';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchFriend } from '../redux/reducers/slicer';
+
 export const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const dispatch = useDispatch()
   useEffect(()=>{
     
   })
@@ -11,6 +15,9 @@ export const Navbar = () => {
     navLinks.classList.toggle('top-[9%]')
     setShowMenu(!showMenu);
   };
+  const handleSearchFriend = () =>{
+    dispatch(setSearchFriend(true))
+  }
   return (
     <header className='bg-white'>
       <nav className='flex   justify-between mx-auto items-center w-[92%]'>
@@ -27,7 +34,7 @@ export const Navbar = () => {
               <a className='hover:text-gray-500' href="#">Chat</a>
             </li>
             <li>
-              <a className='hover:text-gray-500' href="#">Find someone</a>
+              <a onClick={handleSearchFriend} className='hover:text-gray-500' href="#">Find someone</a>
             </li>
             <li>
               <a className='hover:text-gray-500' href="#">Something</a>

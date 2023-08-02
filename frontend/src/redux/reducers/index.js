@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
-import authReducer from './slicer';
-
+import reducers from './slicer'; // Correct import
 const rootReducer = combineReducers({
-  auth: authReducer,
+  auth: reducers.auth,
+  modals: reducers.modals,
+
   // Add other reducers here if needed
 });
 

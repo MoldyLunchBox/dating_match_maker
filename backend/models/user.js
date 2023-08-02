@@ -121,6 +121,9 @@ const indexHandler = (req, res) => {
     res.send('Hello, World!');
 };
 
+
+
+
 const me = (req, res) => {
     const token = req.cookies.token;
     console.log("authenticator")

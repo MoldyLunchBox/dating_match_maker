@@ -25,6 +25,24 @@ const authSlice = createSlice({
     // },
   },
 });
-console.log(authSlice.actions)
+
+const modalSlice = createSlice({
+  name: 'modals',
+  initialState :{
+    searchFriend : null
+  },
+  reducers: {
+    setSearchFriend: (state, action) => {
+      state.searchFriend = action.payload;
+    },
+  },
+});
+console.log(modalSlice)
 export const { setToken } = authSlice.actions;
-export default authSlice.reducer;
+export const { setSearchFriend } = modalSlice.actions;
+const reducers = {
+  auth: authSlice.reducer,
+  modals: modalSlice.reducer,
+};
+
+export default reducers;
