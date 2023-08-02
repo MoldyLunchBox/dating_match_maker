@@ -38,12 +38,12 @@ export const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3001/users/register', {
-        username: "abdu123",
-        password: "hello123",
+        username: "hello123",
+        password: "yoooooo",
         fname:"abdu",
-        lname:"mya",
+        lname:"second",
         gender:"male",
-        email:"hello@hello.hello"
+        email:"hellos@hellos.hellos"
       });
       if (response.data && !response.data.error) {
         const msg = response.data.msg;

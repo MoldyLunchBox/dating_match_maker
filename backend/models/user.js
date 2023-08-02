@@ -170,6 +170,8 @@ const searchUsers = async (req, res) => {
         log("after")
         console.log(users)
         if (users.length) {
+            const amap = users.map((e)=> e.username)
+            log(amap)
             users = users[0]
             res.status(201).json({ message: users });
 
