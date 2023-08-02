@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser,login, indexHandler, fetchUser, home, me } = require('../models/user');
+const { registerUser,login, indexHandler, fetchUser, home, me, searchUsers } = require('../models/user');
 const { jwtSecret } = require('../config');
 const { authenticateUser } = require('../models/middleware');
 const { addFriend } = require('../models/friend');
@@ -9,7 +9,7 @@ const { addFriend } = require('../models/friend');
 router.post('/register',registerUser );
 router.get('/fetchUser',fetchUser );
 // router.get('/me',me );
-router.get('/searchUsers',searchUsers );
+router.post('/searchUsers',searchUsers );
 
 router.post('/addFriend',addFriend );
 

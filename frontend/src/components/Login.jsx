@@ -20,16 +20,43 @@ export const Login = () => {
         username: username,
         password: password,
       });
-      const token = response.data.token;
-      console.log(token);
-      // store the token in localStorage for further use
-      localStorage.setItem('token', token);
-      dispatch(setToken(token)); // Correctly dispatch the setToken action
-      navigate('/home');
+      if (response.data && !response.data.error) {
+        const token = response.data.token;
+        console.log(response.data);
+        // store the token in localStorage for further use
+        localStorage.setItem('token', token);
+        dispatch(setToken(token)); // Correctly dispatch the setToken action
+        navigate('/home');
+      }
+      else
+      console.log(response.data.error)
     } catch (error) {
       console.error('Login failed:', error);
     }
   };
+  const tmpRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3001/users/register', {
+        username: "abdu123",
+        password: "hello123",
+        fname:"abdu",
+        lname:"mya",
+        gender:"male",
+        email:"hello@hello.hello"
+      });
+      if (response.data && !response.data.error) {
+        const msg = response.data.msg;
+        // store the token in localStorage for further use
+        console.log(msg)
+      }
+      else
+        console.log(response.data.error)
+    } catch (error) {
+      console.error('registration failed:', error);
+    }
+  };
+
   return (
     <div className="h-screen bg-indigo-100 flex justify-center items-center">
       <div className="lg:w-2/5 md:w-1/2 w-2/3">
@@ -45,7 +72,7 @@ export const Login = () => {
             <input value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="text" name="password" id="password" placeholder="password" />
           </div>
 
-          <button type="submit" className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans">Register</button>
+          <button type="submit" onClick={tmpRegister} className="w-full mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans">Register</button>
           <button onClick={handleLogin} type="submit" className="w-full mt-6 mb-3 bg-indigo-100 rounded-lg px-4 py-2 text-lg text-gray-800 tracking-wide font-semibold font-sans">Login</button>
 
         </form>
