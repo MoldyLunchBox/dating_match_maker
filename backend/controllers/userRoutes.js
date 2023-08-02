@@ -9,6 +9,7 @@ const { addFriend } = require('../models/friend');
 router.post('/register',registerUser );
 router.get('/fetchUser',fetchUser );
 // router.get('/me',me );
+router.get('/searchUsers',searchUsers );
 
 router.post('/addFriend',addFriend );
 

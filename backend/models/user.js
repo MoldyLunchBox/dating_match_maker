@@ -144,6 +144,32 @@ const me = (req, res) => {
     }
 };
 
+const searchUsers = async (req, res) => {
+    const { username } = req.query;
+    console.log(username, req.body)
+    // Validation: Check if required data is present in the request body
+    if (!username) {
+        return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    try {
+        // Check if the user already exists in the database
+        const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
+        let user = await query(userExistsQuery, [username]);
+        if (user.length) {
+            user = user[0]
+            res.status(201).json({ message: user });
+
+        }
+        else
+            return res.status(409).json({ error: 'Username already exists.' });
+
+
+    } catch (err) {
+        console.error('Error during user registration:', err);
+        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
+    }
+}
 
 module.exports = {
     indexHandler,
@@ -151,4 +177,5 @@ module.exports = {
     fetchUser,
     login,
     home,
+    searchUsers,
 };
