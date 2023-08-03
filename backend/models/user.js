@@ -3,6 +3,7 @@ const { db } = require('./db'); // Assuming you have a separate file for your da
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../config');
+
 const utils = require('../utils/utils');
 const {log} = console
 const query = (sql, values) => {
