@@ -8,7 +8,7 @@ const { addFriend } = require('../models/friend');
 // Endpoint for user registration
 router.post('/register',registerUser );
 router.get('/fetchUser',fetchUser );
-// router.get('/me',me );
+router.get('/me',me );
 router.post('/searchUsers',searchUsers );
 
 router.post('/addFriend',addFriend );

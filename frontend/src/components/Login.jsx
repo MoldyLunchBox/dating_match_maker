@@ -25,6 +25,7 @@ export const Login = () => {
         console.log(response.data);
         // store the token in localStorage for further use
         localStorage.setItem('token', token);
+        document.cookie = `token=${token}; path=/;`;
         dispatch(setToken(token)); // Correctly dispatch the setToken action
         navigate('/home');
       }

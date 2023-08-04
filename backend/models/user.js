@@ -5,11 +5,10 @@ const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../config');
 
 const utils = require('../utils/utils');
-const {log} = console
+const { log } = console
 const query = (sql, values) => {
     return new Promise((resolve, reject) => {
         db.query(sql, values, (err, results) => {
-            console.log("what the fuck")
             if (err)
                 reject(err)
             else
@@ -104,8 +103,8 @@ const login = async (req, res) => {
             res.status(201).json({ token: token });
 
         }
-        else{
-log("nooo user")
+        else {
+            log("nooo user")
             return res.status(201).json({ error: "user doesnt exist" });
         }
 
@@ -130,23 +129,33 @@ const indexHandler = (req, res) => {
 
 
 
-const me = (req, res) => {
+const me = async (req, res) => {
     const token = req.cookies.token;
-    console.log("authenticator")
+    console.log("authenticator", token)
     if (!token) {
         // Token is missing, user not logged in
-        return res.status(401).json({ error: 'Unauthorized - Please log in.' });
+        console.log("no token", token)
+
+        return res.status(201).json({ error: 'Unauthorized - Please log in.' });
     }
 
     try {
         // Verify the token and extract the user ID from it
         const decodedToken = jwt.verify(token, jwtSecret);
-        req.userId = decodedToken.userId; // Attach the user ID to the request object
-        res.status(201).json({ message: true });
+        const userId = decodedToken.userId; // Attach the user ID to the request object
+        const userExistsQuery = 'SELECT fname, lname, username, gender , email FROM users WHERE id = ?';
+        let user = await query(userExistsQuery, [userId]);
+        if (user && user[0]){
+            console.log(user[0])
+            res.status(201).json({ msg: user[0] });
+        }
+        else
+            res.status(201).json({ error: "no such user" });
+
 
     } catch (err) {
         // Token is invalid or expired, user not logged in
-        return res.status(401).json({ error: 'Unauthorized - Please log in.' });
+        return res.status(201).json({ error: 'Unauthorized - Please log in.' });
     }
 };
 
@@ -166,12 +175,12 @@ const searchUsers = async (req, res) => {
   WHERE LOWER(username) LIKE ? OR LOWER(fname) LIKE ? OR LOWER(lname) LIKE ?
 `;
         const searchTerm = word // searchTerm is the user's input for search
-        log("before",searchTerm)
+        log("before", searchTerm)
         let users = await query(userSearchQuery, [searchTerm, searchTerm, searchTerm]);
         log("after")
         console.log(users)
         if (users.length) {
-            const amap = users.map((e)=> e.username)
+            const amap = users.map((e) => e.username)
             log(amap)
             users = users[0]
             res.status(201).json({ message: users });
@@ -194,4 +203,5 @@ module.exports = {
     login,
     home,
     searchUsers,
+    me,
 };

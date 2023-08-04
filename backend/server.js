@@ -8,7 +8,8 @@ const cors = require('cors'); // Import the cors package
 
 const app = express();
 app.use(cors({
-  origin: '*', // Replace with your frontend domain
+  origin: 'http://localhost:3000',
+  credentials: true,
 }));
 app.use(express.json())
 app.use(cookieParser())
