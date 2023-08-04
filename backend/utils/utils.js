@@ -4,7 +4,13 @@ function sanitizeInput(input) {
     return input.replace(/['";\\]/g, '');
 }
 
+const updateQuery = `
+      UPDATE users
+       SET fname = ?, lname = ?, gender = ?
+      WHERE id = ?;
+    `;
 
 module.exports = {
     sanitizeInput,
+    updateQuery,
 };

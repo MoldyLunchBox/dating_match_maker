@@ -38,7 +38,7 @@ export const EditProfil = () => {
             formData.append('avatar', form.avatar.files[0]);
             console.log(formData)
             // Send the form data to the backend
-            await axios.post('http://localhost:3001/users/editProfil', formData);
+            await axios.post('http://localhost:3001/users/editProfil', formData, { withCredentials: true });
 
             // Optionally, show a success message to the user
             alert('Profile updated successfully!');

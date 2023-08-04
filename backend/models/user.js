@@ -17,6 +17,8 @@ const query = (sql, values) => {
     })
 }
 
+
+
 const registerUser = async (req, res) => {
     const { username, fname, lname, gender, password, email } = req.body;
     // Validation: Check if required data is present in the request body
@@ -196,6 +198,39 @@ const searchUsers = async (req, res) => {
     }
 }
 
+const updateProfil = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        console.log("authenticator", token)
+        if (!token) {
+            // Token is missing, user not logged in
+            console.log("no token", token)
+
+            return res.status(201).json({ error: 'Unauthorized - Please log in.' });
+        }
+        const decodedToken = jwt.verify(token, jwtSecret);
+        const id = decodedToken.userId; // Attach the user ID to the request object
+
+        // Handle profile data updates (first name, email, etc.)
+        const {gender, avatar } = req.body;
+        const fname = undefined
+        const  lname = undefined
+        console.log("yay the end", req.body)
+        const pictureLink = `http://localhost:3001/uploads/${avatar}`;
+        
+        let users = await query(utils.updateQuery, [fname, lname, gender, id]);
+        console.log(users)
+        res.status(200).json({ msg: 'Profile updated successfully!' });
+
+    }
+    catch (err) {
+
+        console.log(err)
+        res.status(200).json({ error: err });
+
+    }
+}
+
 module.exports = {
     indexHandler,
     registerUser,
@@ -204,4 +239,5 @@ module.exports = {
     home,
     searchUsers,
     me,
+    updateProfil,
 };
