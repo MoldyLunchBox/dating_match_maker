@@ -213,8 +213,8 @@ const updateProfil = async (req, res) => {
 
         // Handle profile data updates (first name, email, etc.)
         const {gender, avatar } = req.body;
-        const fname = undefined
-        const  lname = undefined
+        const fname = null
+        const  lname = null
         console.log("yay the end", req.body)
         const pictureLink = `http://localhost:3001/uploads/${avatar}`;
         

@@ -6,8 +6,10 @@ function sanitizeInput(input) {
 
 const updateQuery = `
       UPDATE users
-       SET fname = ?, lname = ?, gender = ?
-      WHERE id = ?;
+      SET fname = CASE WHEN ? != '' THEN ? ELSE fname END,
+          lname = CASE WHEN ? != '' THEN ? ELSE lname END,
+          gender = CASE WHEN ? != '' THEN ? ELSE gender END
+      WHERE id = ?
     `;
 
 module.exports = {
