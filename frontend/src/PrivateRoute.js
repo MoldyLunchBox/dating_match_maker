@@ -12,7 +12,7 @@ function isAuthenticated(token) {
 }
 const PrivateLayout = ({ children }) => {
   return (
-    <div className='font-[Poppings] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] h-full '>
+    <div className='font-[Poppings] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] min-h-screen h-full '>
       <Navbar />
       {children}
     </div>

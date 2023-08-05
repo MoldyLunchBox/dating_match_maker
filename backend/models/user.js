@@ -147,7 +147,7 @@ const me = async (req, res) => {
         const userId = decodedToken.userId; // Attach the user ID to the request object
         const userExistsQuery = 'SELECT fname, lname, username, gender , email FROM users WHERE id = ?';
         let user = await query(userExistsQuery, [userId]);
-        if (user && user[0]){
+        if (user && user[0]) {
             console.log(user[0])
             res.status(201).json({ msg: user[0] });
         }
@@ -176,25 +176,36 @@ const searchUsers = async (req, res) => {
   FROM users
   WHERE LOWER(username) LIKE ? OR LOWER(fname) LIKE ? OR LOWER(lname) LIKE ?
 `;
-        const searchTerm = word // searchTerm is the user's input for search
+        const searchTerm = `%${word.toLowerCase()}%`; //  % symbols for partial matching
+
         log("before", searchTerm)
         let users = await query(userSearchQuery, [searchTerm, searchTerm, searchTerm]);
         log("after")
         console.log(users)
         if (users.length) {
-            const amap = users.map((e) => e.username)
-            log(amap)
-            users = users[0]
-            res.status(201).json({ message: users });
+            const arr = users.map((e) => {
+                return (
+                    {
+                        username: e.username,
+                        fname: e.fname,
+                        lname: e.lname,
+                        avatar: e.avatar,
+                        gender: e.gender,
+
+                    }
+                )
+            })
+            log(arr)
+            res.status(201).json({ msg: arr });
 
         }
         else
-            return res.status(409).json({ error: 'Username already exists.' });
+            return res.status(201).json({ error: 'There are no matches available' });
 
 
     } catch (err) {
         console.error('Error during user registration:', err);
-        res.status(500).json({ error: 'Something went wrong. Please try again later.' });
+        res.status(201).json({ error: 'Something went wrong. Please try again later.' });
     }
 }
 
@@ -212,13 +223,16 @@ const updateProfil = async (req, res) => {
         const id = decodedToken.userId; // Attach the user ID to the request object
 
         // Handle profile data updates (first name, email, etc.)
-        const {gender, avatar } = req.body;
-        const fname = null
-        const  lname = null
-        console.log("yay the end", req.body)
-        const pictureLink = `http://localhost:3001/uploads/${avatar}`;
-        
-        let users = await query(utils.updateQuery, [fname, lname, gender, id]);
+        let { fname, lname, gender, avatar } = req.body;
+        fname = fname && fname.length ? fname : null
+        lname = lname && lname.length ? lname : null
+        gender = gender && gender.length ? gender : null
+        avatar = avatar && avatar.length ? avatar : null
+
+
+        console.log("yay the end", avatar)
+
+        let users = await query(utils.updateQuery, [fname, fname, lname, lname, gender, gender, avatar, avatar, id]);
         console.log(users)
         res.status(200).json({ msg: 'Profile updated successfully!' });
 

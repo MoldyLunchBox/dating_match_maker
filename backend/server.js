@@ -5,6 +5,7 @@ const userRoutes = require('./controllers/userRoutes'); // Import the userRoutes
 const indexRoute = require('./controllers/indexRoute'); // Import the userRoutes.js file
 const cookieParser = require('cookie-parser');
 const cors = require('cors'); // Import the cors package
+const path = require('path');
 
 const app = express();
 app.use(cors({
@@ -25,6 +26,9 @@ app.use((err, req, res, next) => {
     app.use('/', indexRoute);
     // app.use('/', home);
     app.use('/users', userRoutes);
+    //this middleware to serve static files from the 'uploads' directory
+
+    app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
     app.listen(port, () => {
       console.log(`Server running on http://localhost:${port}`);

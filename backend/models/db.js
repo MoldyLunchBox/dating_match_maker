@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS users (
   lname VARCHAR(255) NOT NULL,
   gender VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
+   avatar VARCHAR(255) DEFAULT 'http://localhost:3001/uploads/defaultAvatar.jpg',  
   email VARCHAR(255) NOT NULL
 )
 `;

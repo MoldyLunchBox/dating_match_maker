@@ -30,7 +30,15 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const fileExtension = path.extname(file.originalname);
+    console.log("heres the file name", uniqueSuffix + fileExtension)
+    if (file.mimetype.startsWith('image/')){
     cb(null, uniqueSuffix + fileExtension);
+      req.body.avatar = `http://localhost:3001/uploads/${uniqueSuffix + fileExtension}`;
+
+  } else {
+    // Reject the file upload by providing an error message
+    cb(new Error('Only image files are allowed!'), false);
+    }
   },
 });
 

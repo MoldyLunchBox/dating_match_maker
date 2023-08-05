@@ -6,6 +6,7 @@ import PrivateRoute from './PrivateRoute';
 import { Home } from './components/Home';
 import { Register } from './components/register';
 import { EditProfil } from './components/EditProfil';
+import { Search } from './components/Search';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
+        <Route path="/Search" element={<PrivateRoute element={<Search />} />} />
         <Route path="/edit" element={<PrivateRoute element={<EditProfil />} />} />
         <Route path="/home" element={<PrivateRoute element={<Home />} />} />      </Routes>
     </Router>
