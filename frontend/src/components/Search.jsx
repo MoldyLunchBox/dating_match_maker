@@ -93,7 +93,7 @@ export const Search = () => {
             <div className=" lg:w-3/4 w-full">
 
                 {/* <form onSubmit={handleLogin} className="bg-white p-10 rounded-lg shadow-lg min-w-full"> */}
-                <div className=" min-h-screen max-width-[1000px] w-[90vh] bg-white flex flex-col rounded-lg shadow-lg min-w-full">
+                <div className=" min-h-screen max-width-[1000px]   bg-white flex flex-col rounded-lg shadow-lg min-w-full">
                     <h1 className="text-3xl font-semibold   bg-gradient-to-t from-[white] to-[#fbc2eb] py-5 text-center text-gray-700">Find someone</h1>
                     <div className='px-10 pb-10 space-y-4'>
                         <form onSubmit={handleSearch} className='flex w-full justify-center flex-row  '>
@@ -102,7 +102,7 @@ export const Search = () => {
                             </div>
                             <button type='submit' className=" w-1/3 btn btn-block">Search</button>
                         </form>
-                        <div className='w-full flex flex-wrap flex-row justify-start space-x-4 '>
+                        <div className='w-full flex flex-wrap flex-row justify-start '>
                            {
                             test.map((user)=>{
                                return <UserSearchBadge avatar={user.avatar} fname={user.fname} lname={user.lname} username={user.username} />
