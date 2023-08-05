@@ -68,9 +68,29 @@ export const Search = () => {
             console.error('Login failed:', error);
         }
     }
+    const test = [
+        {
+            fname: "yoo",
+            lname: "bar",
+            avatar: "yoo",
+            username: "cookie12",
+        },
+            {
+            fname: "yoo",
+            lname: "bar",
+            avatar: "yoo",
+            username: "cookie12",
+        },
+            {
+            fname: "yoo",
+            lname: "bar",
+            avatar: "yoo",
+            username: "cookie12",
+        }
+    ]
     return (
         <div className="h-full flex justify-center  ">
-            <div className=" md:w-3/4 w-full">
+            <div className=" lg:w-3/4 w-full">
 
                 {/* <form onSubmit={handleLogin} className="bg-white p-10 rounded-lg shadow-lg min-w-full"> */}
                 <div className=" min-h-screen max-width-[1000px] w-[90vh] bg-white flex flex-col rounded-lg shadow-lg min-w-full">
@@ -82,10 +102,14 @@ export const Search = () => {
                             </div>
                             <button type='submit' className=" w-1/3 btn btn-block">Search</button>
                         </form>
-                        <div className='w-full flex flex-col justify-start '>
-
+                        <div className='w-full flex flex-wrap flex-row justify-start space-x-4 '>
+                           {
+                            test.map((user)=>{
+                               return <UserSearchBadge avatar={user.avatar} fname={user.fname} lname={user.lname} username={user.username} />
+                            })
+                           }
                         </div>
-                    <UserSearchBadge avatar={"hi"} fname={"yall"} lname={"yi"} username={"cokkie45"} />
+
                     </div>
 
                 </div>
