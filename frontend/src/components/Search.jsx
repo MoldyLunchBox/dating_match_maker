@@ -75,13 +75,19 @@ export const Search = () => {
             avatar: "yoo",
             username: "cookie12",
         },
-            {
+        {
             fname: "yoo",
             lname: "bar",
             avatar: "yoo",
             username: "cookie12",
         },
-            {
+        {
+            fname: "yoo",
+            lname: "bar",
+            avatar: "yoo",
+            username: "cookie12",
+        },
+        {
             fname: "yoo",
             lname: "bar",
             avatar: "yoo",
@@ -89,7 +95,7 @@ export const Search = () => {
         }
     ]
     return (
-        <div className="h-full flex justify-center  ">
+        <div className="h-full flex justify-center my-5 ">
             <div className=" lg:w-3/4 w-full">
 
                 {/* <form onSubmit={handleLogin} className="bg-white p-10 rounded-lg shadow-lg min-w-full"> */}
@@ -98,17 +104,21 @@ export const Search = () => {
                     <div className='px-10 pb-10 space-y-4'>
                         <form onSubmit={handleSearch} className='flex w-full justify-center flex-row  '>
                             <div className='flex w-full'>
-                                <input onChange={(e) => setSearchWord(e.target.value)} className=" flex w-full input input-bordered" name="search" type="text" placeholder="Search" />
+                                <input onChange={(e) => setSearchWord(e.target.value)} className="flex w-full input input-bordered" name="search" type="text" placeholder="Search" />
                             </div>
                             <button type='submit' className=" w-1/3 btn btn-block">Search</button>
                         </form>
-                        <div className='w-full flex flex-wrap flex-row justify-start '>
-                           {
-                            test.map((user)=>{
-                               return <UserSearchBadge avatar={user.avatar} fname={user.fname} lname={user.lname} username={user.username} />
-                            })
-                           }
-                        </div>
+                        {
+                            userMatch ?
+                                <div className='w-full flex flex-wrap flex-row justify-start '>
+                                    {
+                                        userMatch.map((user, index) => {
+                                            return <UserSearchBadge key={index} avatar={user.avatar} fname={user.fname} lname={user.lname} username={user.username} />
+                                        })
+                                    }
+                                </div>
+                            : null
+                        }
 
                     </div>
 
