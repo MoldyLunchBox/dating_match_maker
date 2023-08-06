@@ -164,12 +164,23 @@ const me = async (req, res) => {
 const searchUsers = async (req, res) => {
     const { word } = req.body;
     console.log("word", word)
+
     // Validation: Check if required data is present in the request body
     if (!word) {
         return res.status(400).json({ error: 'All fields are required.' });
     }
 
     try {
+        const token = req.cookies.token;
+        if (!token) {
+            // Token is missing, user not logged in
+            console.log("no token", req.cookies)
+
+            return res.status(201).json({ error: 'Unauthorized - Please log in.' });
+        }
+        const decodedToken = jwt.verify(token, jwtSecret);
+        const id = decodedToken.userId; // Attach the user ID to the request object
+
         // Check if the user already exists in the database
         const userSearchQuery = `
   SELECT *
@@ -183,7 +194,29 @@ const searchUsers = async (req, res) => {
         log("after")
         console.log(users)
         if (users.length) {
-            const arr = users.map((e) => {
+            const arr = await Promise.all(users.map(async (e) => {
+                let status = null
+                const alreadyFriends = 'SELECT confirmed FROM friends WHERE user_id = ? AND friend_id = ?';
+                let iAdded = await query(alreadyFriends, [id, e.id]);
+                let theyAdded = await query(alreadyFriends, [e.id, id]);
+                log("i added", iAdded)
+                log( "they added",theyAdded)
+                if (iAdded.length){
+                    if (iAdded[0].confirmed)
+                        status = "friend"
+                    else
+                        status = "pending"
+                }
+                else if (theyAdded.length) {
+                    log("done............................................ ", theyAdded[0].confirmed)
+                    if (theyAdded[0].confirmed){
+
+                        status = "friend"
+                    }
+                    else
+                        status = "accept"
+                }
+
                 return (
                     {
                         username: e.username,
@@ -191,10 +224,12 @@ const searchUsers = async (req, res) => {
                         lname: e.lname,
                         avatar: e.avatar,
                         gender: e.gender,
+                        id: e.id,
+                        status: status,
 
                     }
                 )
-            })
+            }))
             log(arr)
             res.status(201).json({ msg: arr });
 
@@ -244,6 +279,8 @@ const updateProfil = async (req, res) => {
 
     }
 }
+
+
 
 module.exports = {
     indexHandler,

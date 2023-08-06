@@ -11,7 +11,7 @@ router.get('/fetchUser',fetchUser );
 router.get('/me',me );
 router.post('/searchUsers',searchUsers );
 
-router.post('/addFriend',addFriend );
+router.post('/addFriend', addFriend );
 
 router.post('/editProfil', upload.single('avatar'),updateProfil)
 router.post('/login',login);

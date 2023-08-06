@@ -57,7 +57,7 @@ export const Search = () => {
             console.log("searching for", searchWord)
             const response = await axios.post('http://localhost:3001/users/searchUsers', {
                 word: searchWord,
-            });
+            },{ withCredentials: true });
             const result = response.data.msg;
             if (result)
                 setUserMatch(result)
@@ -113,7 +113,7 @@ export const Search = () => {
                                 <div className='w-full flex flex-wrap flex-row justify-start '>
                                     {
                                         userMatch.map((user, index) => {
-                                            return <UserSearchBadge key={index} avatar={user.avatar} fname={user.fname} lname={user.lname} username={user.username} />
+                                            return <UserSearchBadge status={user.status} key={index} id={user.id} avatar={user.avatar} fname={user.fname} lname={user.lname} username={user.username} />
                                         })
                                     }
                                 </div>

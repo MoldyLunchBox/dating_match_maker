@@ -15,10 +15,52 @@ const query = (sql, values) => {
     })
 }
 
-const addFriend = async(res,req) =>{
+const addFriend = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        let { username } = req.body;
+        if (!token) {
+            // Token is missing, user not logged in
+            console.log("no token", token)
 
-   console.log("adding a friend ",req.query)
-    
+            return res.status(201).json({ error: 'Unauthorized - Please log in.' });
+        }
+        const decodedToken = jwt.verify(token, jwtSecret);
+        const id = decodedToken.userId; // Attach the user ID to the request object
+        const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
+        let users = await query(userExistsQuery, [username]);
+        if (users.length) {
+            const alreadyAdded = 'SELECT confirmed FROM friends WHERE user_id = ? AND friend_id = ? ';
+            let toAccept = await query(alreadyAdded, [users[0].id, id]);
+            if (toAccept.length) {
+                const confirmQuery = 'UPDATE friends SET confirmed = true WHERE user_id = ? AND friend_id = ? AND confirmed = false';
+                await query(confirmQuery, [users[0].id, id]);
+                console.log("accepted friend")
+            }
+            else {
+                let friend = await query(alreadyAdded, [id, users[0].id]);
+                if (!friend.length) {
+                    const insertQuery = 'INSERT INTO friends (user_id, friend_id) VALUES (?, ?)';
+                    let userss = await query(insertQuery, [id, users[0].id]);
+                    console.log(userss)
+                    console.log("i think it worked")
+                    res.status(200).json({ msg: 'user added succesfully!' });
+                }
+                else {
+                    res.status(200).json({ error: 'already friends!' });
+                    console.log("already friends")
+                }
+            }
+        }
+        else
+            res.status(200).json({ error: 'user not found' });
+    }
+    catch (err) {
+
+        console.log(err)
+        res.status(200).json({ error: err });
+
+    }
 }
 
 
