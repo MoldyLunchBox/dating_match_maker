@@ -59,7 +59,7 @@ const Chat = () => {
                                 </div>
                             ))}
                         </div>
-                        <div className="bg-white p-4 border-t ">
+                        <div className="bg-white p-4 border-t">
                             <input
                                 className="w-full border rounded-lg px-2 py-1 focus:outline-none"
                                 type="text"
