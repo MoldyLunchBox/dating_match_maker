@@ -5,6 +5,8 @@ const Chat = () => {
         { id: 1, name: 'John Doe' },
         { id: 2, name: 'Jane Smith' },
         { id: 3, name: 'Alex Johnson' },
+        { id: 4, name: 'mya Johnson' },
+
     ]);
     const [selectedConversation, setSelectedConversation] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -14,7 +16,7 @@ const Chat = () => {
         if (newMessage.trim() !== '') {
             const updatedMessages = [...messages, newMessage];
             setMessages(updatedMessages);
-            
+
             setNewMessage('');
         }
     };
