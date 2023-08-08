@@ -14,6 +14,7 @@ const Chat = () => {
         if (newMessage.trim() !== '') {
             const updatedMessages = [...messages, newMessage];
             setMessages(updatedMessages);
+            
             setNewMessage('');
         }
     };
