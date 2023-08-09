@@ -6,7 +6,6 @@ const Chat = () => {
         { id: 2, name: 'Jane Smith' },
         { id: 3, name: 'Alex Johnson' },
         { id: 4, name: 'mya Johnson' },
-        { id: 4, name: 'mya Johnson' },
 
     ]);
     const [selectedConversation, setSelectedConversation] = useState(null);
