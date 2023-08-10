@@ -34,7 +34,10 @@ const addFriend = async (req, res) => {
             let toAccept = await query(alreadyAdded, [users[0].id, id]);
             if (toAccept.length) {
                 const confirmQuery = 'UPDATE friends SET confirmed = true WHERE user_id = ? AND friend_id = ? AND confirmed = false';
+                const insertQuery = 'INSERT INTO conversations ( user1_id,  user2_id) VALUES (?, ?)';
+
                 await query(confirmQuery, [users[0].id, id]);
+                await query(insertQuery, [users[0].id, id]);
                 console.log("accepted friend")
             }
             else {

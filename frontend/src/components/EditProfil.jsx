@@ -6,9 +6,7 @@ export const EditProfil = () => {
     const [me, setMe] = useState(null)
     useEffect(() => {
         const fetchMe = async () => {
-
             try {
-
                 const res = await axios.get('http://localhost:3001/users/me', { withCredentials: true });
                 if (res.data.msg)
                     setMe(res.data.msg)
@@ -49,11 +47,10 @@ export const EditProfil = () => {
         }
     };
     return (
-        <div className="h-full flex justify-center  ">
-            <div className="lg:w-2/5 md:w-1/2 w-full">
-
+        <div className="h-full flex justify-center   max-width-[600px]">
+            <div className="lg:w-3/4 md:w-1/2 max-width-[600px]">
                 {/* <form onSubmit={handleLogin} className="bg-white p-10 rounded-lg shadow-lg min-w-full"> */}
-                <form onSubmit={handleFormSubmit} className=" max-width-[1000px] w-[90vh] bg-white flex flex-col rounded-lg shadow-lg min-w-full">
+                <form onSubmit={handleFormSubmit} className=" max-width-[600px] bg-white flex flex-col rounded-lg shadow-lg">
                     <h1 className="text-3xl font-semibold   bg-gradient-to-t from-[white] to-[#fbc2eb] py-5 text-center text-gray-700">Edit profil</h1>
                     <div className='px-10 pb-10'>
                         <div className=' flex flex-row justify-between space-x-4'>

@@ -25,7 +25,7 @@ const connectToDatabase = () => {
             reject(err);
           } else {
             console.log('Users table created successfully!');
-            // Now create the friends table
+            //  create the friends table
             db.query(createFriendsTableQuery, (err, result) => {
               if (err) {
                 console.error('Error creating friends table:', err);
@@ -35,6 +35,29 @@ const connectToDatabase = () => {
                 resolve();
               }
             });
+            // create conversations table
+            db.query(createConversationsTableQuery, (err, result) => {
+              if (err) {
+                console.error('Error creating conversations  table:', err);
+                reject(err);
+              } else {
+                console.log('conversations table created successfully!');
+                resolve();
+              }
+            });
+
+            // create chat messages table
+            db.query(createChatMessagesTableQuery, (err, result) => {
+              if (err) {
+                console.error('Error creating chat messages table:', err);
+                reject(err);
+              } else {
+                console.log('chat messages table created successfully!');
+                resolve();
+              }
+            });
+
+
           }
         });
       }
@@ -65,6 +88,29 @@ const createFriendsTableQuery = `
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (friend_id) REFERENCES users (id)
   )
+`;
+
+const createConversationsTableQuery = `
+CREATE TABLE IF NOT EXISTS conversations (
+  conversation_id INT AUTO_INCREMENT PRIMARY KEY,
+  user1_id INT NOT NULL,
+  user2_id INT NOT NULL,
+  last_message_time TIMESTAMP,
+  FOREIGN KEY (user1_id) REFERENCES users (id),
+  FOREIGN KEY (user2_id) REFERENCES users (id)
+)
+`;
+
+const createChatMessagesTableQuery = `
+CREATE TABLE IF NOT EXISTS chat_messages (
+  message_id INT AUTO_INCREMENT PRIMARY KEY,
+  conversation_id INT NOT NULL,
+  sender_id INT NOT NULL,
+  message_content TEXT,
+  timestamp TIMESTAMP,
+  FOREIGN KEY (conversation_id) REFERENCES conversations (conversation_id),
+  FOREIGN KEY (sender_id) REFERENCES users (id)
+);
 `;
 // Create the users table if it doesn't exist
 

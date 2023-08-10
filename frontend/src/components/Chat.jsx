@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client';
 
 const Chat = () => {
+    const [socket, setSocket] = useState(null);
     const [conversations, setConversations] = useState([
         { id: 1, name: 'John Doe' },
         { id: 2, name: 'Jane Smith' },
@@ -19,12 +21,34 @@ const Chat = () => {
 
             setNewMessage('');
         }
+        if (socket) {
+            socket.emit('sendMessage', {
+              message: newMessage,
+            });
+          }
     };
 
     const handleConversationClick = (conversation) => {
         setSelectedConversation(conversation);
         setMessages([]);
     };
+
+
+    useEffect(() => {
+        const newSocket = io('http://localhost:3001'); // Replace with your server URL
+        setSocket(newSocket);
+        return () => {
+          newSocket.disconnect();
+        };
+      }, []);
+
+      useEffect(() => {
+        if (socket) {
+          socket.on('receiveMessage', (message) => {
+            console.log("message recieved")
+          });
+        }
+      }, [socket]);
 
     return (
         <div className="h-screen flex bg-gray-100">

@@ -6,8 +6,13 @@ const indexRoute = require('./controllers/indexRoute'); // Import the userRoutes
 const cookieParser = require('cookie-parser');
 const cors = require('cors'); // Import the cors package
 const path = require('path');
+const http = require('http');
+const setupSocketServer = require('./models/socketHandler');
+
 
 const app = express();
+const server = http.createServer(app);
+
 app.use(cors({
   origin: 'http://localhost:3000',
   credentials: true,
@@ -27,12 +32,13 @@ app.use((err, req, res, next) => {
     // app.use('/', home);
     app.use('/users', userRoutes);
     //this middleware to serve static files from the 'uploads' directory
-
+    setupSocketServer(server)
     app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-    app.listen(port, () => {
-      console.log(`Server running on http://localhost:${port}`);
-    });
+   // Start the server using the existing 'server' instance
+   server.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+  });
   } catch (err) {
     console.error('Error starting the server:', err);
   }
