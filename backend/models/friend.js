@@ -45,7 +45,7 @@ const friends = async (req, res) => {
                         avatar: friend[0].avatar,
                         gender: friend[0].gender,
                         id: friend[0].id,
-                        status: "friend",
+                        status: "chat",
 
                     }
                 )
@@ -69,7 +69,7 @@ const addFriend = async (req, res) => {
     try {
         const token = req.cookies.token;
         let { username } = req.body;
-        if (!token) {
+        if (!token || !username) {
             // Token is missing, user not logged in
             console.log("no token", token)
 
