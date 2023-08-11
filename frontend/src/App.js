@@ -8,6 +8,7 @@ import { Register } from './components/register';
 import { EditProfil } from './components/EditProfil';
 import { Search } from './components/Search';
 import Chat from './components/Chat';
+import { Friends } from './components/Friends';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         <Route path="/Search" element={<PrivateRoute element={<Search />} />} />
+        <Route path="/Friends" element={<PrivateRoute element={<Friends />} />} />
         <Route path="/Chat" element={<PrivateRoute element={<Chat />} />} />
         <Route path="/edit" element={<PrivateRoute element={<EditProfil />} />} />
         <Route path="/home" element={<PrivateRoute element={<Home />} />} />      </Routes>
