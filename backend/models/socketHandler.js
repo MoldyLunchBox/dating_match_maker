@@ -25,7 +25,7 @@ const setupSocketServer = (server) => {
       const decodedToken = jwt.verify(token, jwtSecret);
       const id = decodedToken.userId; // Attach the user ID to the request object
       
-      socket.on('getConversations', (data) => getConversations(socket, id, data) );
+      socket.on('getConversations', (data) => getConversations(socket, data, id) );
 
       socket.on('sendMessage', (data) => {
         const { conversationId, message } = data;

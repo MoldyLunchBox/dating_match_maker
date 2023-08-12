@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { getConversations, receiveMessageHandler } from '../utils/chat';
-import {useSelector} from 'react-redux'
+import { getConversations, receiveMessageHandler } from '../utils/chat'; 
+import { useDispatch, useSelector } from 'react-redux';
 
 const Chat = () => {
     
     const token = useSelector((state) => state.auth.token);
-    const [socket, setSocket] = useState(null);
-    const [conversations, setConversations] = useState([
-        { id: 1, name: 'John Doe' },
-        { id: 2, name: 'Jane Smith' },
-        { id: 3, name: 'Alex Johnson' },
-        { id: 4, name: 'mya Johnson' },
+  const dispatch = useDispatch()
 
-    ]);
+    const [socket, setSocket] = useState(null);
+    const conversations = useSelector((state)=>state.chat.conversations)
+    console.log(conversations)
     const [selectedConversation, setSelectedConversation] = useState(null);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
@@ -36,7 +33,15 @@ const Chat = () => {
         setSelectedConversation(conversation);
         setMessages([]);
     };
-
+useEffect(()=>{
+    console.log("new convo")
+    if (conversations)
+    console.log(conversations[0])
+    if (conversations)
+    conversations.map((conversation, index) => (
+        console.log(conversation.name)
+    ))
+},[conversations])
 
     useEffect(() => {
         console.log("this is token",token)
@@ -56,7 +61,7 @@ const Chat = () => {
 
 
           socket.on('receiveMessage',  receiveMessageHandler);
-          socket.on('getConversations',  getConversations);
+          socket.on('getConversations', (msg)=> getConversations(msg, dispatch));
 
           return () => {
             // proper cleanup
@@ -72,7 +77,8 @@ const Chat = () => {
                 <h1 className="text-2xl font-semibold">Conversations</h1>
                 <div className="mt-4">
                     
-                    {conversations.map((conversation, index) => (
+                    { conversations ?
+                    conversations.map((conversation, index) => (
                         <div
                             key={index}
                             className={`p-2 cursor-pointer ${selectedConversation === conversation ? 'bg-blue-600' : ''
@@ -81,7 +87,9 @@ const Chat = () => {
                         >
                             {conversation.name}
                         </div>
-                    ))}
+                    ))
+                    : null
+                }
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto p-4">

@@ -37,12 +37,29 @@ const modalSlice = createSlice({
     },
   },
 });
+
+
+const chatSlice = createSlice({
+  name: 'chat',
+  initialState :{
+    conversations : null
+  },
+  reducers: {
+    setConversations: (state, action) => {
+      state.conversations = action.payload;
+    },
+  },
+});
+
 console.log(modalSlice)
 export const { setToken } = authSlice.actions;
 export const { setSearchFriend } = modalSlice.actions;
+export const { setConversations } = chatSlice.actions;
+
 const reducers = {
   auth: authSlice.reducer,
   modals: modalSlice.reducer,
+  chat: chatSlice.reducer,
 };
 
 export default reducers;

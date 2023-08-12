@@ -3,6 +3,7 @@ import reducers from './slicer'; // Correct import
 const rootReducer = combineReducers({
   auth: reducers.auth,
   modals: reducers.modals,
+  chat: reducers.chat,
 
   // Add other reducers here if needed
 });
