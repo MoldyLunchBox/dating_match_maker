@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import { getConversations, receiveMessageHandler } from '../utils/chat';
+import {useSelector} from 'react-redux'
 
 const Chat = () => {
+    
+    const token = useSelector((state) => state.auth.token);
     const [socket, setSocket] = useState(null);
     const [conversations, setConversations] = useState([
         { id: 1, name: 'John Doe' },
@@ -35,7 +39,10 @@ const Chat = () => {
 
 
     useEffect(() => {
-        const newSocket = io('http://localhost:3001'); // Replace with your server URL
+        console.log("this is token",token)
+        const newSocket = io('http://localhost:3001',{
+            query: { token: token }, // Pass the user token as a query parameter
+          }); // Replace with your server URL
         setSocket(newSocket);
         return () => {
           newSocket.disconnect();
@@ -44,9 +51,14 @@ const Chat = () => {
 
       useEffect(() => {
         if (socket) {
-          socket.on('receiveMessage', (message) => {
-            console.log("message recieved")
-          });
+          socket.on('receiveMessage',  receiveMessageHandler);
+          socket.on('getConversations',  getConversations);
+
+          return () => {
+            // proper cleanup
+            socket.off('receiveMessage', receiveMessageHandler);
+            socket.off('getConversations', getConversations);
+          };
         }
       }, [socket]);
 
@@ -55,9 +67,10 @@ const Chat = () => {
             <div className="w-1/4 bg-blue-500 text-white p-4">
                 <h1 className="text-2xl font-semibold">Conversations</h1>
                 <div className="mt-4">
-                    {conversations.map((conversation) => (
+                    
+                    {conversations.map((conversation, index) => (
                         <div
-                            key={conversation.id}
+                            key={index}
                             className={`p-2 cursor-pointer ${selectedConversation === conversation ? 'bg-blue-600' : ''
                                 }`}
                             onClick={() => handleConversationClick(conversation)}

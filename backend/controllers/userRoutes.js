@@ -4,6 +4,7 @@ const { registerUser,login, indexHandler, fetchUser, home, me, searchUsers, upda
 const { jwtSecret } = require('../config');
 const { authenticateUser, upload } = require('../models/middleware');
 const { addFriend, friends } = require('../models/friend');
+const { getConversations } = require('../models/chat');
 
 // Endpoint for user registration
 router.post('/register',registerUser );
@@ -13,6 +14,8 @@ router.post('/searchUsers',searchUsers );
 
 router.post('/addFriend', addFriend );
 router.get('/friends', friends );
+
+router.get('/getConversations', getConversations)
 
 router.post('/editProfil', upload.single('avatar'),updateProfil)
 router.post('/login',login);

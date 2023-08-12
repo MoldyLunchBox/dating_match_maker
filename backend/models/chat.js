@@ -34,8 +34,41 @@ const addToChat = async (req, res) => {
     }
 }
 
+const getConversations = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        const {username} = req.body
+        if (!token || !username) {
+            // Token is missing, user not logged in
+            console.log("no token", token)
+
+            return res.status(201).json({ error: 'Unauthorized - Please log in.' });
+        }
+        const decodedToken = jwt.verify(token, jwtSecret);
+        const id = decodedToken.userId; // Attach the user ID to the request object
+        const getConversations = 'SELECT * FROM conversations WHERE user_id = ? OR friend_id = ? ';
+        let conversations = await query(getConversations, [id, id]);
+        if (conversations && conversations.length){
+            const arr = await Promise.all(conversations.map((e)=>{
+                return({
+                    name: `${e.fname} ${e.lname}`,
+                    timeRecent: e.last_message_time,
+                    userId: e.user_id == id ? e.friend_id : e.user_id
+                })
+            }))
+            console.log(arr)
+            return res.status(201).json({ msg: 'good' });
+
+        }
+        
+    } catch(err){
+        console.log(err)
+    }
+}
+
 
 module.exports = {
 
     addToChat,
+    getConversations,
 };
