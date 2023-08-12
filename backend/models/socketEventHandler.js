@@ -1,7 +1,7 @@
 
   // socketHandlers.js
-const getConversations = (socket, data) => {
-    console.log("conversations", data);
+const getConversations = (socket, data, id) => {
+  console.log("conversations", socket, data, id);
   };
 
 module.exports = {

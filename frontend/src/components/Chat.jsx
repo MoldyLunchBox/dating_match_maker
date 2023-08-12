@@ -51,6 +51,10 @@ const Chat = () => {
 
       useEffect(() => {
         if (socket) {
+            socket.emit('getConversations', {data:"hello myself"});
+
+
+
           socket.on('receiveMessage',  receiveMessageHandler);
           socket.on('getConversations',  getConversations);
 

@@ -4,6 +4,7 @@ const { db } = require('./db'); // Assuming you have a separate file for your da
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { getConversations } = require('./socketEventHandler');
+const { jwtSecret } = require('../config');
 
 
 
@@ -24,7 +25,7 @@ const setupSocketServer = (server) => {
       const decodedToken = jwt.verify(token, jwtSecret);
       const id = decodedToken.userId; // Attach the user ID to the request object
       
-      socket.on('getConversations', getConversations);
+      socket.on('getConversations', (data) => getConversations(socket, id, data) );
 
       socket.on('sendMessage', (data) => {
         const { conversationId, message } = data;
