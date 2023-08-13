@@ -76,6 +76,19 @@ const requestMessage = async (socket, data, id) => {
     const { conversation_id } = data
     const ret = await fetchInfo("chat_messages", "message_content, timestamp, sender_id", 'conversation_id = ?', conversation_id);
     console.log("message sent")
+    const roomsToLeave = [];
+    for (const room of socket.rooms) {
+      if (room.startsWith("convo-")) {
+          roomsToLeave.push(room);
+      }
+  }
+  // Leave existing rooms
+  for (const room of roomsToLeave) {
+    socket.leave(room);
+}
+const newRoom = "convo-" + conversation_id;
+        socket.join(newRoom);
+        console.log(socket.rooms)
     // const getConversations = 'SELECT * FROM conversations WHERE user1_id = ? OR user2_id = ? ';
     // console.log("my id", id)
     // let conversations = await query(getConversations, [id, id]);
@@ -83,7 +96,6 @@ const requestMessage = async (socket, data, id) => {
     //   const arr = await Promise.all(conversations.map(async (e) => {
     //     const user = await fetchInfo("users", "fname, lname", "id = ?", e.user1_id == id ? e.user2_id : e.user1_id);
     //     console.log(user);
-
     //     if (user && user.length) {
     //       return {
     //         name: `${user[0].fname} ${user[0].lname}`,
@@ -93,21 +105,21 @@ const requestMessage = async (socket, data, id) => {
     //       };
     //     }
     //   }));
-
     //   console.log(arr[0]); // This will log the array of resolved values
-if(ret && ret.length){
-  const convo = await Promise.all(ret.map((msg)=>{
-    return ({
-      message_content: msg.message_content,
-      timestamp: msg.timestamp,
-      sender_id: msg.sender_id,
-      me:  msg.sender_id === id
-    })
-  }))
-  console.log(convo)
 
-  socket.emit("receiveMessage", { msg: convo })
-}
+    if (ret && ret.length) {
+      const convo = await Promise.all(ret.map((msg) => {
+        return ({
+          message_content: msg.message_content,
+          timestamp: msg.timestamp,
+          sender_id: msg.sender_id,
+          me: msg.sender_id === id
+        })
+      }))
+      // console.log(convo)
+
+      socket.emit("receiveMessage", { msg: convo })
+    }
 
     // }
 
