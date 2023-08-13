@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { getConversations, receiveMessageHandler } from '../utils/chat'; 
+import { getConversations, receiveMessageHandler } from '../utils/chat';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Chat = () => {
-    
+
     const token = useSelector((state) => state.auth.token);
-  const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
     const [socket, setSocket] = useState(null);
-    const conversations = useSelector((state)=>state.chat.conversations)
+    const conversations = useSelector((state) => state.chat.conversations)
     console.log(conversations)
     const [selectedConversation, setSelectedConversation] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -24,72 +24,68 @@ const Chat = () => {
         }
         if (socket) {
             socket.emit('sendMessage', {
-              message: newMessage,
+                message: newMessage,
+                conversation_id: selectedConversation.conversation_id
             });
-          }
+        }
     };
 
     const handleConversationClick = (conversation) => {
         setSelectedConversation(conversation);
+        if (socket) {
+            console.log("requestion this messqge ", conversation.conversation_id)
+            socket.emit("requestMessages", {conversation_id: conversation.conversation_id})
+        }
         setMessages([]);
     };
-useEffect(()=>{
-    console.log("new convo")
-    if (conversations)
-    console.log(conversations[0])
-    if (conversations)
-    conversations.map((conversation, index) => (
-        console.log(conversation.name)
-    ))
-},[conversations])
 
     useEffect(() => {
-        console.log("this is token",token)
-        const newSocket = io('http://localhost:3001',{
+        console.log("this is token", token)
+        const newSocket = io('http://localhost:3001', {
             query: { token: token }, // Pass the user token as a query parameter
-          }); // Replace with your server URL
+        }); // Replace with your server URL
         setSocket(newSocket);
         return () => {
-          newSocket.disconnect();
+            newSocket.disconnect();
         };
-      }, []);
+    }, []);
 
-      useEffect(() => {
+    useEffect(() => {
         if (socket) {
-            socket.emit('getConversations', {data:"hello myself"});
+            socket.emit('getConversations', { data: "hello myself" });
 
 
 
-          socket.on('receiveMessage',  receiveMessageHandler);
-          socket.on('getConversations', (msg)=> getConversations(msg, dispatch));
+            socket.on('receiveMessage', (msg)=> receiveMessageHandler(msg, dispatch));
+            socket.on('getConversations', (msg) => getConversations(msg, dispatch));
 
-          return () => {
-            // proper cleanup
-            socket.off('receiveMessage', receiveMessageHandler);
-            socket.off('getConversations', getConversations);
-          };
+            return () => {
+                // proper cleanup
+                socket.off('receiveMessage', receiveMessageHandler);
+                socket.off('getConversations', getConversations);
+            };
         }
-      }, [socket]);
+    }, [socket]);
 
     return (
         <div className="h-screen flex bg-gray-100">
             <div className="w-1/4 bg-blue-500 text-white p-4">
                 <h1 className="text-2xl font-semibold">Conversations</h1>
                 <div className="mt-4">
-                    
-                    { conversations ?
-                    conversations.map((conversation, index) => (
-                        <div
-                            key={index}
-                            className={`p-2 cursor-pointer ${selectedConversation === conversation ? 'bg-blue-600' : ''
-                                }`}
-                            onClick={() => handleConversationClick(conversation)}
-                        >
-                            {conversation.name}
-                        </div>
-                    ))
-                    : null
-                }
+
+                    {conversations ?
+                        conversations.map((conversation, index) => (
+                            <div
+                                key={index}
+                                className={`p-2 cursor-pointer ${selectedConversation === conversation ? 'bg-blue-600' : ''
+                                    }`}
+                                onClick={() => handleConversationClick(conversation)}
+                            >
+                                {conversation.name}
+                            </div>
+                        ))
+                        : null
+                    }
                 </div>
             </div>
             <div className="flex-1 overflow-y-auto p-4">

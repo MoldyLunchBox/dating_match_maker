@@ -18,6 +18,30 @@ const fetchInfo = async (table, fields, clause, values) => {
     }
 
 }
+const saveInfo = async (table, fields, values) => {
+    try {
+        const timestampIndex = fields.split(',').map(f => f.trim()).indexOf('timestamp');
+        
+        if (timestampIndex !== -1) {
+            fields = fields.replace(', timestamp', '');
+            values.splice(timestampIndex, 0, 'CURRENT_TIMESTAMP');
+        }
+
+        const valuePlaceholders = new Array(values.length).fill('?').join(', ');
+        const saveInfoQuery = `INSERT INTO ${table} ${fields} VALUES (${valuePlaceholders})`;
+
+        console.log("saveInfoQuery", saveInfoQuery);
+        console.log("values", values);
+
+        let saved = await query(saveInfoQuery, values);
+        console.log("info is saved", saved);
+
+        return saved;
+    } catch (err) {
+        console.log("fetch user failed", err);
+    }
+};
+
 
 const updateQuery = `
       UPDATE users
@@ -50,4 +74,5 @@ module.exports = {
     updateQuery,
     query,
     fetchInfo,
+    saveInfo,
 };

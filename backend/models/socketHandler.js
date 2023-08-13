@@ -3,7 +3,7 @@ const mysql = require('mysql');
 const { db } = require('./db'); // Assuming you have a separate file for your database connection (db.js)
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { getConversations } = require('./socketEventHandler');
+const { getConversations, sendMessage, requestMessage } = require('./socketEventHandler');
 const { jwtSecret } = require('../config');
 
 
@@ -27,10 +27,8 @@ const setupSocketServer = (server) => {
       
       socket.on('getConversations', (data) => getConversations(socket, data, id) );
 
-      socket.on('sendMessage', (data) => {
-        const { conversationId, message } = data;
-        console.log("message received")
-      });
+      socket.on('sendMessage', (data) => sendMessage(socket, data, id) );
+      socket.on('requestMessages', (data) => requestMessage(socket, data, id) );
       
       socket.on('joinRoom', (data) => {
         socket.join(roomId);
