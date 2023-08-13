@@ -100,6 +100,7 @@ if(ret && ret.length){
       message_content: msg.message_content,
       timestamp: msg.timestamp,
       sender_id: msg.sender_id,
+      me:  msg.sender_id === id
     })
   }))
   console.log(convo)

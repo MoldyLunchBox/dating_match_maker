@@ -104,10 +104,10 @@ useEffect(()=>{
                             {messages.map((message, index) => (
                                 <div
                                     key={index}
-                                    className={`rounded-lg p-2 mt-2 ${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'
+                                    className={`rounded-lg p-2 mt-2 ${!message.me ? 'bg-gray-200' : 'bg-white'
                                         }`}
                                 >
-                                    {message.message_content}
+                                    {message.message_content } 
                                 </div>
                             ))}
                         </div>
