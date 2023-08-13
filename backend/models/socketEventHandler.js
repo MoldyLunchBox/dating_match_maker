@@ -74,7 +74,7 @@ const requestMessage = async (socket, data, id) => {
     console.log(data)
     const { conversation_id } = data
     const ret = await fetchInfo("chat_messages", "message_content, timestamp, sender_id", 'conversation_id = ?', conversation_id);
-    console.log("message sent", ret)
+    console.log("message sent")
     // const getConversations = 'SELECT * FROM conversations WHERE user1_id = ? OR user2_id = ? ';
     // console.log("my id", id)
     // let conversations = await query(getConversations, [id, id]);
@@ -94,8 +94,18 @@ const requestMessage = async (socket, data, id) => {
     //   }));
 
     //   console.log(arr[0]); // This will log the array of resolved values
+if(ret && ret.length){
+  const convo = await Promise.all(ret.map((msg)=>{
+    return ({
+      message_content: msg.message_content,
+      timestamp: msg.timestamp,
+      sender_id: msg.sender_id,
+    })
+  }))
+  console.log(convo)
 
-    //   socket.emit("getConversations", {msg: arr})
+  socket.emit("receiveMessage", { msg: convo })
+}
 
     // }
 

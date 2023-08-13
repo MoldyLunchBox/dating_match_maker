@@ -6,27 +6,28 @@ import { useDispatch, useSelector } from 'react-redux';
 const Chat = () => {
 
     const token = useSelector((state) => state.auth.token);
+    const conversations = useSelector((state) => state.chat.conversations)
+    const messages = useSelector((state) => state.chat.messages)
     const dispatch = useDispatch()
 
     const [socket, setSocket] = useState(null);
-    const conversations = useSelector((state) => state.chat.conversations)
     console.log(conversations)
     const [selectedConversation, setSelectedConversation] = useState(null);
-    const [messages, setMessages] = useState([]);
+    // const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
     const handleSendMessage = () => {
         if (newMessage.trim() !== '') {
             const updatedMessages = [...messages, newMessage];
-            setMessages(updatedMessages);
+            // setMessages(updatedMessages);
 
+            if (socket) {
+                socket.emit('sendMessage', {
+                    message: newMessage,
+                    conversation_id: selectedConversation.conversation_id
+                });
+            }
             setNewMessage('');
-        }
-        if (socket) {
-            socket.emit('sendMessage', {
-                message: newMessage,
-                conversation_id: selectedConversation.conversation_id
-            });
         }
     };
 
@@ -36,9 +37,12 @@ const Chat = () => {
             console.log("requestion this messqge ", conversation.conversation_id)
             socket.emit("requestMessages", {conversation_id: conversation.conversation_id})
         }
-        setMessages([]);
+        // setMessages([]);
     };
+useEffect(()=>{
+        console.log("here are the messages", messages)
 
+},[messages])
     useEffect(() => {
         console.log("this is token", token)
         const newSocket = io('http://localhost:3001', {
@@ -61,7 +65,7 @@ const Chat = () => {
 
             return () => {
                 // proper cleanup
-                socket.off('receiveMessage', receiveMessageHandler);
+                // socket.off('receiveMessage', receiveMessageHandler);
                 socket.off('getConversations', getConversations);
             };
         }
@@ -103,7 +107,7 @@ const Chat = () => {
                                     className={`rounded-lg p-2 mt-2 ${index % 2 === 0 ? 'bg-gray-200' : 'bg-white'
                                         }`}
                                 >
-                                    {message}
+                                    {message.message_content}
                                 </div>
                             ))}
                         </div>
