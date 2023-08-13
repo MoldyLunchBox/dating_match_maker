@@ -39,6 +39,7 @@ const sendMessage = async (socket, data, id) => {
     const { conversation_id, message } = data
     const ret = await saveInfo("chat_messages", "(conversation_id, sender_id, message_content)", [conversation_id, id, message]);
     console.log("message sent", ret)
+    requestMessage(socket, data, id)
     // const getConversations = 'SELECT * FROM conversations WHERE user1_id = ? OR user2_id = ? ';
     // console.log("my id", id)
     // let conversations = await query(getConversations, [id, id]);
