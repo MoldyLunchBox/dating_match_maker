@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import { useEffect } from 'react';
-import { UserSearchBadge } from '../badges/UserSearchBadge';
+import { UserSearchBadge } from '../../badges/UserSearchBadge';
 
 export const Search = () => {
     const [me, setMe] = useState(null)

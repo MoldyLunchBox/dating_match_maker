@@ -1,7 +1,7 @@
 import React from 'react'
-import { SearchFriends } from '../modals/SearchFriends'
+import { SearchFriends } from '../../modals/SearchFriends'
 import { useDispatch, useSelector } from 'react-redux';
-import { setSearchFriend } from '../redux/reducers/slicer';
+import { setSearchFriend } from '../../redux/reducers/slicer';
 
 export const Home = () => {
   const dispatch = useDispatch();

@@ -1,14 +1,14 @@
 // App.js
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { Login } from './components/Login';
+import { Login } from './components/pages/Login';
 import PrivateRoute from './PrivateRoute';
-import { Home } from './components/Home';
-import { Register } from './components/register';
-import { EditProfil } from './components/EditProfil';
-import { Search } from './components/Search';
-import Chat from './components/Chat';
-import { Friends } from './components/Friends';
+import { Register } from './components/pages/register';
+import { Search } from './components/pages/Search';
+import Chat from './components/pages/Chat';
+import { EditProfil } from './components/pages/EditProfil';
+import { Friends } from './components/pages/Friends';
+import { Home } from 'react-feather';
 
 function App() {
   return (

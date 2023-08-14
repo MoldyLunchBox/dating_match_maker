@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { setToken } from '../redux/reducers/slicer';
+import { setToken } from '../../redux/reducers/slicer';
 import { useNavigate } from 'react-router-dom';
 export const Login = () => {
   const [username, setUsername] = useState('');

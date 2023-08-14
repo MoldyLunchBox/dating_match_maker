@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { getConversations, receiveMessageHandler } from '../utils/chat';
+import { getConversations, receiveMessageHandler } from '../../utils/chat';
 import { useDispatch, useSelector } from 'react-redux';
-import { ChatBuble } from './ChatBuble';
+import { ChatBuble } from '../ChatBuble';
 
 const Chat = () => {
 

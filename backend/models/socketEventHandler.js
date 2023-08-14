@@ -78,9 +78,9 @@ const requestMessage = async (socket, data, id, io) => {
       }
     }
     // Leave existing rooms
-    //   for (const room of roomsToLeave) {
-    //     socket.leave(room);
-    // }
+      for (const room of roomsToLeave) {
+        socket.leave(room);
+    }
     const newRoom = "convo-" + conversation_id;
     socket.join(newRoom);
     const connectedSockets = io.sockets.adapter.rooms.get("convo-2");

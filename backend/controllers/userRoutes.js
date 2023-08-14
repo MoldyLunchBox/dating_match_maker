@@ -3,7 +3,7 @@ const router = express.Router();
 const { registerUser,login, indexHandler, fetchUser, home, me, searchUsers, updateProfil } = require('../models/user');
 const { jwtSecret } = require('../config');
 const { authenticateUser, upload } = require('../models/middleware');
-const { addFriend, friends } = require('../models/friend');
+const { addFriend, friends, requests } = require('../models/friend');
 const { getConversations } = require('../models/chat');
 
 // Endpoint for user registration
@@ -14,6 +14,7 @@ router.post('/searchUsers',searchUsers );
 
 router.post('/addFriend', addFriend );
 router.get('/friends', friends );
+router.get('/requests', requests );
 
 router.get('/getConversations', getConversations)
 

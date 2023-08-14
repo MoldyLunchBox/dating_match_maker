@@ -174,8 +174,6 @@ const searchUsers = async (req, res) => {
         const token = req.cookies.token;
         if (!token) {
             // Token is missing, user not logged in
-            console.log("no token", req.cookies)
-
             return res.status(201).json({ error: 'Unauthorized - Please log in.' });
         }
         const decodedToken = jwt.verify(token, jwtSecret);
@@ -200,8 +198,8 @@ const searchUsers = async (req, res) => {
                 let iAdded = await query(alreadyFriends, [id, e.id]);
                 let theyAdded = await query(alreadyFriends, [e.id, id]);
                 log("i added", iAdded)
-                log( "they added",theyAdded)
-                if (iAdded.length){
+                log("they added", theyAdded)
+                if (iAdded.length) {
                     if (iAdded[0].confirmed)
                         status = "friend"
                     else
@@ -209,7 +207,7 @@ const searchUsers = async (req, res) => {
                 }
                 else if (theyAdded.length) {
                     log("done............................................ ", theyAdded[0].confirmed)
-                    if (theyAdded[0].confirmed){
+                    if (theyAdded[0].confirmed) {
 
                         status = "friend"
                     }

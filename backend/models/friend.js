@@ -61,6 +61,52 @@ const friends = async (req, res) => {
     }
 }
 
+const requests = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        if (!token) {
+            // Token is missing, user not logged in
+            console.log("no token", token)
+
+            return res.status(201).json({ error: 'Unauthorized - Please log in.' });
+        }
+        const decodedToken = jwt.verify(token, jwtSecret);
+        const id = decodedToken.userId; // Attach the user ID to the request object
+        const getFriends = 'SELECT * FROM friends WHERE (user_id = ? OR friend_id = ?) AND confirmed = false ';
+
+        let friends = await query(getFriends, [id, id]);
+        if (friends.length) {
+            const arr = await Promise.all(friends.map(async (e) => {
+                let status = null
+                const getfriend = 'SELECT username , fname, lname, avatar  FROM users WHERE id = ? ';
+                let friend = await query(getfriend, [id == e.user_id ? e.friend_id : e.user_id,]);
+                if(friend && friend.length)
+                return (
+                    {
+                        username: friend[0].username,
+                        fname: friend[0].fname,
+                        lname: friend[0].lname,
+                        avatar: friend[0].avatar,
+                        gender: friend[0].gender,
+                        id: friend[0].id,
+                        status: "accept",
+
+                    }
+                )
+            }))
+            res.status(200).json({ msg: arr });
+            
+        }
+        else
+            res.status(200).json({ msg: null });
+    }
+    catch (err) {
+
+        console.log(err)
+        res.status(200).json({ error: err });
+
+    }
+}
 
 const addFriend = async (req, res) => {
     try {
@@ -117,4 +163,5 @@ module.exports = {
 
     addFriend,
     friends,
+    requests,
 };
