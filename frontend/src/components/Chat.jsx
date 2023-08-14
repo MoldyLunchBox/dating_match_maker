@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { getConversations, receiveMessageHandler } from '../utils/chat';
 import { useDispatch, useSelector } from 'react-redux';
+import { ChatBuble } from './ChatBuble';
 
 const Chat = () => {
 
     const token = useSelector((state) => state.auth.token);
     const conversations = useSelector((state) => state.chat.conversations)
     const messages = useSelector((state) => state.chat.messages)
+    const [me, setMe] = useState(null)
     const dispatch = useDispatch()
 
     const [socket, setSocket] = useState(null);
@@ -59,6 +61,7 @@ useEffect(()=>{
             socket.emit('getConversations', { data: "hello myself" });
 
 
+            socket.on('getId', (msg) => setMe(msg.id));
 
             socket.on('receiveMessage', (msg)=> receiveMessageHandler(msg, dispatch));
             socket.on('getConversations', (msg) => getConversations(msg, dispatch));
@@ -92,7 +95,7 @@ useEffect(()=>{
                     }
                 </div>
             </div>
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-4 ">
                 {selectedConversation && (
                     <>
                         <div className="bg-blue-500 text-white p-2">
@@ -100,15 +103,16 @@ useEffect(()=>{
                                 Chat with {selectedConversation.name}
                             </h2>
                         </div>
-                        <div className="mt-4">
+                        <div className="mt-4 overflow-y-auto  max-h-[50%]">
                             {messages.map((message, index) => (
-                                <div
-                                    key={index}
-                                    className={`rounded-lg p-2 mt-2 ${!message.me ? 'bg-gray-200' : 'bg-white'
-                                        }`}
-                                >
-                                    {message.message_content } 
-                                </div>
+                                // <div
+                                //     key={index}
+                                //     className={`rounded-lg p-2 mt-2 ${message.sender_id == me ? 'bg-gray-200' : 'bg-white'
+                                //         }`}
+                                // >
+                                //     {message.message_content } {}
+                                // </div>
+                                <ChatBuble isMe={me === message.sender_id} message={message} />
                             ))}
                         </div>
                         <div className="bg-white p-4 border-t">

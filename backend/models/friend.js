@@ -6,7 +6,6 @@ const { jwtSecret } = require('../config');
 const query = (sql, values) => {
     return new Promise((resolve, reject) => {
         db.query(sql, values, (err, results) => {
-            console.log("what the fuck")
             if (err)
                 reject(err)
             else
@@ -29,13 +28,11 @@ const friends = async (req, res) => {
         const getFriends = 'SELECT * FROM friends WHERE (user_id = ? OR friend_id = ?) AND confirmed = true ';
 
         let friends = await query(getFriends, [id, id]);
-        console.log(friends)
         if (friends.length) {
             const arr = await Promise.all(friends.map(async (e) => {
                 let status = null
                 const getfriend = 'SELECT username , fname, lname, avatar  FROM users WHERE id = ? ';
                 let friend = await query(getfriend, [id == e.user_id ? e.friend_id : e.user_id,]);
-                console.log(friend)
                 if(friend && friend.length)
                 return (
                     {
@@ -95,7 +92,6 @@ const addFriend = async (req, res) => {
                 if (!friend.length) {
                     const insertQuery = 'INSERT INTO friends (user_id, friend_id) VALUES (?, ?)';
                     let userss = await query(insertQuery, [id, users[0].id]);
-                    console.log(userss)
                     console.log("i think it worked")
                     res.status(200).json({ msg: 'user added succesfully!' });
                 }

@@ -5,7 +5,6 @@ const { jwtSecret } = require('../config');
 const query = (sql, values) => {
     return new Promise((resolve, reject) => {
         db.query(sql, values, (err, results) => {
-            console.log("what the fuck")
             if (err)
                 reject(err)
             else

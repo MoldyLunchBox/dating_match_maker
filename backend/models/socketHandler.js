@@ -9,14 +9,14 @@ const { jwtSecret } = require('../config');
 
 
 const setupSocketServer = (server) => {
-    const io = socketIo(server, {
-        cors: {
-          origin: 'http://localhost:3000', // Replace with your frontend URL
-          methods: ['GET', 'POST'],
-          credentials: true,
-        },
-      });
-
+  const io = socketIo(server, {
+      cors: {
+        origin: 'http://localhost:3000', // Replace with your frontend URL
+        methods: ['GET', 'POST'],
+        credentials: true,
+      },
+    });
+  
   io.on('connection', (socket) => {
     try{
 
@@ -24,11 +24,11 @@ const setupSocketServer = (server) => {
       console.log('A user connected', token);
       const decodedToken = jwt.verify(token, jwtSecret);
       const id = decodedToken.userId; // Attach the user ID to the request object
-      
+      socket.emit("getId", {id:id})
       socket.on('getConversations', (data) => getConversations(socket, data, id) );
 
-      socket.on('sendMessage', (data) => sendMessage(socket, data, id) );
-      socket.on('requestMessages', (data) => requestMessage(socket, data, id) );
+      socket.on('sendMessage', (data) => sendMessage(socket, data, id, io) );
+      socket.on('requestMessages', (data) => requestMessage(socket, data, id, io) );
       
       socket.on('joinRoom', (data) => {
         socket.join(roomId);
