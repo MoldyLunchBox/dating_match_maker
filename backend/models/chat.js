@@ -2,6 +2,7 @@ const { db } = require('./db'); // Assuming you have a separate file for your da
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../config');
+const { fetchInfo } = require('../utils/utils');
 const query = (sql, values) => {
     return new Promise((resolve, reject) => {
         db.query(sql, values, (err, results) => {
@@ -65,9 +66,42 @@ const getConversations = async (req, res) => {
     }
 }
 
+const getConversationId = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        const {user_id} = req.body
+        if (!token || !user_id) {
+            // Token is missing, user not logged in
+            console.log("no token or userid", token, user_id)
+            return res.status(201).json({ error: 'Unauthorized - Please log in.' });
+        }
+        const decodedToken = jwt.verify(token, jwtSecret);
+        const id = decodedToken.userId; // Attach the user ID to the request object
+        // const getConversations = 'SELECT * FROM conversations (WHERE user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?) ';
+        const conversations = fetchInfo("conversations", "conversation_id", "(user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)",[user_id, id, id, user_id])
+        // let conversations = await query(getConversations, [user_id, id, id, user_id]);
+        if (conversations && conversations.length){
+            // const arr = await Promise.all(conversations.map((e)=>{
+            //     return({
+            //         name: `${e.fname} ${e.lname}`,
+            //         timeRecent: e.last_message_time,
+            //         userId: e.user_id == id ? e.friend_id : e.user_id
+            //     })
+            // }))
+            console.log(conversations)
+            return res.status(201).json({ msg: 'good' });
+
+        }
+        
+    } catch(err){
+        console.log(err)
+    }
+}
+
 
 module.exports = {
 
     addToChat,
     getConversations,
+    getConversationId,
 };

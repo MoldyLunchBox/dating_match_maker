@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react'
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSelectedConversation } from '../redux/reducers/slicer';
+
 
 export const UserSearchBadge = ({ status, avatar, fname, lname, username , id}) => {
+    const dispatch = useDispatch()
     const handleAdd = async (user) => {
         try {
             const response = await axios.post('http://localhost:3001/users/addFriend', {
@@ -18,16 +22,12 @@ export const UserSearchBadge = ({ status, avatar, fname, lname, username , id}) 
         }
     }
     const handleChat = async (user) => {
-        try {
-            const response = await axios.post('http://localhost:3001/users/addToChat', {
-                username: user,
-            }, { withCredentials: true });
-            const success = response.data.msg;
-            if (success)
-                console.log("friend request sent");
-
-            else
-                console.log("error");
+        console.log("im sending this id", id)
+        try {    
+             const response = await axios.post('http://localhost:3001/users/getConversationId', {
+            user_id: id,
+        }, { withCredentials: true });
+            // dispatch(setSelectedConversation())
         } catch (error) {
             console.error('failed:', error);
         }

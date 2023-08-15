@@ -4,6 +4,7 @@ import * as Icon from 'react-feather';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchFriend } from '../redux/reducers/slicer';
 import { SearchFriends } from '../modals/SearchFriends';
+import { Link } from 'react-router-dom';
 
 export const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -32,19 +33,19 @@ export const Navbar = () => {
 
             <ul className='flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8'>
               <li>
-                <a className='hover:text-gray-500' href="#">Home</a>
+                <Link to="/" className="hover:text-gray-500">Home</Link>
               </li>
               <li>
-                <a className='hover:text-gray-500' href="#">Chat</a>
+                <Link to="/chat" className="hover:text-gray-500">Chat</Link>
               </li>
               <li>
-                <a className='hover:text-gray-500' href="#">Find someone</a>
+                <Link to="/friends" className="hover:text-gray-500">Find someone</Link>
               </li>
               <li>
-                <a className='hover:text-gray-500' href="#">Something</a>
+                <Link to="/something" className="hover:text-gray-500">Something</Link>
               </li>
               <li>
-                <a className='hover:text-gray-500' href="#">Log out</a>
+                <Link to="/logout" className="hover:text-gray-500">Log out</Link>
               </li>
             </ul>
           </div>

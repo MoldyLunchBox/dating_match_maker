@@ -1,56 +1,11 @@
 import React, { useState } from 'react'
 import axios from 'axios';
-import { useEffect } from 'react';
 import { UserSearchBadge } from '../../badges/UserSearchBadge';
 
 export const Search = () => {
-    const [me, setMe] = useState(null)
     const [searchWord, setSearchWord] = useState("")
     const [userMatch, setUserMatch] = useState(null)
-    // useEffect(() => {
-    //     const fetchMe = async () => {
 
-    //         try {
-
-    //             const res = await axios.get('http://localhost:3001/users/me', { withCredentials: true });
-    //             if (res.data.msg)
-    //                 setMe(res.data.msg)
-    //             else if (res.data.error)
-    //             console.log(res.data.error)
-
-    //         } catch (err) {
-    //             console.log("error", err)
-    //         }
-    //     }
-    //     if (!me)
-    //     fetchMe()
-    //     console.log(me)
-    // },[me])
-    // const handleFormSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     try {
-    //         const form = e.target
-    //         // Create a FormData object to send the profile data and picture
-    //         const formData = new FormData();
-    //         formData.append('fname', form.fname.value);
-    //         formData.append('lname', form.lname.value);
-    //         formData.append('email', form.email.value);
-    //         formData.append('gender', form.gender.value);
-    //         formData.append('username', form.username.value);
-    //         formData.append('avatar', form.avatar.files[0]);
-    //         console.log(formData)
-    //         // Send the form data to the backend
-    //         await axios.post('http://localhost:3001/users/editProfil', formData, { withCredentials: true });
-
-    //         // Optionally, show a success message to the user
-    //         alert('Profile updated successfully!');
-    //     } catch (error) {
-    //         // Handle any errors that may occur during the form submission
-    //         console.error('Error updating profile:', error);
-    //         // Show an error message to the user
-    //     }
-    // };
     const handleSearch = async (e) => {
         e.preventDefault();
         try {
@@ -68,32 +23,7 @@ export const Search = () => {
             console.error('Login failed:', error);
         }
     }
-    const test = [
-        {
-            fname: "yoo",
-            lname: "bar",
-            avatar: "yoo",
-            username: "cookie12",
-        },
-        {
-            fname: "yoo",
-            lname: "bar",
-            avatar: "yoo",
-            username: "cookie12",
-        },
-        {
-            fname: "yoo",
-            lname: "bar",
-            avatar: "yoo",
-            username: "cookie12",
-        },
-        {
-            fname: "yoo",
-            lname: "bar",
-            avatar: "yoo",
-            username: "cookie12",
-        }
-    ]
+   
     return (
         <div className="h-full flex justify-center my-5 ">
             <div className=" lg:w-3/4 w-full">
