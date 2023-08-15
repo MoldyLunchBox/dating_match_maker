@@ -3,18 +3,21 @@ import io from 'socket.io-client';
 import { getConversations, receiveMessageHandler } from '../../utils/chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChatBuble } from '../ChatBuble';
+import { setSelectedConversation } from '../../redux/reducers/slicer';
 
 const Chat = () => {
 
     const token = useSelector((state) => state.auth.token);
     const conversations = useSelector((state) => state.chat.conversations)
     const messages = useSelector((state) => state.chat.messages)
+    const selectedConversation = useSelector((state) => state.chat.selectedConversation)
+
     const [me, setMe] = useState(null)
     const dispatch = useDispatch()
 
     const [socket, setSocket] = useState(null);
     console.log(conversations)
-    const [selectedConversation, setSelectedConversation] = useState(null);
+    // const [selectedConversation, setSelectedConversation] = useState(null);
     // const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
@@ -41,10 +44,7 @@ const Chat = () => {
         }
         // setMessages([]);
     };
-useEffect(()=>{
-        console.log("here are the messages", messages)
 
-},[messages])
     useEffect(() => {
         console.log("this is token", token)
         const newSocket = io('http://localhost:3001', {
@@ -65,7 +65,10 @@ useEffect(()=>{
 
             socket.on('receiveMessage', (msg)=> receiveMessageHandler(msg, dispatch));
             socket.on('getConversations', (msg) => getConversations(msg, dispatch));
+            if (selectedConversation){
+            socket.emit("requestMessages", {conversation_id: selectedConversation})
 
+            }
             return () => {
                 // proper cleanup
                 // socket.off('receiveMessage', receiveMessageHandler);

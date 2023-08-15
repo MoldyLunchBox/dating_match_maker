@@ -46,9 +46,9 @@ export const FriendsList = ({ tab }) => {
         fetchFriends()
     }, [tab])
     useEffect(()=>{
-        
-    })
-    console.log("searching for", friends)
+
+        console.log("searching for", friends)
+    },[friends])
 
     return (
         <div className=' '>

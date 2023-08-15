@@ -31,24 +31,24 @@ const friends = async (req, res) => {
         if (friends.length) {
             const arr = await Promise.all(friends.map(async (e) => {
                 let status = null
-                const getfriend = 'SELECT username , fname, lname, avatar  FROM users WHERE id = ? ';
+                const getfriend = 'SELECT username , fname, lname, avatar, gender, id   FROM users WHERE id = ? ';
                 let friend = await query(getfriend, [id == e.user_id ? e.friend_id : e.user_id,]);
-                if(friend && friend.length)
-                return (
-                    {
-                        username: friend[0].username,
-                        fname: friend[0].fname,
-                        lname: friend[0].lname,
-                        avatar: friend[0].avatar,
-                        gender: friend[0].gender,
-                        id: friend[0].id,
-                        status: "chat",
+                if (friend && friend.length)
+                    return (
+                        {
+                            username: friend[0].username,
+                            fname: friend[0].fname,
+                            lname: friend[0].lname,
+                            avatar: friend[0].avatar,
+                            gender: friend[0].gender,
+                            id: friend[0].id,
+                            status: "chat",
 
-                    }
-                )
+                        }
+                    )
             }))
             res.status(200).json({ msg: arr });
-            
+
         }
         else
             res.status(200).json({ msg: null });
@@ -78,24 +78,26 @@ const requests = async (req, res) => {
         if (friends.length) {
             const arr = await Promise.all(friends.map(async (e) => {
                 let status = null
-                const getfriend = 'SELECT username , fname, lname, avatar  FROM users WHERE id = ? ';
+                const getfriend = 'SELECT username , fname, lname, avatar, gender, id  FROM users WHERE id = ? ';
                 let friend = await query(getfriend, [id == e.user_id ? e.friend_id : e.user_id,]);
-                if(friend && friend.length)
-                return (
-                    {
-                        username: friend[0].username,
-                        fname: friend[0].fname,
-                        lname: friend[0].lname,
-                        avatar: friend[0].avatar,
-                        gender: friend[0].gender,
-                        id: friend[0].id,
-                        status: "accept",
+                console.log("delet this", friend)
+                if (friend && friend.length)
+                    return (
+                        {
+                            username: friend[0].username,
+                            fname: friend[0].fname,
+                            lname: friend[0].lname,
+                            avatar: friend[0].avatar,
+                            gender: friend[0].gender,
+                            id: friend[0].id,
+                            status: "accept",
 
-                    }
-                )
+                        }
+                    )
+
             }))
             res.status(200).json({ msg: arr });
-            
+
         }
         else
             res.status(200).json({ msg: null });

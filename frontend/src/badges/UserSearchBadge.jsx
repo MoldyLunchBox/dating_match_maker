@@ -2,10 +2,14 @@ import React, { useEffect } from 'react'
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedConversation } from '../redux/reducers/slicer';
+import { useNavigate } from "react-router-dom";
 
 
-export const UserSearchBadge = ({ status, avatar, fname, lname, username , id}) => {
+export const UserSearchBadge = ({ status, avatar, fname, lname, username, id }) => {
     const dispatch = useDispatch()
+    const navigate = useNavigate();
+
+
     const handleAdd = async (user) => {
         try {
             const response = await axios.post('http://localhost:3001/users/addFriend', {
@@ -23,11 +27,15 @@ export const UserSearchBadge = ({ status, avatar, fname, lname, username , id}) 
     }
     const handleChat = async (user) => {
         console.log("im sending this id", id)
-        try {    
-             const response = await axios.post('http://localhost:3001/users/getConversationId', {
-            user_id: id,
-        }, { withCredentials: true });
-            // dispatch(setSelectedConversation())
+        try {
+            const response = await axios.post('http://localhost:3001/users/getConversationId', {
+                user_id: id,
+            }, { withCredentials: true });
+            if (response && response.data && response.data.msg) {
+
+                dispatch(setSelectedConversation(response.data.msg))
+                navigate("/chat");
+            }
         } catch (error) {
             console.error('failed:', error);
         }
@@ -48,9 +56,9 @@ export const UserSearchBadge = ({ status, avatar, fname, lname, username , id}) 
                     <h3>{id}</h3>
                 </div>
             </div>
-            <div onClick={status == "accept" || !status  ? ()=> handleAdd(username): status == "chat" ? ()=> handleChat(username) :  null} className='flex border-2 h-full justify-center w-10 sm:w-full md:mt-2 min-w-[20px] hover:bg-[#e5e7eb] cursor-pointer items-center'>
-                {status ? status : "add" }
-                
+            <div onClick={status == "accept" || !status ? () => handleAdd(username) : status == "chat" ? () => handleChat(username) : null} className='flex border-2 h-full justify-center w-10 sm:w-full md:mt-2 min-w-[20px] hover:bg-[#e5e7eb] cursor-pointer items-center'>
+                {status ? status : "add"}
+
             </div>
         </div>
     )

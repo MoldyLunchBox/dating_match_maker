@@ -78,18 +78,14 @@ const getConversationId = async (req, res) => {
         const decodedToken = jwt.verify(token, jwtSecret);
         const id = decodedToken.userId; // Attach the user ID to the request object
         // const getConversations = 'SELECT * FROM conversations (WHERE user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?) ';
-        const conversations = fetchInfo("conversations", "conversation_id", "(user_id = ? AND friend_id = ?) OR (user_id = ? AND friend_id = ?)",[user_id, id, id, user_id])
+        const conversations = await fetchInfo("conversations", "conversation_id", "(user1_id = ? AND user2_id = ?) OR (user1_id = ? AND user2_id = ?)",[user_id, id, id, user_id])
+        console.log(conversations)
+       
         // let conversations = await query(getConversations, [user_id, id, id, user_id]);
         if (conversations && conversations.length){
-            // const arr = await Promise.all(conversations.map((e)=>{
-            //     return({
-            //         name: `${e.fname} ${e.lname}`,
-            //         timeRecent: e.last_message_time,
-            //         userId: e.user_id == id ? e.friend_id : e.user_id
-            //     })
-            // }))
+        
             console.log(conversations)
-            return res.status(201).json({ msg: 'good' });
+            return res.status(201).json({ msg: conversations[0].conversation_id });
 
         }
         
