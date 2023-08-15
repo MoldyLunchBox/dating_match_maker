@@ -37,7 +37,7 @@ const Chat = () => {
     };
 
     const handleConversationClick = (conversation) => {
-        setSelectedConversation(conversation);
+        dispatch(setSelectedConversation(conversation))
         if (socket) {
             console.log("requestion this messqge ", conversation.conversation_id)
             socket.emit("requestMessages", {conversation_id: conversation.conversation_id})
@@ -66,7 +66,7 @@ const Chat = () => {
             socket.on('receiveMessage', (msg)=> receiveMessageHandler(msg, dispatch));
             socket.on('getConversations', (msg) => getConversations(msg, dispatch));
             if (selectedConversation){
-            socket.emit("requestMessages", {conversation_id: selectedConversation})
+            socket.emit("requestMessages", {conversation_id: selectedConversation.conversation_id})
 
             }
             return () => {
@@ -87,7 +87,7 @@ const Chat = () => {
                         conversations.map((conversation, index) => (
                             <div
                                 key={index}
-                                className={`p-2 cursor-pointer ${selectedConversation === conversation ? 'bg-blue-600' : ''
+                                className={`p-2 cursor-pointer ${selectedConversation && selectedConversation.conversation_id === conversation.conversation_id ? 'bg-blue-600' : ''
                                     }`}
                                 onClick={() => handleConversationClick(conversation)}
                             >
@@ -115,7 +115,7 @@ const Chat = () => {
                                 // >
                                 //     {message.message_content } {}
                                 // </div>
-                                <ChatBuble isMe={me === message.sender_id} message={message} />
+                                <ChatBuble key={index} isMe={me === message.sender_id} message={message} />
                             ))}
                         </div>
                         <div className="bg-white p-4 border-t">
