@@ -8,7 +8,9 @@ import { Search } from './components/pages/Search';
 import Chat from './components/pages/Chat';
 import { EditProfil } from './components/pages/EditProfil';
 import { Friends } from './components/pages/Friends';
-import { Home } from 'react-feather';
+import { Home } from './components/pages/Home';
+import { Match } from './components/pages/Match';
+// import { Home } from 'react-feather';
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
         <Route path="/Search" element={<PrivateRoute element={<Search />} />} />
         <Route path="/Friends" element={<PrivateRoute element={<Friends />} />} />
         <Route path="/Chat" element={<PrivateRoute element={<Chat />} />} />
+        <Route path="/match" element={<PrivateRoute element={<Match />} />} />
         <Route path="/edit" element={<PrivateRoute element={<EditProfil />} />} />
         <Route path="/home" element={<PrivateRoute element={<Home />} />} />      </Routes>
     </Router>

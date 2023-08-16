@@ -33,7 +33,7 @@ export const Navbar = () => {
 
             <ul className='flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8'>
               <li>
-                <Link to="/" className="hover:text-gray-500">Home</Link>
+                <Link to="/home" className="hover:text-gray-500">Home</Link>
               </li>
               <li>
                 <Link to="/chat" className="hover:text-gray-500">Chat</Link>
@@ -42,7 +42,7 @@ export const Navbar = () => {
                 <Link to="/friends" className="hover:text-gray-500">Find someone</Link>
               </li>
               <li>
-                <Link to="/something" className="hover:text-gray-500">Something</Link>
+                <Link to="/match" className="hover:text-gray-500">Match maker</Link>
               </li>
               <li>
                 <Link to="/logout" className="hover:text-gray-500">Log out</Link>
