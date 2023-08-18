@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const dotenv = require("dotenv");
+const { saveInfo, query } = require("../utils/utils");
 
 dotenv.config({ path: './.env' });
 const db = mysql.createConnection({
@@ -54,6 +55,44 @@ const connectToDatabase = () => {
               } else {
                 console.log('chat messages table created successfully!');
                 resolve();
+              }
+            });
+
+            // create categories table
+            db.query(createCategoriesTableQuery, async (err, result) => {
+              if (err) {
+                console.error('Error creating categories table:', err);
+                reject(err);
+              } else {
+                console.log('categories table created successfully!');
+                try {
+      
+                  // Insert categories into categories table
+                  const categoriesData = [
+                    ['Sports and Fitness'],
+                    ['Arts and Crafts'],
+                    ['Music'],
+                    ['Food and Cooking'],
+                    ['Gaming'],
+                    ['Travel and Adventure'],
+                    ['Technology and Coding'],
+                    ['Health and Wellness'],
+                    ['Literature and Writing'],
+                    ['Science and Nature'],
+                  ];
+
+                  const insertCategoriesQuery = `INSERT INTO categories (name) VALUES (?)`;
+
+                  for (const category of categoriesData) {
+                    await query(insertCategoriesQuery, category);
+                  }
+
+                  console.log('Categories inserted successfully!');
+                  resolve();
+                } catch (err) {
+                  console.error('Error creating categories and inserting data:', err);
+                  reject(err);
+                }
               }
             });
 
@@ -112,7 +151,12 @@ CREATE TABLE IF NOT EXISTS chat_messages (
   FOREIGN KEY (sender_id) REFERENCES users (id)
 );
 `;
-// Create the users table if it doesn't exist
+
+const createCategoriesTableQuery = `
+CREATE  TABLE IF NOT EXISTS  categories (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);`
 
 
 module.exports = {
