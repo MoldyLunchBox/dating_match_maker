@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const dotenv = require("dotenv");
 const { saveInfo, query } = require("../utils/utils");
+const { categoriesData } = require("../utils/constants");
 
 dotenv.config({ path: './.env' });
 const db = mysql.createConnection({
@@ -66,36 +67,49 @@ const connectToDatabase = () => {
               } else {
                 console.log('categories table created successfully!');
                 try {
-      
-                  // Insert categories into categories table
-                  const categoriesData = [
-                    ['Sports and Fitness'],
-                    ['Arts and Crafts'],
-                    ['Music'],
-                    ['Food and Cooking'],
-                    ['Gaming'],
-                    ['Travel and Adventure'],
-                    ['Technology and Coding'],
-                    ['Health and Wellness'],
-                    ['Literature and Writing'],
-                    ['Science and Nature'],
-                  ];
-
-                  const insertCategoriesQuery = `INSERT INTO categories (name) VALUES (?)`;
-
-                  for (const category of categoriesData) {
-                    await query(insertCategoriesQuery, category);
-                  }
-
-                  console.log('Categories inserted successfully!');
-                  resolve();
+                  // Check if categories exist in the table before inserting
+                  db.query('SELECT COUNT(*) as count FROM categories', (err, countResult) => {
+                    if (err) {
+                      console.error('Error checking categories existence:', err);
+                      reject(err);
+                    } else {
+                      const categoriesExist = countResult[0].count > 0;
+            
+                      if (!categoriesExist) {
+                        // Insert categories into categories table
+                        const insertCategoriesQuery = `INSERT INTO categories (name) VALUES ?`;
+            
+                        db.query(insertCategoriesQuery, [categoriesData], (err, insertResult) => {
+                          if (err) {
+                            console.error('Error inserting categories data:', err);
+                            reject(err);
+                          } else {
+                            console.log('Categories inserted successfully!');
+                            resolve();
+                          }
+                        });
+                      } else {
+                        console.log('Categories already exist, skipping insertion.');
+                        resolve();
+                      }
+                    }
+                  });
                 } catch (err) {
                   console.error('Error creating categories and inserting data:', err);
                   reject(err);
                 }
               }
             });
-
+            // create  interests table
+            db.query(createInterestsTableQuery, (err, result) => {
+              if (err) {
+                console.error('Error creating chat messages table:', err);
+                reject(err);
+              } else {
+                console.log('chat messages table created successfully!');
+                resolve();
+              }
+            });
 
           }
         });
@@ -158,6 +172,13 @@ CREATE  TABLE IF NOT EXISTS  categories (
   name VARCHAR(255) NOT NULL
 );`
 
+const createInterestsTableQuery = `
+CREATE TABLE IF NOT EXISTS  interests (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  category_id INT,
+  FOREIGN KEY (category_id) REFERENCES categories(id)
+);`
 
 module.exports = {
   db,
