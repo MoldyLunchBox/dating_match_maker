@@ -1,7 +1,7 @@
 const mysql = require("mysql");
 const dotenv = require("dotenv");
 const { saveInfo, query } = require("../utils/utils");
-const { categoriesData } = require("../utils/constants");
+const { categoriesData, interestsData } = require("../utils/constants");
 
 dotenv.config({ path: './.env' });
 const db = mysql.createConnection({
@@ -103,11 +103,44 @@ const connectToDatabase = () => {
             // create  interests table
             db.query(createInterestsTableQuery, (err, result) => {
               if (err) {
-                console.error('Error creating chat messages table:', err);
+                console.error('Error creating interests table:', err);
                 reject(err);
               } else {
-                console.log('chat messages table created successfully!');
-                resolve();
+                
+                console.log('interests table created successfully!');
+                try {
+                  // Check if interests exist in the table before inserting
+                  db.query('SELECT COUNT(*) as count FROM interests', (err, countResult) => {
+                    if (err) {
+                      console.error('Error checking interests existence:', err);
+                      reject(err);
+                    } else {
+                      const interestsExist = countResult[0].count > 0;
+            
+                      if (!interestsExist) {
+                        // Insert interests into interests table
+                        const insertInterestsQuery = `INSERT INTO interests (name, category_id) VALUES ?`;
+            
+                        db.query(insertInterestsQuery, [interestsData], (err, insertResult) => {
+                          if (err) {
+                            console.error('Error inserting interests data:', err);
+                            reject(err);
+                          } else {
+                            console.log('interests inserted successfully!');
+                            resolve();
+                          }
+                        });
+                      } else {
+                        console.log('interests already exist, skipping insertion.');
+                        resolve();
+                      }
+                    }
+                  });
+                } catch (err) {
+                  console.error('Error creating interests and inserting data:', err);
+                  reject(err);
+                }
+
               }
             });
 
