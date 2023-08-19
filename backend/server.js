@@ -3,6 +3,7 @@ const {  connectToDatabase } = require('./models/db');
 const port = 3001; // Set your desired port number
 const userRoutes = require('./controllers/userRoutes'); // Import the userRoutes.js file
 const indexRoute = require('./controllers/indexRoute'); // Import the userRoutes.js file
+const apiRoute = require('./controllers/api'); // Import the userRoutes.js file
 const cookieParser = require('cookie-parser');
 const cors = require('cors'); // Import the cors package
 const path = require('path');
@@ -29,6 +30,7 @@ app.use((err, req, res, next) => {
     // Wait for the database connection to be established before starting the server
     await connectToDatabase();
     app.use('/', indexRoute);
+    app.use('/api', apiRoute);
     // app.use('/', home);
     app.use('/users', userRoutes);
     //this middleware to serve static files from the 'uploads' directory

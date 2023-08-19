@@ -3,6 +3,7 @@ const { db } = require('./db'); // Assuming you have a separate file for your da
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../config');
+const { fetchInfo } = require('../utils/utils');
 const query = (sql, values) => {
     return new Promise((resolve, reject) => {
         db.query(sql, values, (err, results) => {
@@ -47,6 +48,8 @@ const friends = async (req, res) => {
                         }
                     )
             }))
+        
+
             res.status(200).json({ msg: arr });
 
         }

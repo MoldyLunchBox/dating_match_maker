@@ -58,7 +58,16 @@ const connectToDatabase = () => {
                 resolve();
               }
             });
-
+            // create user interests table
+            db.query(createUserInterestsTableQuery, (err, result) => {
+              if (err) {
+                console.error('Error creating user interests table:', err);
+                reject(err);
+              } else {
+                console.log('user interests table created successfully!');
+                resolve();
+              }
+            });
             // create categories table
             db.query(createCategoriesTableQuery, async (err, result) => {
               if (err) {
@@ -212,6 +221,16 @@ CREATE TABLE IF NOT EXISTS  interests (
   category_id INT,
   FOREIGN KEY (category_id) REFERENCES categories(id)
 );`
+
+const createUserInterestsTableQuery = `
+CREATE TABLE IF NOT EXISTS user_interests (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  interest_id INT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (interest_id) REFERENCES interests (id)
+);
+`;
 
 module.exports = {
   db,
