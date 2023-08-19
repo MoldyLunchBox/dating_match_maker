@@ -10,19 +10,19 @@ const fetchInterests = async (req, res) => {
         console.log("all users are", allCategories)
         const interestTags = await Promise.all(
             allCategories.map( async (category) => {
-                let getInterests = 'SELECT name, id FROM interests where id=?'
+                let getInterests = 'SELECT name  FROM interests where category_id=?'
                 let interests = await query(getInterests, [category.id], db);
-                console.log("cat id", category.id, "interest id", interests[0].id)
-                console.log(interests)
+                interests = interests.map((row)=> row.name)
+                console.log("-----------------------------",interests)
                 return({
-                    ...category, interests: interests.name
+                    ...category, interests: interests
                 })
             })
         )
         console.log("the end", interestTags)
         // Further processing or returning the result to the client
         // return categories;
-        res.status(200).json({ categories: allCategories, interests: null });
+        res.status(200).json({ categories: interestTags });
 
     } catch (error) {
         console.error("Error fetching categories:", error);

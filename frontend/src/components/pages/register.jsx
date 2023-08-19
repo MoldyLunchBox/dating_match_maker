@@ -4,22 +4,31 @@ import { Menu, ChevronDown } from 'react-feather';
 
 export const Register = () => {
     const [categories, setCategories] = useState(null)
-    const [category, setCategory] = useState(null)
-    
-    useEffect(async ()=>{
-        const fetchInterests = async ()=>{
+    const [pickedCategory, setPickedCategory] = useState(null)
+    const [selectedInterests, setSelectedInterests] = useState([]);
 
-            try{
+    useEffect(() => {
+        const fetchInterests = async () => {
+
+            try {
                 const response = await axios.get('http://localhost:3001/api/interests');
-                if (response && response.data.categories){
+                if (response && response.data.categories) {
                     setCategories(response.data.categories)
                 }
-            }catch(err){
+            } catch (err) {
                 console.log("error fetching interests")
             }
         }
-        await fetchInterests()
-    },[])
+        fetchInterests()
+    }, [])
+    const handleInterestToggle = (interest) => {
+        const checked = selectedInterests.includes(interest)
+        if (checked)
+            setSelectedInterests((prev) => (prev.filter(item => item !== interest)))
+        else
+            setSelectedInterests((prev) => ([...prev, interest]))
+
+    }
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -112,17 +121,32 @@ export const Register = () => {
                         <div className='p-2 border py-5'>
                             <ul className='  text-start'>
                                 <li className=' flex flex-col space-y-2 '>
-                                    { categories ?
+                                    {categories ?
                                         categories.map((category, index) => (
-                                            <div onClick={()=>setCategory(category.id)}>
-                                                <span className='text-xl p-1 flex items-center justify-between cursor-pointer rounded-t border-[#6C22F0] border-b-2 w-full bg-[#E0E0E0] hover:shadow-md hover:translat hover:duration-300'> 
-                                                
-                                                {category.name} 
-                                                <div><ChevronDown/></div>
-                                                </span>
-                                                <ul>
+                                            <div key={index} onClick={() => setPickedCategory(category.id)}>
+                                                <span className='text-xl p-1 flex items-center justify-between cursor-pointer rounded-t border-[#6C22F0] border-b-2 w-full bg-[#E0E0E0] hover:shadow-md hover:translat hover:duration-300'>
 
-                                                </ul>
+                                                    {category.name}
+                                                    <div><ChevronDown /></div>
+                                                </span>
+                                                {
+                                                    pickedCategory == category.id ?
+                                                        <ul>
+                                                            {
+                                                                category.interests.map((interest, index) => (
+                                                                    <li key={index} className='items-center flex space-y-1 space-x-1'>
+                                                                        <input checked={selectedInterests.includes(interest)}
+                                                                            onChange={() => handleInterestToggle(interest)}
+                                                                            type="checkbox" className="checkbox" />
+                                                                        <div>
+                                                                            {interest}
+                                                                        </div>
+                                                                    </li>
+                                                                ))
+                                                            }
+                                                        </ul>
+                                                        : null
+                                                }
                                             </div>
                                         )) : null
                                     }
