@@ -36,7 +36,11 @@
     transform: rotate(360deg);
   }
 }
-
+.slide-down {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out; /* Adjust the duration as needed */
+}
 
 @tailwind base;
 @tailwind components;

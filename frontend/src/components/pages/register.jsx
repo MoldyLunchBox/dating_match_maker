@@ -131,12 +131,12 @@ export const Register = () => {
                                                 </span>
                                                 {
                                                     pickedCategory == category.id ?
-                                                        <ul>
+                                                        <ul className='transition-all  ease-in-out '>
                                                             {
                                                                 category.interests.map((interest, index) => (
-                                                                    <li key={index} className='items-center flex space-y-1 space-x-1'>
+                                                                    <li key={index} onClick={() => handleInterestToggle(interest)} className='cursor-pointer items-center flex space-y-1 space-x-1'>
                                                                         <input checked={selectedInterests.includes(interest)}
-                                                                            onChange={() => handleInterestToggle(interest)}
+                                                                            
                                                                             type="checkbox" className="checkbox" />
                                                                         <div>
                                                                             {interest}
