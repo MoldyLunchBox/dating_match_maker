@@ -1,7 +1,21 @@
 import axios from 'axios';
-import React from 'react'
+import React, { useState } from 'react'
+import { Menu, ChevronDown } from 'react-feather';
 
 export const Register = () => {
+    const [categories, setCategories] = useState([
+        ['Sports and Fitness'],
+        ['Arts and Crafts'],
+        ['Music'],
+        ['Food and Cooking'],
+        ['Gaming'],
+        ['Travel and Adventure'],
+        ['Technology and Coding'],
+        ['Health and Wellness'],
+        ['Literature and Writing'],
+        ['Science and Nature'],
+    ])
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const form = e.target
@@ -26,17 +40,17 @@ export const Register = () => {
         }
     }
     return (
-        <div className="h-full bg-indigo-100 flex justify-center items-center">
-            <div className="lg:w-2/5 md:w-1/2 w-2/3">
+        <div className="min-h-screen  bg-indigo-100 flex justify-center items-center">
+            <div className="container my-5  max-w-[600px]">
 
                 {/* <form onSubmit={handleLogin} className="bg-white p-10 rounded-lg shadow-lg min-w-full"> */}
-                <form onSubmit={handleFormSubmit} className="bg-white p-10 rounded-lg shadow-lg min-w-full space-y-4">
+                <form onSubmit={handleFormSubmit} className="bg-white p-10 rounded-lg shadow-lg  h-full space-y-5">
                     <h1 className="text-3xl font-semibold text-center text-gray-700">Sign up</h1>
                     <div>
                         <label className="label">
                             <span className="text-base label-text">Username</span>
                         </label>
-                        <input  name="username" type="text" placeholder="Username" className="w-full input input-bordered" />
+                        <input name="username" type="text" placeholder="Username" className="w-full input input-bordered" />
                     </div>
                     <div>
                         <label className="label">
@@ -69,12 +83,48 @@ export const Register = () => {
                         <input name="password" type="password" placeholder="Enter Password"
                             className="w-full input input-bordered" />
                     </div>
-                    <div>
+                    <div className='mb-4'>
                         <label className="label">
                             <span className="text-base label-text">Confirm Password</span>
                         </label>
                         <input type="password" placeholder="Confirm Password"
                             className="w-full input input-bordered" />
+                    </div>
+                    <div className='relative '>
+                        <label className="   bg-white label">
+                            <span className="text-base label-text"></span>
+                        </label>
+                        <label className="absolute -top-2 left-[0px] bg-white label">
+                            <span className="text-base label-text">Interests</span>
+                        </label>
+                        {/* <div className='w-full flex justify-center items-center flex-col'>
+                            <div className='flex flex-row items-center space-x-2 py-2 px-3 rounded bg-gray-300'>
+                                <div>Interests</div>
+                                <Menu />
+                            </div>
+                        </div> */}
+
+                        <div className='p-2 border py-5'>
+                            <ul className='  text-start'>
+                                <li className=' flex flex-col space-y-2 '>
+                                    {
+                                        categories.map((category, index) => (
+                                            <>
+                                                <span className='text-xl p-1 flex items-center justify-between cursor-pointer rounded-t border-[#6C22F0] border-b-2 w-full bg-[#E0E0E0] hover:shadow-md hover:translat hover:duration-300'> 
+                                                
+                                                {category} 
+                                                <div><ChevronDown/></div>
+                                                </span>
+                                                <ul>
+
+                                                </ul>
+                                            </>
+                                        ))
+                                    }
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
                     <div>
                         <button type='submit' className="btn btn-block">Sign Up</button>
