@@ -24,7 +24,7 @@ const registerUser = async (req, res) => {
     // Validation: Check if required data is present in the request body
     console.log(username, req.body)
 
-    if (!username || !fname || !lname || !gender || !password || !email|| !interests) {
+    if (!username || !fname || !lname || !gender || !password || !email || !interests) {
         log("check")
         return res.status(201).json({ error: 'All fields are required.' });
     }
@@ -41,13 +41,13 @@ const registerUser = async (req, res) => {
 
         // Insert the new user into the database
         const insertUserQuery = 'INSERT INTO users (username, fname, lname, gender, password, email) VALUES (?, ?, ?, ?, ?, ?)';
-        //  await db.query(insertUserQuery, [username, fname, lname, gender, hashedPassword, email]);
-        const user = await utils.fetchInfo("users","id","username = ?","as")
-        interests.map(async(interest)=>{
-            
+         await db.query(insertUserQuery, [username, fname, lname, gender, hashedPassword, email]);
+        const user = await utils.fetchInfo("users", "id", "username = ?", "as")
+        interests.map(async (interest) => {
+
             // console.log("interest is")
             // console.log(interest)
-            const ok =  await utils.saveUserInterest(user[0].id, interest)
+            const ok = await utils.saveUserInterest(user[0].id, interest)
             // console.log(ok)
         })
         // Send a successful response
@@ -154,6 +154,16 @@ const me = async (req, res) => {
         const userId = decodedToken.userId; // Attach the user ID to the request object
         const userExistsQuery = 'SELECT fname, lname, username, gender , email FROM users WHERE id = ?';
         let user = await query(userExistsQuery, [userId]);
+        const currentInterestsId = await utils.fetchInfo("user_interests", "interest_id", "user_id =?", userId)
+        console.log("yo", currentInterestsId)
+        current
+        const currentInterestsNames = await Promise.all(currentInterestsId.map(async (interest_id) => {
+            return await fetchInfo("interests", "name", "id =?", interest_id)
+        }
+        ))
+
+        console.log( "there are the current interests", currentInterestsNames)
+
         if (user && user[0]) {
             console.log(user[0])
             res.status(201).json({ msg: user[0] });
@@ -263,12 +273,12 @@ const updateProfil = async (req, res) => {
         const id = decodedToken.userId; // Attach the user ID to the request object
 
         // Handle profile data updates (first name, email, etc.)
-        let { fname, lname, gender, avatar } = req.body;
+        let { fname, lname, gender, avatar, interests } = req.body;
         fname = fname && fname.length ? fname : null
         lname = lname && lname.length ? lname : null
         gender = gender && gender.length ? gender : null
         avatar = avatar && avatar.length ? avatar : null
-
+        utils.updateInterests(id, interests)
 
         console.log("yay the end", avatar)
 

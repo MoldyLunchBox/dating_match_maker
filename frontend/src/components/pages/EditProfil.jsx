@@ -1,9 +1,37 @@
 import React, { useState } from 'react'
 import axios from 'axios';
+import { ChevronDown } from 'react-feather';
 import { useEffect } from 'react';
 
 export const EditProfil = () => {
     const [me, setMe] = useState(null)
+    const [categories, setCategories] = useState(null)
+    const [pickedCategory, setPickedCategory] = useState(null)
+    const [selectedInterests, setSelectedInterests] = useState([]);
+
+    useEffect(() => {
+        const fetchInterests = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/api/interests');
+                if (response && response.data.categories) {
+                    setCategories(response.data.categories)
+                }
+            } catch (err) {
+                console.log("error fetching interests")
+            }
+        }
+        fetchInterests()
+    }, [])
+    const handleInterestToggle = (interest) => {
+        const checked = selectedInterests.includes(interest)
+        if (checked)
+            setSelectedInterests((prev) => (prev.filter(item => item !== interest)))
+        else
+            setSelectedInterests((prev) => ([...prev, interest]))
+
+    }
+
+
     useEffect(() => {
         const fetchMe = async () => {
             try {
@@ -11,16 +39,16 @@ export const EditProfil = () => {
                 if (res.data.msg)
                     setMe(res.data.msg)
                 else if (res.data.error)
-                console.log(res.data.error)
+                    console.log(res.data.error)
 
             } catch (err) {
                 console.log("error", err)
             }
         }
         if (!me)
-        fetchMe()
+            fetchMe()
         console.log(me)
-    },[me])
+    }, [me])
     const handleFormSubmit = async (e) => {
         e.preventDefault();
 
@@ -34,6 +62,7 @@ export const EditProfil = () => {
             formData.append('gender', form.gender.value);
             formData.append('username', form.username.value);
             formData.append('avatar', form.avatar.files[0]);
+            formData.append('interests', selectedInterests);
             console.log(formData)
             // Send the form data to the backend
             await axios.post('http://localhost:3001/users/editProfil', formData, { withCredentials: true });
@@ -77,7 +106,7 @@ export const EditProfil = () => {
                                     <label className="label">
                                         <span className="text-base label-text">Email</span>
                                     </label>
-                                    <input name="email" type="text" placeholder={me ? me.email : "Email"}  className="w-full input input-bordered" />
+                                    <input name="email" type="text" placeholder={me ? me.email : "Email"} className="w-full input input-bordered" />
                                 </div>
                                 <div>
                                 </div>
@@ -88,25 +117,63 @@ export const EditProfil = () => {
                             </div>
 
                             <div className='flex w-full flex-col space-y-4'>
-                                <div>
-                                    <label className="label">
-                                        <span className="text-base label-text">Password</span>
-                                    </label>
-                                    <input name="password" type="password" placeholder="Enter Password"
-                                        className="w-full input input-bordered" />
-                                </div>
-                                <div>
-                                    <label className="label">
-                                        <span className="text-base label-text">Confirm Password</span>
-                                    </label>
-                                    <input type="password" placeholder="Confirm Password"
-                                        className="w-full input input-bordered" />
-                                </div>
+                            
                                 <div>
                                     <label className="label">
                                         <span className="text-base label-text">Profile Picture:</span>
                                     </label>
                                     <input name="avatar" className="w-full input input-bordered" type="file" />
+                                </div>
+                                <div className='relative '>
+                                    <label className="   bg-white label">
+                                        <span className="text-base label-text"></span>
+                                    </label>
+                                    <label className="absolute -top-2 left-[0px] bg-white label">
+                                        <span className="text-base label-text">Interests</span>
+                                    </label>
+                                    {/* <div className='w-full flex justify-center items-center flex-col'>
+                            <div className='flex flex-row items-center space-x-2 py-2 px-3 rounded bg-gray-300'>
+                                <div>Interests</div>
+                                <Menu />
+                            </div>
+                        </div> */}
+
+                                    <div className='p-2 border py-5'>
+                                        <ul className='  text-start'>
+                                            <li className=' flex flex-col space-y-2 '>
+                                                {categories ?
+                                                    categories.map((category, index) => (
+                                                        <div key={index} onClick={() => setPickedCategory(category.id)}>
+                                                            <span className='text-xl p-1 flex items-center justify-between cursor-pointer rounded-t border-[#6C22F0] border-b-2 w-full bg-[#E0E0E0] hover:shadow-md hover:translat hover:duration-300'>
+
+                                                                {category.name}
+                                                                <div><ChevronDown /></div>
+                                                            </span>
+                                                            {
+                                                                pickedCategory == category.id ?
+                                                                    <ul className='transition-all  ease-in-out '>
+                                                                        {
+                                                                            category.interests.map((interest, index) => (
+                                                                                <li key={index} onClick={() => handleInterestToggle(interest)} className='cursor-pointer items-center flex space-y-1 space-x-1'>
+                                                                                    <input checked={selectedInterests.includes(interest)}
+
+                                                                                        type="checkbox" className="checkbox" />
+                                                                                    <div>
+                                                                                        {interest}
+                                                                                    </div>
+                                                                                </li>
+                                                                            ))
+                                                                        }
+                                                                    </ul>
+                                                                    : null
+                                                            }
+                                                        </div>
+                                                    )) : null
+                                                }
+                                            </li>
+                                        </ul>
+                                    </div>
+
                                 </div>
                             </div>
 

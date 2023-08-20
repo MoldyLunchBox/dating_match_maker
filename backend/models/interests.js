@@ -7,19 +7,16 @@ const fetchInterests = async (req, res) => {
 
         let allCategories = await query(getCategories, [], db);
 
-        console.log("all users are", allCategories)
         const interestTags = await Promise.all(
             allCategories.map( async (category) => {
                 let getInterests = 'SELECT name  FROM interests where category_id=?'
                 let interests = await query(getInterests, [category.id], db);
                 interests = interests.map((row)=> row.name)
-                console.log("-----------------------------",interests)
                 return({
                     ...category, interests: interests
                 })
             })
         )
-        console.log("the end", interestTags)
         // Further processing or returning the result to the client
         // return categories;
         res.status(200).json({ categories: interestTags });

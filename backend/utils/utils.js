@@ -35,7 +35,7 @@ const fetchInfo = async (table, fields, clause, values) => {
 const saveInfo = async (table, fields, values) => {
     try {
         const timestampIndex = fields.split(',').map(f => f.trim()).indexOf('timestamp');
-        
+
         if (timestampIndex !== -1) {
             fields = fields.replace(', timestamp', '');
             values.splice(timestampIndex, 0, 'CURRENT_TIMESTAMP');
@@ -66,30 +66,52 @@ const updateQuery = `
       WHERE id = ?
       `;
 
-      const getInterestID = async (interestName) => {
-          const getInterestIDQuery = 'SELECT id FROM interests WHERE name = ?';
-          const result = await query(getInterestIDQuery, [interestName]);
-          return result[0].id;
-        };
-        
-        // Step 2: Insert User Interest
-        const saveUserInterest = async (userId, interestName) => {
-            try {
-                const interestId = await getInterestID(interestName);
-                console.log(interestId, "interest", interestName)
-      
-          const insertUserInterestQuery = 'INSERT INTO user_interests (user_id, interest_id) VALUES (?, ?)';
-          await query(insertUserInterestQuery, [userId, interestId]);
-          console.log('User interest saved successfully');
-        } catch (error) {
-          console.error('Error saving user interest:', error);
-        }
-      };
-      
+const getInterestID = async (interestName) => {
+    const getInterestIDQuery = 'SELECT id FROM interests WHERE name = ?';
+    const result = await query(getInterestIDQuery, [interestName]);
+    return result[0].id;
+};
+
+// Step 2: Insert User Interest
+const saveUserInterest = async (userId, interestName) => {
+    try {
+        const interestId = await getInterestID(interestName);
+        console.log(interestId, "interest", interestName)
+
+        const insertUserInterestQuery = 'INSERT INTO user_interests (user_id, interest_id) VALUES (?, ?)';
+        await query(insertUserInterestQuery, [userId, interestId]);
+        console.log('User interest saved successfully');
+    } catch (error) {
+        console.error('Error saving user interest:', error);
+    }
+};
+
+const updateInterests = async (userId, interests) => {
+    const currentInterests = await fetchInfo("user_interests", "interest_id", "user_id =?", userId)
+    console.log("fuck heres the current interests", currentInterests)
+    const newInterests = await Promise.all(interests.split(",").map(async (elem) => await getInterestID(elem)))
+    const deletedInterests = currentInterests.filter(currentInterest => !newInterests.includes(currentInterest.interest_id));
+    const addedInterests = newInterests.filter(newInterest => !currentInterests.some(currentInterest => currentInterest.interest_id === newInterest));
+    console.log("fuck heres the new interests", newInterests)
+    console.log("fuck heres the deleted interests", deletedInterests)
+    console.log("fuck heres the added interests", addedInterests)
+    // Delete old interests
+    for (const deletedInterest of deletedInterests) {
+        const deleteQuery = "DELETE FROM user_interests WHERE user_id = ? AND interest_id = ?";
+        await query(deleteQuery, [userId, deletedInterest.interest_id]);
+    }
+    // Add new interests
+    for (const addedInterestId of addedInterests) {
+        const insertQuery = "INSERT INTO user_interests (user_id, interest_id) VALUES (?, ?)";
+        await query(insertQuery, [userId, addedInterestId]);
+    }
+    console.log("Interests updated successfully");
+}
 
 module.exports = {
     sanitizeInput,
     updateQuery,
+    updateInterests,
     query,
     fetchInfo,
     saveInfo,
