@@ -9,7 +9,6 @@ export const Register = () => {
 
     useEffect(() => {
         const fetchInterests = async () => {
-
             try {
                 const response = await axios.get('http://localhost:3001/api/interests');
                 if (response && response.data.categories) {
@@ -40,7 +39,8 @@ export const Register = () => {
                 fname: form.elements.fname.value,
                 lname: form.elements.lname.value,
                 gender: form.elements.gender.value,
-                email: form.elements.email.value
+                email: form.elements.email.value,
+                interests: selectedInterests
             });
             if (response.data && !response.data.error) {
                 const msg = response.data.msg;
