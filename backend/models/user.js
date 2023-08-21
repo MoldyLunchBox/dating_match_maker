@@ -41,7 +41,7 @@ const registerUser = async (req, res) => {
 
         // Insert the new user into the database
         const insertUserQuery = 'INSERT INTO users (username, fname, lname, gender, password, email) VALUES (?, ?, ?, ?, ?, ?)';
-         await db.query(insertUserQuery, [username, fname, lname, gender, hashedPassword, email]);
+        await db.query(insertUserQuery, [username, fname, lname, gender, hashedPassword, email]);
         const user = await utils.fetchInfo("users", "id", "username = ?", "as")
         interests.map(async (interest) => {
 
@@ -155,25 +155,30 @@ const me = async (req, res) => {
         const userExistsQuery = 'SELECT fname, lname, username, gender , email FROM users WHERE id = ?';
         let user = await query(userExistsQuery, [userId]);
         const currentInterestsId = await utils.fetchInfo("user_interests", "interest_id", "user_id =?", userId)
-        console.log("yo", currentInterestsId)
-        current
-        const currentInterestsNames = await Promise.all(currentInterestsId.map(async (interest_id) => {
-            return await fetchInfo("interests", "name", "id =?", interest_id)
+        let interests = null
+        if (currentInterestsId.length){
+            console.log("yo", currentInterestsId)
+            const currentInterestsNames = await Promise.all(currentInterestsId.map(async (interest_id) => {
+                // console.log(interest_id.interest_id)
+                return await utils.fetchInfo("interests", "name", "id =?", interest_id.interest_id)
+            }
+            ))
+            interests = currentInterestsNames.map((elem)=>(elem[0].name))
+            console.log("there are the current interests", interests)
+            
         }
-        ))
-
-        console.log( "there are the current interests", currentInterestsNames)
-
         if (user && user[0]) {
             console.log(user[0])
-            res.status(201).json({ msg: user[0] });
+            res.status(201).json({ msg: user[0], interests: interests });
         }
+
         else
             res.status(201).json({ error: "no such user" });
 
 
     } catch (err) {
         // Token is invalid or expired, user not logged in
+        console.log(err)
         return res.status(201).json({ error: 'Unauthorized - Please log in.' });
     }
 };

@@ -10,17 +10,7 @@ export const EditProfil = () => {
     const [selectedInterests, setSelectedInterests] = useState([]);
 
     useEffect(() => {
-        const fetchInterests = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/api/interests');
-                if (response && response.data.categories) {
-                    setCategories(response.data.categories)
-                }
-            } catch (err) {
-                console.log("error fetching interests")
-            }
-        }
-        fetchInterests()
+     
     }, [])
     const handleInterestToggle = (interest) => {
         const checked = selectedInterests.includes(interest)
@@ -35,10 +25,23 @@ export const EditProfil = () => {
     useEffect(() => {
         const fetchMe = async () => {
             try {
+                const fetchInterests = async () => {
+                    try {
+                        const response = await axios.get('http://localhost:3001/api/interests');
+                        if (response && response.data.categories) {
+                            setCategories(response.data.categories)
+                        }
+                    } catch (err) {
+                        console.log("error fetching interests")
+                    }
+                }
+                fetchInterests()
                 const res = await axios.get('http://localhost:3001/users/me', { withCredentials: true });
-                if (res.data.msg)
+                if (res.data.msg){
+                    setSelectedInterests(res.data.interests)
                     setMe(res.data.msg)
-                else if (res.data.error)
+                }
+                    else if (res.data.error)
                     console.log(res.data.error)
 
             } catch (err) {
