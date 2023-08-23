@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Menu, ChevronDown } from 'react-feather';
+import { UploadPicture } from '../UploadPicture';
 
 export const Register = () => {
     const [categories, setCategories] = useState(null)
@@ -60,6 +61,10 @@ export const Register = () => {
                 {/* <form onSubmit={handleLogin} className="bg-white p-10 rounded-lg shadow-lg min-w-full"> */}
                 <form onSubmit={handleFormSubmit} className="bg-white p-10 rounded-lg shadow-lg  h-full space-y-5">
                     <h1 className="text-3xl font-semibold text-center text-gray-700">Sign up</h1>
+                    <div className='flex justify-center'>
+                        <UploadPicture />
+                        
+                    </div>
                     <div>
                         <label className="label">
                             <span className="text-base label-text">Username</span>
@@ -136,7 +141,7 @@ export const Register = () => {
                                                                 category.interests.map((interest, index) => (
                                                                     <li key={index} onClick={() => handleInterestToggle(interest)} className='cursor-pointer items-center flex space-y-1 space-x-1'>
                                                                         <input checked={selectedInterests.includes(interest)}
-                                                                            
+
                                                                             type="checkbox" className="checkbox" />
                                                                         <div>
                                                                             {interest}
