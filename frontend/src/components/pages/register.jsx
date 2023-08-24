@@ -55,7 +55,7 @@ export const Register = () => {
             console.error('registration failed:', error);
         }
     }
-    const fieldHandler = (e)=>{
+    const fieldHandler = (e) => {
         fieldChecker(e.target.name, e.target.value)
     }
     return (
@@ -67,7 +67,7 @@ export const Register = () => {
                     <h1 className="text-3xl font-semibold text-center text-gray-700">Sign up</h1>
                     <div className='flex justify-center'>
                         <UploadPicture />
-                        
+
                     </div>
                     <div>
                         <label className="label">
@@ -79,25 +79,40 @@ export const Register = () => {
                         <label className="label">
                             <span className="text-base label-text">First name</span>
                         </label>
-                        <input name="fname" type="text" placeholder="First name" className="w-full   input input-bordered" />
+                        <input name="fname" id="fname" type="text" onChange={fieldHandler} placeholder="First name" className="w-full   input input-bordered" />
                     </div>
                     <div>
                         <label className="label">
                             <span className="text-base label-text">Last name</span>
                         </label>
-                        <input name="lname" type="text" placeholder="Last name" className="w-full input input-bordered" />
+                        <input name="lname" id="lname" onChange={fieldHandler} type="text" placeholder="Last name" className="w-full input input-bordered" />
                     </div>
                     <div>
                         <label className="label">
                             <span className="text-base label-text">Email</span>
                         </label>
-                        <input name="email" type="text" placeholder="Email Address" className="w-full input input-bordered" />
+                        <input name="email" id="email" onChange={fieldHandler} type="text" placeholder="Email Address" className="w-full input input-bordered" />
                     </div>
                     <div>
-                        <label className="label">
+                        {/* <label className="label">
                             <span className="text-base label-text">gender</span>
                         </label>
                         <input name="gender" type="text" placeholder="gender" className="w-full input input-bordered" />
+                   */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700">Gender</label>
+                            <select
+                                className="mt-1 block w-full p-2 border rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300"
+                                name="gender"
+                                id="gender" onChange={fieldHandler}
+                            >
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
                     </div>
                     <div>
                         <label className="label">

@@ -1,18 +1,69 @@
 
 import axios from 'axios';
+const isAlphanumeric = (input) => /^[a-zA-Z0-9]+$/.test(input);
+const isEmailValid = (email) => {
+    const regexPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regexPattern.test(email);
+};
 
-export const fieldChecker = async (field,value) => {
+export const fieldChecker = async (field, value) => {
     try {
-        let response = null
+        let response = {
+            data: {
+                msg: "good"
+            }
+        };
+        console.log("yo", field, value)
         switch (field) {
             case "username":
-                console.log("checkign username")
                 response = await axios.post('http://localhost:3001/api/fieldCheck', {
                     username: value
                 });
+                break
+            case "fname":
+            case "lname":
+                console.log("eh")
+                if (!isAlphanumeric(value)) {
+                    response = {
+                        data: {
+                            error: "no special characters or digits"
+                        }
+                    };
+                }
+                else if (!value.length) {
+                    response = {
+                        data: {
+                            error: "field must not be empty"
+                        }
+                    };
+                }
+                break;
+            case "email":
+                if (!isEmailValid(value)) {
+                    response = {
+                        data: {
+                            error: "enter valid email"
+                        }
+                    };
+                }
+                else{
+                    response = await axios.post('http://localhost:3001/api/emailChecker', {
+                        email: value
+                    });
+                }
+                break;
+            case "gender":
+                console.log("gender", value)
+                if (value !== "male" && value !== "female" && value !== "other")
+                response = {
+                    data: {
+                        error: "invalid gender choice"
+                    }
+                };
+
         }
 
-
+        console.log(response)
         const divElement = document.getElementById(field);
         if (response && response.data.msg) {
 
@@ -30,8 +81,8 @@ export const fieldChecker = async (field,value) => {
                 divElement.classList.add('border-red-500');
             }
         }
-        
+
     } catch (err) {
-        console.log("error fetching interests")
+        console.log("error fetching interests", err)
     }
 }
