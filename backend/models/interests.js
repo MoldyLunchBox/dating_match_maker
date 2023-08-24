@@ -27,6 +27,9 @@ const fetchInterests = async (req, res) => {
     }
 };
 
+
+
+
 module.exports = {
     fetchInterests,
 };

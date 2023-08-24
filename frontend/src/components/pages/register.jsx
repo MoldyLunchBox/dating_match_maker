@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Menu, ChevronDown } from 'react-feather';
 import { UploadPicture } from '../UploadPicture';
+import { fieldChecker } from '../../utils/register';
 
 export const Register = () => {
     const [categories, setCategories] = useState(null)
@@ -54,6 +55,9 @@ export const Register = () => {
             console.error('registration failed:', error);
         }
     }
+    const fieldHandler = (e)=>{
+        fieldChecker(e.target.name, e.target.value)
+    }
     return (
         <div className="min-h-screen  bg-indigo-100 flex justify-center items-center">
             <div className="container my-5  max-w-[600px]">
@@ -69,13 +73,13 @@ export const Register = () => {
                         <label className="label">
                             <span className="text-base label-text">Username</span>
                         </label>
-                        <input name="username" type="text" placeholder="Username" className="w-full input input-bordered" />
+                        <input name="username" id="username" onChange={fieldHandler} type="text" placeholder="Username" className="w-full input input-bordered" />
                     </div>
                     <div>
                         <label className="label">
                             <span className="text-base label-text">First name</span>
                         </label>
-                        <input name="fname" type="text" placeholder="First name" className="w-full input input-bordered" />
+                        <input name="fname" type="text" placeholder="First name" className="w-full   input input-bordered" />
                     </div>
                     <div>
                         <label className="label">
