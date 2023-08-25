@@ -1,8 +1,7 @@
 import React, { useRef, useState } from 'react'
 
-export const UploadPicture = ({file}) => {
+export const UploadPicture = ({file, setFile}) => {
     const inputRef = useRef(null)
-    const [image, setImage] = useState("")
 
     const handleInageClick = () =>{
         inputRef.current.click()
@@ -15,7 +14,7 @@ export const UploadPicture = ({file}) => {
           const maxSize = 2 * 1024 * 1024; // 2MB
     
           if (allowedFormats.includes(file.type) && file.size <= maxSize) {
-            setImage(file)
+            setFile(file)
             setError('');
           } else {
             setSelectedImage(null);
