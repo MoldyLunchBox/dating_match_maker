@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-export const UploadPicture = () => {
+export const UploadPicture = ({file}) => {
     const inputRef = useRef(null)
     const [image, setImage] = useState("")
 
@@ -9,8 +9,19 @@ export const UploadPicture = () => {
     }
     const imagePreview = document.getElementById('image-preview');
     const handleImageChange = (e) =>{
-        const file = e.target.files[0]
-        setImage(file)
+         file = e.target.files[0]
+        if (file) {
+          const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
+          const maxSize = 2 * 1024 * 1024; // 2MB
+    
+          if (allowedFormats.includes(file.type) && file.size <= maxSize) {
+            setImage(file)
+            setError('');
+          } else {
+            setSelectedImage(null);
+            setError('Invalid image format or file size.');
+          }
+        }
         imagePreview.innerHTML =
         `<img src="${ URL.createObjectURL(file)}" className="max-h-48 rounded-lg mx-auto" alt="Image preview" />`;
       imagePreview.classList.remove('border-dashed', 'border-2', 'border-gray-400');

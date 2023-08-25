@@ -35,28 +35,7 @@ export const Login = () => {
       console.error('Login failed:', error);
     }
   };
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3001/users/register', {
-        username: "hello123",
-        password: "yoooooo",
-        fname:"abdu",
-        lname:"second",
-        gender:"male",
-        email:"hellos@hellos.hellos"
-      });
-      if (response.data && !response.data.error) {
-        const msg = response.data.msg;
-        // store the token in localStorage for further use
-        console.log(msg)
-      }
-      else
-        console.log(response.data.error)
-    } catch (error) {
-      console.error('registration failed:', error);
-    }
-  };
+
 
   return (
     <div className="h-screen bg-indigo-100 flex justify-center items-center">

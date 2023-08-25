@@ -8,7 +8,7 @@ export const Register = () => {
     const [categories, setCategories] = useState(null)
     const [pickedCategory, setPickedCategory] = useState(null)
     const [selectedInterests, setSelectedInterests] = useState([]);
-
+    const [file, setFile] = null
     useEffect(() => {
         const fetchInterests = async () => {
             try {
@@ -63,10 +63,10 @@ export const Register = () => {
             <div className="container my-5  max-w-[600px]">
 
                 {/* <form onSubmit={handleLogin} className="bg-white p-10 rounded-lg shadow-lg min-w-full"> */}
-                <form onSubmit={handleFormSubmit} className="bg-white p-10 rounded-lg shadow-lg  h-full space-y-5">
+                <form onSubmit={handleFormSubmit}  className="bg-white p-10 rounded-lg shadow-lg  h-full space-y-5">
                     <h1 className="text-3xl font-semibold text-center text-gray-700">Sign up</h1>
                     <div className='flex justify-center'>
-                        <UploadPicture />
+                        <UploadPicture file={file} setFile={setFile}/>
 
                     </div>
                     <div>
