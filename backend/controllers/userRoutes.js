@@ -7,7 +7,7 @@ const { addFriend, friends, requests } = require('../models/friend');
 const { getConversations, getConversation } = require('../models/chat');
 
 // Endpoint for user registration
-router.post('/register',registerUser );
+router.post('/register',upload.single('avatar') ,registerUser );
 router.get('/fetchUser',fetchUser );
 router.get('/me',me );
 router.post('/searchUsers',searchUsers );

@@ -19,7 +19,6 @@ export const FriendsList = ({ tab }) => {
                 setFriends(result)
             else
                 setFriends(null)
-            console.log(result);
         } catch (error) {
             console.error('Login failed:', error);
         }

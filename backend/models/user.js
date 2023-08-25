@@ -20,36 +20,37 @@ const query = (sql, values) => {
 
 
 const registerUser = async (req, res) => {
-    const { username, fname, lname, gender, password, email, interests } = req.body;
+    const { username, fname, lname, gender, password, email, interests, avatar } = req.body;
     // Validation: Check if required data is present in the request body
     console.log(username, req.body)
 
-    if (!username || !fname || !lname || !gender || !password || !email || !interests) {
+    if (!username || !fname || !lname || !gender || !password || !email || !interests, avatar) {
         log("check")
         return res.status(201).json({ error: 'All fields are required.' });
     }
     try {
         // Check if the user already exists in the database
-        const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
+        console.log("got in register")
+        // const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
         // const existingUser = await query(userExistsQuery, [username]);
         // if (existingUser.length > 0) {
         //     return res.status(201).json({ error: 'Username already exists.' });
         // }
 
-        // Hash the password before storing it in the database
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // // Hash the password before storing it in the database
+        // const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Insert the new user into the database
-        const insertUserQuery = 'INSERT INTO users (username, fname, lname, gender, password, email) VALUES (?, ?, ?, ?, ?, ?)';
-        await db.query(insertUserQuery, [username, fname, lname, gender, hashedPassword, email]);
-        const user = await utils.fetchInfo("users", "id", "username = ?", "as")
-        interests.map(async (interest) => {
+        // // Insert the new user into the database
+        // const insertUserQuery = 'INSERT INTO users (username, fname, lname, gender, password, email, avatar) VALUES (?, ?, ?, ?, ?, ?)';
+        // await db.query(insertUserQuery, [username, fname, lname, gender, hashedPassword, email, avatar]);
+        // const user = await utils.fetchInfo("users", "id", "username = ?", "as")
+        // interests.map(async (interest) => {
 
-            // console.log("interest is")
-            // console.log(interest)
-            const ok = await utils.saveUserInterest(user[0].id, interest)
+        //     // console.log("interest is")
+        //     // console.log(interest)
+        //     const ok = await utils.saveUserInterest(user[0].id, interest)
             // console.log(ok)
-        })
+        // })
         // Send a successful response
         res.status(201).json({ msg: 'User registered successfully.' });
     } catch (err) {

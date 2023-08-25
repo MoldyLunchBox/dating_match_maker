@@ -37,6 +37,7 @@ const storage = multer.diskStorage({
 
   } else {
     // Reject the file upload by providing an error message
+    req.body.avatar = null
     cb(new Error('Only image files are allowed!'), false);
     }
   },
