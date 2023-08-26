@@ -2,13 +2,21 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Menu, ChevronDown } from 'react-feather';
 import { UploadPicture } from '../UploadPicture';
-import { fieldChecker } from '../../utils/register';
+import { errorIndicator, fieldChecker } from '../../utils/register';
+import { Loading } from '../../modals/Loading';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setRegistered } from '../../redux/reducers/slicer';
 
 export const Register = () => {
     const [categories, setCategories] = useState(null)
     const [pickedCategory, setPickedCategory] = useState(null)
     const [selectedInterests, setSelectedInterests] = useState([]);
+    const [loading, setLoading] = useState(null)
     const [file, setFile] = useState(null)
+    const dispatch = useDispatch()
+    const navigate = useNavigate();
+
     useEffect(() => {
         const fetchInterests = async () => {
             try {
@@ -33,29 +41,42 @@ export const Register = () => {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        const form = e.target
         try {
-            if (selectedInterests && file){
-                const response = await axios.post('http://localhost:3001/users/register', {
-                    username: form.elements.username.value,
-                    password: form.elements.password.value,
-                    fname: form.elements.fname.value,
-                    lname: form.elements.lname.value,
-                    gender: form.elements.gender.value,
-                    email: form.elements.email.value,
-                    interests: selectedInterests,
-                    avatar: file
-                });
+            setLoading(true)
+            const form = e.target
+            const formData = new FormData();
+            formData.append('username', form.username.value);
+            formData.append('fname', form.fname.value);
+            formData.append('password', form.password.value);
+            formData.append('lname', form.lname.value);
+            formData.append('email', form.email.value);
+            formData.append('gender', form.gender.value);
+            formData.append('avatar', form.avatar.files[0]);
+            formData.append('interests', selectedInterests);
+            const badFieldDiv = document.getElementById("missingFieldError")
+            if (selectedInterests && file) {
+                const response = await axios.post('http://localhost:3001/users/register',
+                    formData
+                );
                 if (response.data && !response.data.error) {
                     const msg = response.data.msg;
-                    // store the token in localStorage for further use
-                    console.log(msg)
+                    console.log("all is good we registered?")
+                    dispatch(setRegistered(true))
+                    navigate("/");
                 }
-                else
-                console.log(response.data.error)
+                else {
+                    errorIndicator(response.data.error, setLoading)
+                    console.log("error?", response.data.error)
+                }
+            }
+            else {
+                errorIndicator("* all fields are required")
+                console.log("eror missing fields")
+
             }
         } catch (error) {
             console.error('registration failed:', error);
+            errorIndicator("registration failed")
         }
     }
     const fieldHandler = (e) => {
@@ -63,8 +84,8 @@ export const Register = () => {
     }
     return (
         <div className="min-h-screen bg-indigo-100 flex justify-center items-center">
+            {loading ? <Loading /> : null}
             <div className="container my-5 max-w-[600px]">
-
                 {/* <form onSubmit={handleLogin} className="bg-white p-10 rounded-lg shadow-lg min-w-full"> */}
                 <form onSubmit={handleFormSubmit} className="bg-white p-10 rounded-lg shadow-lg  h-full space-y-5">
                     <h1 className="text-3xl font-semibold text-center text-gray-700">Sign up</h1>
@@ -178,9 +199,12 @@ export const Register = () => {
                         </div>
 
                     </div>
-                    <div>
-                        <button type='submit' className="btn btn-block">Sign Up</button>
-                    </div>
+                    {
+
+                        <h1 id="missingFieldError" className='hidden text-red-400 '>* all fields must be filled.</h1>
+                    }
+                    <button type='submit' className="btn btn-block">Sign Up</button>
+
                     <span>Already have an account ?
                         <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline">Login</a></span>
                 </form>

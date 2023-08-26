@@ -29,11 +29,15 @@ const authSlice = createSlice({
 const modalSlice = createSlice({
   name: 'modals',
   initialState :{
-    searchFriend : null
+    searchFriend : null,
+    registered : null,
   },
   reducers: {
     setSearchFriend: (state, action) => {
       state.searchFriend = action.payload;
+    }, 
+    setRegistered: (state, action) => {
+      state.registered = action.payload;
     },
   },
 });
@@ -62,6 +66,7 @@ const chatSlice = createSlice({
 console.log(modalSlice)
 export const { setToken } = authSlice.actions;
 export const { setSearchFriend } = modalSlice.actions;
+export const { setRegistered } = modalSlice.actions;
 export const { setConversations } = chatSlice.actions;
 export const { setSelectedConversation } = chatSlice.actions;
 export const { setMessages } = chatSlice.actions;

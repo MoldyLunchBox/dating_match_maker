@@ -1,13 +1,16 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../redux/reducers/slicer';
 import { useNavigate } from 'react-router-dom';
+import { Info } from 'react-feather';
+import { InfoModal } from '../../modals/InfoModal';
 export const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const registered = useSelector((state) => state.modals.registered)
 
 
 
@@ -39,6 +42,7 @@ export const Login = () => {
 
   return (
     <div className="h-screen bg-indigo-100 flex justify-center items-center">
+      {registered ? <InfoModal /> : null}
       <div className="lg:w-2/5 md:w-1/2 w-2/3 max-w-[509px]">
         <form onSubmit={handleLogin} className=" bg-white p-10 rounded-lg shadow-lg min-w-full">
           <h1 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">Log in</h1>

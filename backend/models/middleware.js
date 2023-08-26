@@ -25,6 +25,7 @@ const authenticateUser = (req, res, next) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    console.log("yo")
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
@@ -37,6 +38,8 @@ const storage = multer.diskStorage({
 
   } else {
     // Reject the file upload by providing an error message
+    console.log("upload bad")
+
     req.body.avatar = null
     cb(new Error('Only image files are allowed!'), false);
     }

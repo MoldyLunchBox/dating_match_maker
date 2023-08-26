@@ -24,19 +24,20 @@ const registerUser = async (req, res) => {
     // Validation: Check if required data is present in the request body
     console.log(username, req.body)
 
-    if (!username || !fname || !lname || !gender || !password || !email || !interests, avatar) {
+    if (!username || !fname || !lname || !gender || !password || !email || !interests, !avatar) {
         log("check")
         return res.status(201).json({ error: 'All fields are required.' });
     }
     try {
         // Check if the user already exists in the database
         console.log("got in register")
-        // const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
-        // const existingUser = await query(userExistsQuery, [username]);
-        // if (existingUser.length > 0) {
-        //     return res.status(201).json({ error: 'Username already exists.' });
-        // }
-
+        return res.status(201).json({ msg: 'User registered successfully.' });
+        const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
+        const existingUser = await query(userExistsQuery, [username]);
+        if (existingUser.length > 0) {
+            return res.status(201).json({ error: 'Username already exists.' });
+        }
+        const verification = verifyFields()
         // // Hash the password before storing it in the database
         // const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -268,29 +269,29 @@ const searchUsers = async (req, res) => {
 const updateProfil = async (req, res) => {
     try {
         const token = req.cookies.token;
-        console.log("authenticator", token)
-        if (!token) {
-            // Token is missing, user not logged in
-            console.log("no token", token)
+        console.log("authenticator for edit", token)
+        // if (!token) {
+        //     // Token is missing, user not logged in
+        //     console.log("no token", token)
 
-            return res.status(201).json({ error: 'Unauthorized - Please log in.' });
-        }
-        const decodedToken = jwt.verify(token, jwtSecret);
-        const id = decodedToken.userId; // Attach the user ID to the request object
+        //     return res.status(201).json({ error: 'Unauthorized - Please log in.' });
+        // }
+        // const decodedToken = jwt.verify(token, jwtSecret);
+        // const id = decodedToken.userId; // Attach the user ID to the request object
 
-        // Handle profile data updates (first name, email, etc.)
-        let { fname, lname, gender, avatar, interests } = req.body;
-        fname = fname && fname.length ? fname : null
-        lname = lname && lname.length ? lname : null
-        gender = gender && gender.length ? gender : null
-        avatar = avatar && avatar.length ? avatar : null
-        utils.updateInterests(id, interests)
+        // // Handle profile data updates (first name, email, etc.)
+        // let { fname, lname, gender, avatar, interests } = req.body;
+        // fname = fname && fname.length ? fname : null
+        // lname = lname && lname.length ? lname : null
+        // gender = gender && gender.length ? gender : null
+        // avatar = avatar && avatar.length ? avatar : null
+        // utils.updateInterests(id, interests)
 
-        console.log("yay the end", avatar)
+        // console.log("yay the end", avatar)
 
-        let users = await query(utils.updateQuery, [fname, fname, lname, lname, gender, gender, avatar, avatar, id]);
-        console.log(users)
-        res.status(200).json({ msg: 'Profile updated successfully!' });
+        // let users = await query(utils.updateQuery, [fname, fname, lname, lname, gender, gender, avatar, avatar, id]);
+        // console.log(users)
+        // res.status(200).json({ msg: 'Profile updated successfully!' });
 
     }
     catch (err) {

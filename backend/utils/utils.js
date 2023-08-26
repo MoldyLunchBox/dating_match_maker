@@ -108,6 +108,10 @@ const updateInterests = async (userId, interests) => {
     console.log("Interests updated successfully");
 }
 
+const verifyFields = () =>{
+
+}
+
 module.exports = {
     sanitizeInput,
     updateQuery,
