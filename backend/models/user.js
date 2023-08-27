@@ -24,7 +24,8 @@ const registerUser = async (req, res) => {
     // Validation: Check if required data is present in the request body
     console.log(username, req.body)
 
-    if (!username || !fname || !lname || !gender || !password || !email || !interests, !avatar) {
+    const verification = verifyFields()
+    if (!verification) {
         log("check")
         return res.status(201).json({ error: 'All fields are required.' });
     }
@@ -37,7 +38,6 @@ const registerUser = async (req, res) => {
         if (existingUser.length > 0) {
             return res.status(201).json({ error: 'Username already exists.' });
         }
-        const verification = verifyFields()
         // // Hash the password before storing it in the database
         // const hashedPassword = await bcrypt.hash(password, 10);
 

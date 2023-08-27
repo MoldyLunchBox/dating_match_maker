@@ -108,7 +108,9 @@ const updateInterests = async (userId, interests) => {
     console.log("Interests updated successfully");
 }
 
-const verifyFields = () =>{
+const verifyFields = (body) =>{
+    const { username, fname, lname, gender, password, email, interests, avatar } =  body;
+    
 
 }
 
