@@ -1,6 +1,8 @@
 
 import axios from 'axios';
 const isAlphanumeric = (input) => /^[a-zA-Z0-9]+$/.test(input);
+const isUsernameValid = (input) => /^[a-zA-Z0-9_-]+$/.test(input);
+
 const isEmailValid = (email) => {
     const regexPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regexPattern.test(email);
