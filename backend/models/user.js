@@ -24,36 +24,30 @@ const registerUser = async (req, res) => {
     // Validation: Check if required data is present in the request body
     console.log(username, req.body)
 
-    const verification = verifyFields()
-    if (!verification) {
+    const verificationFailed = utils.verifyFields( req.body)
+    if (verificationFailed) {
         log("check")
-        return res.status(201).json({ error: 'All fields are required.' });
+        return res.status(201).json({ error: verificationFailed });
     }
     try {
         // Check if the user already exists in the database
-        console.log("got in register")
-        return res.status(201).json({ msg: 'User registered successfully.' });
+        console.log("got in register", interests)
         const userExistsQuery = 'SELECT * FROM users WHERE username = ?';
         const existingUser = await query(userExistsQuery, [username]);
         if (existingUser.length > 0) {
             return res.status(201).json({ error: 'Username already exists.' });
         }
         // // Hash the password before storing it in the database
-        // const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         // // Insert the new user into the database
-        // const insertUserQuery = 'INSERT INTO users (username, fname, lname, gender, password, email, avatar) VALUES (?, ?, ?, ?, ?, ?)';
-        // await db.query(insertUserQuery, [username, fname, lname, gender, hashedPassword, email, avatar]);
-        // const user = await utils.fetchInfo("users", "id", "username = ?", "as")
-        // interests.map(async (interest) => {
-
-        //     // console.log("interest is")
-        //     // console.log(interest)
-        //     const ok = await utils.saveUserInterest(user[0].id, interest)
-            // console.log(ok)
-        // })
+        await utils.saveInfo("users", "(username, fname, lname, gender, password, email, avatar)",[username, fname, lname, gender, hashedPassword, email, avatar])
+        const user = await utils.fetchInfo("users", "id", "username = ?", username)
+        interests.map(async (interest) => {
+            const ok = await utils.saveUserInterest(user[0].id, interest)
+        })
         // Send a successful response
-        res.status(201).json({ msg: 'User registered successfully.' });
+        res.status(201).json({ error: 'User registered successfully.' });
     } catch (err) {
         console.error('Error during user registration:', err);
         res.status(201).json({ error: 'Something went wrong. Please try again later.' });

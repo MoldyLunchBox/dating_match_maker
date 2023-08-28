@@ -107,11 +107,76 @@ const updateInterests = async (userId, interests) => {
     }
     console.log("Interests updated successfully");
 }
+const isAlpha = (input) => /^[a-zA-Z]+$/.test(input);
 
-const verifyFields = (body) =>{
-    const { username, fname, lname, gender, password, email, interests, avatar } =  body;
-    
+const isAlphanumeric = (input) => /^[a-zA-Z0-9]+$/.test(input);
+const isUsernameValid = (input) => /^[a-zA-Z0-9_-]+$/.test(input);
+const isEmailValid = (email) => {
+    const regexPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regexPattern.test(email);
+};
 
+const fieldChecker = (key, value) => {
+    switch (key) {
+        case "username":
+            console.log(isUsernameValid(value))
+            if (!isUsernameValid(value))
+                return ("username must contain only letters (a-z), numbers, - and _ ")
+            else
+                return ("")
+        case "fname":
+        case "lname":
+            if (!isAlpha(value))
+                return ("name must contain only letters (a-z)")
+            else
+                return ("")
+        case "email":
+            if (!isEmailValid(value))
+                return ("enter valid email")
+            else
+                return ("")
+        case "gender":
+            if (value !== "male" && value !== "female" && value !== "other")
+                return ("invalid gender choice")
+            else
+                return ""
+        case "interests":
+            if (!value.length)
+                return ("must choose atleast one interest")
+            else
+                return ("")
+        case "avatar":
+            console.log(!value.length)
+            if (!value.length)
+                return ("must upload a profil picture")
+            else
+                return ("")
+
+        default:
+            return ("")
+    }
+}
+const verifyFields = (body) => {
+    console.log("verifying fields")
+    const { username, fname, lname, gender, password, email, interests, avatar } = body;
+
+    const fields =
+        [{ key: "username", value: username },
+        { key: "fname", value: fname },
+        { key: "lname", value: lname },
+        { key: "gender", value: gender },
+        { key: "password", value: password },
+        { key: "email", value: email },
+        { key: "interests", value: interests },
+        { key: "avatar", value: avatar }]
+    let msg = null
+    fields.map((field) => {
+        const ret = fieldChecker(field.key, field.value)
+        if (ret.length)
+            msg = ret
+
+    })
+    return msg
 }
 
 module.exports = {
@@ -122,4 +187,6 @@ module.exports = {
     fetchInfo,
     saveInfo,
     saveUserInterest,
+    verifyFields,
+
 };
