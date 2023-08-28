@@ -20,11 +20,13 @@ const query = (sql, values) => {
 
 
 const registerUser = async (req, res) => {
-    const { username, fname, lname, gender, password, email, interests, avatar } = req.body;
+    const { username, fname, lname, gender, password, email, avatar } = req.body;
+    let {interests} = req.body
+    interests = interests ? interests.split(",") : interests
     // Validation: Check if required data is present in the request body
     console.log(username, req.body)
 
-    const verificationFailed = utils.verifyFields( req.body)
+    const verificationFailed = utils.verifyFields(req.body)
     if (verificationFailed) {
         log("check")
         return res.status(201).json({ error: verificationFailed });
@@ -47,7 +49,7 @@ const registerUser = async (req, res) => {
             const ok = await utils.saveUserInterest(user[0].id, interest)
         })
         // Send a successful response
-        res.status(201).json({ error: 'User registered successfully.' });
+        res.status(201).json({ msg: 'User registered successfully.' });
     } catch (err) {
         console.error('Error during user registration:', err);
         res.status(201).json({ error: 'Something went wrong. Please try again later.' });

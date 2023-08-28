@@ -116,7 +116,7 @@ const isEmailValid = (email) => {
     return regexPattern.test(email);
 };
 
-const fieldChecker = (key, value) => {
+const fieldChecker = async (key, value) => {
     switch (key) {
         case "username":
             console.log(isUsernameValid(value))
@@ -133,8 +133,13 @@ const fieldChecker = (key, value) => {
         case "email":
             if (!isEmailValid(value))
                 return ("enter valid email")
-            else
+            else {
+                const users = await fetchInfo("users", "id", "email =?", value)
+                if (users.length) {
+                    return ("email is not available");
+                }
                 return ("")
+            }
         case "gender":
             if (value !== "male" && value !== "female" && value !== "other")
                 return ("invalid gender choice")

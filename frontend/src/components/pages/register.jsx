@@ -30,6 +30,7 @@ export const Register = () => {
         }
         fetchInterests()
     }, [])
+    
     const handleInterestToggle = (interest) => {
         const checked = selectedInterests.includes(interest)
         if (checked)
@@ -38,6 +39,10 @@ export const Register = () => {
             setSelectedInterests((prev) => ([...prev, interest]))
 
     }
+
+    useEffect(() => {
+        console.log("selected intersts ", selectedInterests)
+    }, [selectedInterests])
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
