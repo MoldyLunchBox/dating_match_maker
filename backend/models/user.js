@@ -21,7 +21,7 @@ const query = (sql, values) => {
 
 const registerUser = async (req, res) => {
     const { username, fname, lname, gender, password, email, avatar } = req.body;
-    let {interests} = req.body
+    let { interests } = req.body
     interests = interests ? interests.split(",") : interests
     // Validation: Check if required data is present in the request body
     console.log(username, req.body)
@@ -43,7 +43,7 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // // Insert the new user into the database
-        await utils.saveInfo("users", "(username, fname, lname, gender, password, email, avatar)",[username, fname, lname, gender, hashedPassword, email, avatar])
+        await utils.saveInfo("users", "(username, fname, lname, gender, password, email, avatar)", [username, fname, lname, gender, hashedPassword, email, avatar])
         const user = await utils.fetchInfo("users", "id", "username = ?", username)
         interests.map(async (interest) => {
             const ok = await utils.saveUserInterest(user[0].id, interest)
@@ -154,16 +154,16 @@ const me = async (req, res) => {
         let user = await query(userExistsQuery, [userId]);
         const currentInterestsId = await utils.fetchInfo("user_interests", "interest_id", "user_id =?", userId)
         let interests = null
-        if (currentInterestsId.length){
+        if (currentInterestsId.length) {
             console.log("yo", currentInterestsId)
             const currentInterestsNames = await Promise.all(currentInterestsId.map(async (interest_id) => {
                 // console.log(interest_id.interest_id)
                 return await utils.fetchInfo("interests", "name", "id =?", interest_id.interest_id)
             }
             ))
-            interests = currentInterestsNames.map((elem)=>(elem[0].name))
+            interests = currentInterestsNames.map((elem) => (elem[0].name))
             console.log("there are the current interests", interests)
-            
+
         }
         if (user && user[0]) {
             console.log(user[0])
@@ -298,24 +298,42 @@ const updateProfil = async (req, res) => {
     }
 }
 
-const validateToken = (req, res) => {
+const validateToken = async (req, res) => {
     const { token } = req.body;
-  
+
     if (!token) {
-      return res.status(201).json({ valid: false });
+        return res.status(201).json({ valid: false });
     }
-  
+
     try {
-      // Verify the token using the same secret key used during token generation
-      const decoded = jwt.verify(token, jwtSecret);
-        console.log("this is the toeken", decoded)
-      // Token is valid, send a valid response
-      return res.status(200).json({ valid: true });
-    } catch (error) {
-      // Token verification failed, send an invalid response
-      return res.status(200).json({ valid: false });
+        // Verify the token using the same secret key used during token generation
+        const decoded = jwt.verify(token, jwtSecret);
+    console.log("verifyign tken", decoded, !decoded.userId, !decoded.exp) 
+
+        if (!decoded || !decoded.userId || !decoded.exp){
+        return res.status(201).json({ valid: false })
     }
-  }
+    const user = await utils.fetchInfo("users", "id", "id =?", decoded.userId)
+    if (user && user.length) {
+        // Get the current Unix timestamp in seconds
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        
+        if (decoded.exp < currentTimestamp) {
+            //   the token has expired
+            return res.status(201).json({ valid: false })
+            
+        }
+        else{
+            console.log("verifyign is trueeeeeeee") 
+                return res.status(201).json({ valid: true })}
+        }
+        return res.status(201).json({ valid: false })
+
+    } catch (error) {
+        // Token verification failed, send an invalid response
+        return res.status(200).json({ valid: false });
+    }
+}
 
 module.exports = {
     indexHandler,
