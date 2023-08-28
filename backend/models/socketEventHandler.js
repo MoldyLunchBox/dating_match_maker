@@ -78,8 +78,8 @@ const requestMessage = async (socket, data, id, io) => {
       }
     }
     // Leave existing rooms
-      for (const room of roomsToLeave) {
-        socket.leave(room);
+    for (const room of roomsToLeave) {
+      socket.leave(room);
     }
     const newRoom = "convo-" + conversation_id;
     socket.join(newRoom);
@@ -94,11 +94,23 @@ const requestMessage = async (socket, data, id, io) => {
 
 
     if (ret && ret.length) {
+      const user1 = null
+      const user2 = null
       const convo = await Promise.all(ret.map((msg) => {
+        if (!user1 || !user2) {
+          const info = fetchInfo("users", "avatar, username", "id =?", sender_id)
+          if (info && info.length) {
+
+            user1 = !user1 ? { avatar: info[0].avatar, username: info[0].username, id: sender_id } : user1
+            user2 = user1 && !user2 && user1.username != info[0].username ? { avatar: info[0].avatar, username: info[0].username, id: sender_id } : user2
+          }
+        }
+
         return ({
           message_content: msg.message_content,
           timestamp: msg.timestamp,
           sender_id: msg.sender_id,
+          (user1 && user1.id === sender_id ? ...user1 : null )
         })
       }))
       // console.log(convo)

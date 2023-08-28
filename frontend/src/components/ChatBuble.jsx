@@ -1,6 +1,7 @@
 import React from 'react'
 
 export const ChatBuble = ({message, isMe}) => {
+    console.log("message is", message)
   return (
     <div>
         {

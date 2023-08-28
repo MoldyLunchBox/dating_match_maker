@@ -100,7 +100,7 @@ const Chat = () => {
             </div>
             <div className="flex-1 overflow-y-auto p-4 ">
                 {selectedConversation && (
-                    <>
+                    <div className='bg-[#e0ebfe]'>
                         <div className="bg-blue-500 text-white p-2">
                             <h2 className="text-lg font-semibold">
                                 Chat with {selectedConversation.name}
@@ -108,13 +108,6 @@ const Chat = () => {
                         </div>
                         <div className="mt-4 overflow-y-auto  max-h-[50%]">
                             {messages.map((message, index) => (
-                                // <div
-                                //     key={index}
-                                //     className={`rounded-lg p-2 mt-2 ${message.sender_id == me ? 'bg-gray-200' : 'bg-white'
-                                //         }`}
-                                // >
-                                //     {message.message_content } {}
-                                // </div>
                                 <ChatBuble key={index} isMe={me === message.sender_id} message={message} />
                             ))}
                         </div>
@@ -133,7 +126,7 @@ const Chat = () => {
                                 Send
                             </button>
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
         </div>

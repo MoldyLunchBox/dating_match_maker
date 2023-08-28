@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, Route } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
+import { Home } from './components/pages/Home';
+import { Login } from './components/pages/Login';
+import { Navbar } from './components/Navbar';
 
 const PrivateRoute = ({ element, ...rest }) => {
   const [isTokenValid, setIsTokenValid] = useState(null); // Use null as initial value
@@ -15,6 +18,7 @@ const PrivateRoute = ({ element, ...rest }) => {
           setIsTokenValid(response.data.valid);
         } catch (error) {
           console.error('Error validating token:', error);
+          localStorage.removeItem('token');
           setIsTokenValid(false);
         }
       } else {
@@ -24,17 +28,22 @@ const PrivateRoute = ({ element, ...rest }) => {
 
     checkTokenValidity();
   }, []);
+  const PrivateLayout = ({ children }) => {
+    return (
+      <div className='font-[Poppings] bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] min-h-screen h-full '>
+        <Navbar />
+        {children}
+      </div>
+    );
+  };
+  
 
-  // Render loading state while token validation is in progress
-  if (isTokenValid === null) {
-    return <div>Loading...</div>;
-  }
-
-  // Render Route or Navigate based on token validity
-  return isTokenValid ? (
-    <Route element={element} {...rest} />
-  ) : (
-    <Navigate to="/login" />
+  // Render Routes with the Route or Navigate based on token validity
+  return (
+    <>
+      {isTokenValid ? <PrivateLayout>{element}</PrivateLayout>  : <Login />}
+    </>
+  
   );
 };
 
