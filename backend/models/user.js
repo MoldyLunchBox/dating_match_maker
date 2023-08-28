@@ -298,7 +298,24 @@ const updateProfil = async (req, res) => {
     }
 }
 
-
+const validateToken = (req, res) => {
+    const { token } = req.body;
+  
+    if (!token) {
+      return res.status(201).json({ valid: false });
+    }
+  
+    try {
+      // Verify the token using the same secret key used during token generation
+      const decoded = jwt.verify(token, jwtSecret);
+        console.log("this is the toeken", decoded)
+      // Token is valid, send a valid response
+      return res.status(200).json({ valid: true });
+    } catch (error) {
+      // Token verification failed, send an invalid response
+      return res.status(200).json({ valid: false });
+    }
+  }
 
 module.exports = {
     indexHandler,
@@ -309,4 +326,5 @@ module.exports = {
     searchUsers,
     me,
     updateProfil,
+    validateToken,
 };

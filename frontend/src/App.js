@@ -25,7 +25,8 @@ function App() {
         <Route path="/Chat" element={<PrivateRoute element={<Chat />} />} />
         <Route path="/match" element={<PrivateRoute element={<Match />} />} />
         <Route path="/edit" element={<PrivateRoute element={<EditProfil />} />} />
-        <Route path="/home" element={<PrivateRoute element={<Home />} />} />      </Routes>
+        <Route path="/home" element={<PrivateRoute element={<Home />} />} />    
+          </Routes>
     </Router>
   );
 }

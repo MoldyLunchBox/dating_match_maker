@@ -30,7 +30,7 @@ export const Register = () => {
         }
         fetchInterests()
     }, [])
-    
+
     const handleInterestToggle = (interest) => {
         const checked = selectedInterests.includes(interest)
         if (checked)
@@ -184,7 +184,7 @@ export const Register = () => {
                                                             {
                                                                 category.interests.map((interest, index) => (
                                                                     <li key={index} onClick={() => handleInterestToggle(interest)} className='cursor-pointer items-center flex space-y-1 space-x-1'>
-                                                                        <input checked={selectedInterests.includes(interest)}
+                                                                        <input onChange={()=>{}} checked={selectedInterests.includes(interest)}
 
                                                                             type="checkbox" className="checkbox" />
                                                                         <div>
