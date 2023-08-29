@@ -13,11 +13,11 @@ export const EditProfil = () => {
      
     }, [])
     const handleInterestToggle = (interest) => {
-        const checked = selectedInterests.includes(interest)
+        const checked = selectedInterests  ? selectedInterests.includes(interest) : false
         if (checked)
             setSelectedInterests((prev) => (prev.filter(item => item !== interest)))
         else
-            setSelectedInterests((prev) => ([...prev, interest]))
+            setSelectedInterests((prev) => (selectedInterests ? [...prev, interest]: [interest]))
 
     }
 
@@ -158,7 +158,7 @@ export const EditProfil = () => {
                                                                         {
                                                                             category.interests.map((interest, index) => (
                                                                                 <li key={index} onClick={() => handleInterestToggle(interest)} className='cursor-pointer items-center flex space-y-1 space-x-1'>
-                                                                                    <input checked={selectedInterests.includes(interest)}
+                                                                                    <input checked={selectedInterests ? selectedInterests.includes(interest): false}
 
                                                                                         type="checkbox" className="checkbox" />
                                                                                     <div>

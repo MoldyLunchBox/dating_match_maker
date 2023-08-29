@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { getConversations, receiveMessageHandler } from '../../utils/chat';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,9 +11,16 @@ const Chat = () => {
     const conversations = useSelector((state) => state.chat.conversations)
     const messages = useSelector((state) => state.chat.messages)
     const selectedConversation = useSelector((state) => state.chat.selectedConversation)
+    const messagesRef = useRef();
 
     const [me, setMe] = useState(null)
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        // Scroll to the bottom of the messages container when new messages are added
+        if (messagesRef && messagesRef.current)
+            messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+    }, [messages]);
 
     const [socket, setSocket] = useState(null);
     console.log(conversations)
@@ -40,7 +47,7 @@ const Chat = () => {
         dispatch(setSelectedConversation(conversation))
         if (socket) {
             console.log("requestion this messqge ", conversation.conversation_id)
-            socket.emit("requestMessages", {conversation_id: conversation.conversation_id})
+            socket.emit("requestMessages", { conversation_id: conversation.conversation_id })
         }
         // setMessages([]);
     };
@@ -63,10 +70,10 @@ const Chat = () => {
 
             socket.on('getId', (msg) => setMe(msg.id));
 
-            socket.on('receiveMessage', (msg)=> receiveMessageHandler(msg, dispatch));
+            socket.on('receiveMessage', (msg) => receiveMessageHandler(msg, dispatch));
             socket.on('getConversations', (msg) => getConversations(msg, dispatch));
-            if (selectedConversation){
-            socket.emit("requestMessages", {conversation_id: selectedConversation.conversation_id})
+            if (selectedConversation) {
+                socket.emit("requestMessages", { conversation_id: selectedConversation.conversation_id })
 
             }
             return () => {
@@ -78,8 +85,8 @@ const Chat = () => {
     }, [socket]);
 
     return (
-        <div className="h-screen flex bg-gray-100">
-            <div className="w-1/4 bg-blue-500 text-white p-4">
+        <div className="  flex bg-gray-100  h-[calc(100vh-56px)] ">
+            <div className="w-1/4 bg-blue-500 text-white p-4   ">
                 <h1 className="text-2xl font-semibold">Conversations</h1>
                 <div className="mt-4">
 
@@ -98,29 +105,30 @@ const Chat = () => {
                     }
                 </div>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 ">
+            <div className="flex-1 h-full ">
                 {selectedConversation && (
-                    <div className='bg-[#e0ebfe]'>
-                        <div className="bg-blue-500 text-white p-2">
-                            <h2 className="text-lg font-semibold">
+                    <div className='bg-[#F5F5F5]      '>
+                        <div className="bg-[#F5F5F5] text-black  ">
+                            <h2 className="text-lg m-5 font-semibold">
                                 Chat with {selectedConversation.name}
                             </h2>
                         </div>
-                        <div className="mt-4 overflow-y-auto  max-h-[50%]">
+
+                        <div ref={messagesRef} className="p-2 max-h-[calc(100vh-164px)] min-h-full overflow-y-auto   ">
                             {messages.map((message, index) => (
                                 <ChatBuble key={index} isMe={me === message.sender_id} message={message} />
                             ))}
                         </div>
-                        <div className="bg-white p-4 border-t">
+                        <div className="bg-[black]  p-4   flex">
                             <input
-                                className="w-full border rounded-lg px-2 py-1 focus:outline-none"
+                                className="w-full  rounded-lg px-2 py-1 focus:outline-none"
                                 type="text"
                                 placeholder="Type a message..."
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
                             />
                             <button
-                                className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none"
+                                className="  h-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none"
                                 onClick={handleSendMessage}
                             >
                                 Send
