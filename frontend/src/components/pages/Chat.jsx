@@ -107,19 +107,19 @@ const Chat = () => {
             </div>
             <div className="flex-1 h-full ">
                 {selectedConversation && (
-                    <div className='bg-[#F5F5F5]      '>
+                    <div className='bg-[#F5F5F5]   divide-y   '>
                         <div className="bg-[#F5F5F5] text-black  ">
                             <h2 className="text-lg m-5 font-semibold">
                                 Chat with {selectedConversation.name}
                             </h2>
                         </div>
 
-                        <div ref={messagesRef} className="p-2 max-h-[calc(100vh-164px)] min-h-full overflow-y-auto   ">
+                        <div ref={messagesRef} className="p-2 max-h-[calc(100vh-197px)]  min-h-[calc(100vh-197px)] overflow-y-auto   ">
                             {messages.map((message, index) => (
                                 <ChatBuble key={index} isMe={me === message.sender_id} message={message} />
                             ))}
                         </div>
-                        <div className="bg-[black]  p-4   flex">
+                        <div className="   p-4   flex">
                             <input
                                 className="w-full  rounded-lg px-2 py-1 focus:outline-none"
                                 type="text"
