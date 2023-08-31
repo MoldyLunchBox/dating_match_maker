@@ -42,6 +42,33 @@
   transition: max-height 0.3s ease-in-out; /* Adjust the duration as needed */
 }
 
+
+/* profile page: divider curve  >>*/
+.custom-shape-divider-top-1693453063 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  /* background-image: url('/public/logo192.png'); */
+
+  line-height: 0;
+}
+
+.custom-shape-divider-top-1693453063 svg {
+  position: relative;
+  display: block;
+  /* background-image: url('/public/logo192.png'); */
+
+  height: 500px;
+}
+
+.custom-shape-divider-top-1693453063 .shape-fill {
+  /* fill: #FFFFFF; */
+  background-image: url('/public/logo192.png');
+  background-size: cover; /* Adjust this property as needed */
+}
+/* << */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
