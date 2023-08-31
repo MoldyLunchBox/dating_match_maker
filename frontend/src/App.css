@@ -44,30 +44,34 @@
 
 
 /* profile page: divider curve  >>*/
-.custom-shape-divider-top-1693453063 {
+.custom-shape-divider-bottom-1693517643 {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
   overflow: hidden;
-  /* background-image: url('/public/logo192.png'); */
-
   line-height: 0;
+  height: 100%;
+
+  transform: rotate(180deg);
 }
 
-.custom-shape-divider-top-1693453063 svg {
+.custom-shape-divider-bottom-1693517643 svg {
   position: relative;
   display: block;
-  /* background-image: url('/public/logo192.png'); */
-
-  height: 500px;
+  width: calc(100% + 1.3px);
+  height: 80%;
+  transform: rotateY(180deg);
+  opacity: 100%;
 }
 
-.custom-shape-divider-top-1693453063 .shape-fill {
-  /* fill: #FFFFFF; */
-  background-image: url('/public/logo192.png');
-  background-size: cover; /* Adjust this property as needed */
+.custom-shape-divider-bottom-1693517643 .shape-fill {
+  fill: #E5E7EB;
 }
+
+
+
+
 /* << */
 @tailwind base;
 @tailwind components;
