@@ -18,8 +18,8 @@ export const Profil = () => {
       </div>
       <div class="flex-auto p-10 bg-white justify-center  items-center hidden md:flex">
         <div className='bg-[#fafafa] border w-full h-full border-[orange] p-10 flex items-center justify-center'>
-          <div className='flex flex-col'>
-            <div className='flex flex-row gap-4'>
+          <div className='flex w-full flex-col'>
+            <div className='flex flex-row gap-4  justify-between'>
               <div className='flex flex-col'>
                 <span>job</span>
                 <span>job</span>
