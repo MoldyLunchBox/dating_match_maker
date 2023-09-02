@@ -153,6 +153,17 @@ const connectToDatabase = () => {
               }
             });
 
+            // create likes table
+            db.query(CreateUserLikesTableQuery, (err, result) => {
+              if (err) {
+                console.error('Error creating  likes table:', err);
+                reject(err);
+              } else {
+                console.log(' likes table created successfully!');
+                resolve();
+              }
+            });
+
           }
         });
       }
@@ -169,7 +180,9 @@ CREATE TABLE IF NOT EXISTS users (
   gender VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
    avatar VARCHAR(255) DEFAULT 'http://localhost:3001/uploads/defaultAvatar.jpg',  
-  email VARCHAR(255) NOT NULL
+  email VARCHAR(255) NOT NULL,
+  likes INT DEFAULT 0 ,
+  vues INT DEFAULT 0 ,
 )
 `;
 
@@ -230,7 +243,16 @@ CREATE TABLE IF NOT EXISTS user_interests (
   FOREIGN KEY (user_id) REFERENCES users (id),
   FOREIGN KEY (interest_id) REFERENCES interests (id)
 );
-`;
+`
+
+const CreateUserLikesTableQuery = `
+CREATE TABLE IF NOT EXISTS likes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  liker_id INT NOT NULL,
+  liked_profile_id INT NOT NULL,
+  FOREIGN KEY (liker_id) REFERENCES users(id),
+  FOREIGN KEY (liked_profile_id) REFERENCES users(id)
+);`
 
 module.exports = {
   db,

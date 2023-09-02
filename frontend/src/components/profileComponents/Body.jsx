@@ -8,8 +8,8 @@ export const Body = () => {
         { name: "gaming" },
     ]
     return (
-        <div class="flex-auto p-10 bg-white justify-center items-center hidden md:flex">
-            <div className='bg-[#fafafa]   w-full   mytest  p-10 flex items-center justify-center'>
+        <div class="flex-auto p-10 bg-white   hidden md:flex">
+            <div className='bg-[#fafafa]   w-full   mytest  p-10 flex justify-center'>
                 <div className='flex w-full h-1/2 gap-10 flex-col'>
                     <div className='flex flex-row gap-4  justify-between'>
                         <div className='flex flex-col gap-2'>
