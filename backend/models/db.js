@@ -183,6 +183,14 @@ CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(255) NOT NULL,
   likes INT DEFAULT 0 ,
   vues INT DEFAULT 0 ,
+  age INT NOT NULL ,
+  nickname VARCHAR(255) NOT NULL,
+  job VARCHAR(255) NOT NULL,
+  country VARCHAR(255) NOT NULL,
+  city VARCHAR(255) NOT NULL,
+  online boolean DEFAULT false,
+
+
 )
 `;
 
