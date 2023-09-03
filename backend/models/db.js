@@ -163,7 +163,16 @@ const connectToDatabase = () => {
                 resolve();
               }
             });
-
+            // create views table
+            db.query(CreateViewsTableQuery, (err, result) => {
+              if (err) {
+                console.error('Error creating  views table:', err);
+                reject(err);
+              } else {
+                console.log(' views table created successfully!');
+                resolve();
+              }
+            });
           }
         });
       }
@@ -182,17 +191,14 @@ CREATE TABLE IF NOT EXISTS users (
    avatar VARCHAR(255) DEFAULT 'http://localhost:3001/uploads/defaultAvatar.jpg',  
   email VARCHAR(255) NOT NULL,
   likes INT DEFAULT 0 ,
-  vues INT DEFAULT 0 ,
+  views INT DEFAULT 0 ,
   age INT NOT NULL ,
   nickname VARCHAR(255) NOT NULL,
   job VARCHAR(255) NOT NULL,
   country VARCHAR(255) NOT NULL,
   city VARCHAR(255) NOT NULL,
-  online boolean DEFAULT false,
-
-
-)
-`;
+  online BOOLEAN DEFAULT false
+)`;
 
 const createFriendsTableQuery = `
   CREATE TABLE IF NOT EXISTS friends (
@@ -257,9 +263,20 @@ const CreateUserLikesTableQuery = `
 CREATE TABLE IF NOT EXISTS likes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   liker_id INT NOT NULL,
-  liked_profile_id INT NOT NULL,
+  liked_id INT NOT NULL,
+  is_like BOOLEAN NOT NULL,
   FOREIGN KEY (liker_id) REFERENCES users(id),
-  FOREIGN KEY (liked_profile_id) REFERENCES users(id)
+  FOREIGN KEY (liked_id) REFERENCES users(id)
+);`
+
+const CreateViewsTableQuery = `
+CREATE TABLE IF NOT EXISTS profile_views (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  viewer_id INT NOT NULL,
+  viewed_id INT NOT NULL,
+  view_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (viewer_id) REFERENCES users(id),
+  FOREIGN KEY (viewed_id) REFERENCES users(id)
 );`
 
 module.exports = {

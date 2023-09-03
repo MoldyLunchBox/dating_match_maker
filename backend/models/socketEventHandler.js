@@ -3,27 +3,11 @@ const { query, fetchInfo, saveInfo } = require("../utils/utils");
 // socketHandlers.js
 const getConversations = async (socket, data, id) => {
   try {
-    const getConversations = 'SELECT * FROM conversations WHERE user1_id = ? OR user2_id = ? ';
-    let conversations = await query(getConversations, [id, id]);
-    if (conversations && conversations.length) {
-      const arr = await Promise.all(conversations.map(async (e) => {
-        const user = await fetchInfo("users", "fname, lname", "id = ?", e.user1_id == id ? e.user2_id : e.user1_id);
-
-        if (user && user.length) {
-          return {
-            name: `${user[0].fname} ${user[0].lname}`,
-            timeRecent: e.last_message_time,
-            userId: e.user1_id == id ? e.user2_id : e.user1_id,
-            conversation_id: e.conversation_id
-          };
-        }
-      }));
-
-      console.log(arr[0]); // This will log the array of resolved values
-
-      socket.emit("getConversations", { msg: arr })
-
-    }
+ 
+  //  await  saveInfo("profile_views", )
+      // socket.emit("getConversations", { msg: arr })
+    console.log("data", data)
+    console.log("to save the view count we need", "  table:", "  fields:", "  values:")
 
   } catch (err) {
     console.log(err)

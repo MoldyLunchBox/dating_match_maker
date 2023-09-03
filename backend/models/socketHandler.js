@@ -30,6 +30,9 @@ const setupSocketServer = (server) => {
       socket.on('sendMessage', (data) => sendMessage(socket, data, id, io) );
       socket.on('requestMessages', (data) => requestMessage(socket, data, id, io) );
       
+      socket.on('profileView', (data) => profileView(socket, data, id, io) );
+
+
       socket.on('joinRoom', (data) => {
         socket.join(roomId);
       });
