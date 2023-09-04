@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { getConversations, sendMessage, requestMessage } = require('./socketEventHandler');
 const { jwtSecret } = require('../config');
+const { profileView } = require('./SocketHandlers/profileView');
 
 
 

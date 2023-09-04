@@ -20,7 +20,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<PrivateRoute element={<Home />} />} />
         <Route path="/login" element={<PrivateRoute element={<Home />} />} />
-        <Route path="/profile" element={<PrivateRoute element={<Profil />} />} />
+        {/* <Route path="/profile" element={<PrivateRoute element={<Profil />} />} /> */}
+        <Route path="/profile/:username" element={<PrivateRoute element={<Profil />} />} />
+
         <Route path="/Search" element={<PrivateRoute element={<Search />} />} />
         <Route path="/Friends" element={<PrivateRoute element={<Friends />} />} />
         <Route path="/Chat" element={<PrivateRoute element={<Chat />} />} />

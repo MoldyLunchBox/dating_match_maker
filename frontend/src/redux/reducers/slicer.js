@@ -15,14 +15,6 @@ const authSlice = createSlice({
       console.log("action dispatched")
       state.token = action.payload;
     },
-    // Add other reducers for different states here
-    // Example:
-    // setUsername: (state, action) => {
-    //   state.username = action.payload;
-    // },
-    // setPassword: (state, action) => {
-    //   state.password = action.payload;
-    // },
   },
 });
 
@@ -63,6 +55,19 @@ const chatSlice = createSlice({
   },
 });
 
+const socketSlice = createSlice({
+  name: 'socket',
+  initialState :{
+    socket : null,
+  },
+  reducers: {
+    setSocket: (state, action) => {
+      state.socket = action.payload;
+    },
+  },
+});
+
+
 console.log(modalSlice)
 export const { setToken } = authSlice.actions;
 export const { setSearchFriend } = modalSlice.actions;
@@ -70,11 +75,13 @@ export const { setRegistered } = modalSlice.actions;
 export const { setConversations } = chatSlice.actions;
 export const { setSelectedConversation } = chatSlice.actions;
 export const { setMessages } = chatSlice.actions;
+export const { setSocket } = socketSlice.actions;
 
 const reducers = {
   auth: authSlice.reducer,
   modals: modalSlice.reducer,
   chat: chatSlice.reducer,
+  socket: socketSlice.reducer,
 };
 
 export default reducers;
