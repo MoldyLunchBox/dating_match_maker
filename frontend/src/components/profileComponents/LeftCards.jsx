@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { LikeBar } from './LikeBar';
 import { UserNameInfo } from './UserNameInfo';
+import { useSelector } from 'react-redux';
 
 export const LeftCards = () => {
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
+    const profile = useSelector((state) => state.profile.profile)
 
     const handleLike = () => {
         setLikes(likes + 1);
@@ -15,20 +17,21 @@ export const LeftCards = () => {
     };
 
     const user = {
-        fname: "abdu",
-        lname: "mya",
-        age: 90,
-        gender: "male",
-        username: "real_abdu123",
-        location: { city: "agadir", country: "morocco" },
-        views: 125,
-        likes: 40,
-        dislikes: 20,
+        fname: "..",
+        lname: "..",
+        age: "..",
+        gender: "..",
+        username: "..",
+       city: "..",
+        country: ".." ,
+        views: "..",
+        likes: "..",
+        dislikes:".." ,
     };
     return (
         <div className="bg-gray-100 flex-1 p-4">
             <div className="flex h-full max-h-[600px] flex-col gap-4">
-                <UserNameInfo user={user}/>
+                <UserNameInfo user={profile ? profile : user}/>
 
                 {/* secodn card */}
 

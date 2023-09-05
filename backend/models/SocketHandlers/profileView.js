@@ -3,32 +3,29 @@ const { query, fetchInfo, saveInfo } = require("../../utils/utils");
 
 
 const profileView = async (socket, data, id) => {
-    try {
-      const getConversations = 'SELECT * FROM conversations WHERE user1_id = ? OR user2_id = ? ';
-      let conversations = await query(getConversations, [id, id]);
-      if (conversations && conversations.length) {
-        const arr = await Promise.all(conversations.map(async (e) => {
-          const user = await fetchInfo("users", "fname, lname", "id = ?", e.user1_id == id ? e.user2_id : e.user1_id);
-          if (user && user.length) {
-            return {
-              name: `${user[0].fname} ${user[0].lname}`,
-              timeRecent: e.last_message_time,
-              userId: e.user1_id == id ? e.user2_id : e.user1_id,
-              conversation_id: e.conversation_id
-            };
-          }
-        }));
-  
-        console.log(arr[0]); // This will log the array of resolved values
-  
-        socket.emit("getConversations", { msg: arr })
-      }
+  try {
+    const { token, username } = data
+    console.log("here we go we r in teh getdata", data, id)
+    if (!data || !token || !username || !id) {
+      return socket.emit("profileData", { msg: null })
+
+    }
+    const user = await fetchInfo("users", "fname, id, avatar, lname, username, age, nickname,gender, job , country , city , online ","username =? ",username )
+    
+    if (user && user.length){
+      await saveInfo("profile_views", "(viewer_id, viewed_id)",[id, user[0].id])
+      const views = await fetchInfo("profile_views", "id", "viewed_id =?", user[0].id)
+      const userData = {...user[0],views:views.length}
+      console.log("vews", views)
+      socket.emit("profileData", { msg: userData })
+    }
+      // }
   
     } catch (err) {
-      console.log(err)
-    }
-  };
+    console.log(err)
+  }
+};
 
-  module.exports = {
-    profileView
+module.exports = {
+  profileView
 };

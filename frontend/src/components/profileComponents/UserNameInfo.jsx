@@ -21,7 +21,7 @@ export const UserNameInfo = ({user}) => {
                 </div>
                 <div className='flex flex-row'>
                     <span className="w-60 f-lato capitalize flex items-center gap-1 font-semibold text-lg">
-                        <MapPin className="w-4" /> {user.location.city}, {user.location.country}
+                        <MapPin className="w-4" /> {user.city}, {user.country}
                     </span>
                     <div className=" flex items-center  ">
                         <span className='f-lato font-semibold'>Gender: {user.gender}</span>

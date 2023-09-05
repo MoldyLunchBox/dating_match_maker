@@ -4,7 +4,7 @@ const rootReducer = combineReducers({
   auth: reducers.auth,
   modals: reducers.modals,
   chat: reducers.chat,
-  socket: reducers.socket,
+  profile: reducers.profile,
 
   // Add other reducers here if needed
 });

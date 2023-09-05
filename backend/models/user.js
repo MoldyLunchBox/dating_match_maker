@@ -43,7 +43,7 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // // Insert the new user into the database
-        await utils.saveInfo("users", "(username, fname, lname, gender, password, email, avatar)", [username, fname, lname, gender, hashedPassword, email, avatar])
+        await utils.saveInfo("users", "(username, fname, lname, gender, password, email, avatar, age)", [username, fname, lname, gender, hashedPassword, email, avatar, 28])
         const user = await utils.fetchInfo("users", "id", "username = ?", username)
         interests.map(async (interest) => {
             const ok = await utils.saveUserInterest(user[0].id, interest)

@@ -10,7 +10,6 @@ import { setSocket } from './redux/reducers/slicer';
 
 const PrivateRoute = ({ element, ...rest }) => {
   const [isTokenValid, setIsTokenValid] = useState(null); // Use null as initial value
-  const socket = useSelector((state) => state.socket.socket);
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -20,14 +19,6 @@ const PrivateRoute = ({ element, ...rest }) => {
       if (token) {
         try {
           const response = await axios.post('http://localhost:3001/api/validateToken', { token });
-
-          if (!socket) {
-            const newSocket = io('http://localhost:3001', {
-              query: { token: token }, // Pass the user token as a query parameter
-            }); // Replace with your server URL
-            console.log("socket is null")
-          dispatch(setSocket(newSocket));
-          }
           setIsTokenValid(response.data.valid);
 
         } catch (error) {

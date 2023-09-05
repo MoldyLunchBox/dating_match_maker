@@ -58,16 +58,7 @@ const connectToDatabase = () => {
                 resolve();
               }
             });
-            // create user interests table
-            db.query(createUserInterestsTableQuery, (err, result) => {
-              if (err) {
-                console.error('Error creating user interests table:', err);
-                reject(err);
-              } else {
-                console.log('user interests table created successfully!');
-                resolve();
-              }
-            });
+
             // create categories table
             db.query(createCategoriesTableQuery, async (err, result) => {
               if (err) {
@@ -83,11 +74,11 @@ const connectToDatabase = () => {
                       reject(err);
                     } else {
                       const categoriesExist = countResult[0].count > 0;
-            
+
                       if (!categoriesExist) {
                         // Insert categories into categories table
                         const insertCategoriesQuery = `INSERT INTO categories (name) VALUES ?`;
-            
+
                         db.query(insertCategoriesQuery, [categoriesData], (err, insertResult) => {
                           if (err) {
                             console.error('Error inserting categories data:', err);
@@ -115,7 +106,7 @@ const connectToDatabase = () => {
                 console.error('Error creating interests table:', err);
                 reject(err);
               } else {
-                
+
                 console.log('interests table created successfully!');
                 try {
                   // Check if interests exist in the table before inserting
@@ -125,11 +116,11 @@ const connectToDatabase = () => {
                       reject(err);
                     } else {
                       const interestsExist = countResult[0].count > 0;
-            
+
                       if (!interestsExist) {
                         // Insert interests into interests table
                         const insertInterestsQuery = `INSERT INTO interests (name, category_id) VALUES ?`;
-            
+
                         db.query(insertInterestsQuery, [interestsData], (err, insertResult) => {
                           if (err) {
                             console.error('Error inserting interests data:', err);
@@ -152,7 +143,16 @@ const connectToDatabase = () => {
 
               }
             });
-
+            // create user interests table
+            db.query(createUserInterestsTableQuery, (err, result) => {
+              if (err) {
+                console.error('Error creating user interests table:', err);
+                reject(err);
+              } else {
+                console.log('user interests table created successfully!');
+                resolve();
+              }
+            });
             // create likes table
             db.query(CreateUserLikesTableQuery, (err, result) => {
               if (err) {
@@ -193,10 +193,10 @@ CREATE TABLE IF NOT EXISTS users (
   likes INT DEFAULT 0 ,
   views INT DEFAULT 0 ,
   age INT NOT NULL ,
-  nickname VARCHAR(255) NOT NULL,
-  job VARCHAR(255) NOT NULL,
-  country VARCHAR(255) NOT NULL,
-  city VARCHAR(255) NOT NULL,
+  nickname VARCHAR(255)  DEFAULT "burger breath" ,
+  job VARCHAR(255)  DEFAULT "sleep" ,
+  country VARCHAR(255)  DEFAULT "morocco" ,
+  city VARCHAR(255)  DEFAULT "agadir" ,
   online BOOLEAN DEFAULT false
 )`;
 

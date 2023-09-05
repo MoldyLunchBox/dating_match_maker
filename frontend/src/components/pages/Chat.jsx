@@ -4,7 +4,7 @@ import { getConversations, receiveMessageHandler } from '../../utils/chat';
 import { useDispatch, useSelector } from 'react-redux';
 import { ChatBuble } from '../ChatBuble';
 import { setSelectedConversation } from '../../redux/reducers/slicer';
-
+import {mySocket} from '../../utils/socket'; // Import the socket instance
 const Chat = () => {
 
     const token = useSelector((state) => state.auth.token);
@@ -12,6 +12,7 @@ const Chat = () => {
     const messages = useSelector((state) => state.chat.messages)
     const selectedConversation = useSelector((state) => state.chat.selectedConversation)
     const messagesRef = useRef();
+    const [socket, setSocket] = useState(null);
 
     const [me, setMe] = useState(null)
     const dispatch = useDispatch()
@@ -22,7 +23,6 @@ const Chat = () => {
             messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     }, [messages]);
 
-    const [socket, setSocket] = useState(null);
     console.log(conversations)
     // const [selectedConversation, setSelectedConversation] = useState(null);
     // const [messages, setMessages] = useState([]);
@@ -54,9 +54,7 @@ const Chat = () => {
 
     useEffect(() => {
         console.log("this is token", token)
-        const newSocket = io('http://localhost:3001', {
-            query: { token: token }, // Pass the user token as a query parameter
-        }); // Replace with your server URL
+        const newSocket = mySocket(token)
         setSocket(newSocket);
         return () => {
             newSocket.disconnect();

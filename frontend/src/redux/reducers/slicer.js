@@ -1,8 +1,6 @@
 // authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
-
-
 const initialState = {
   token: localStorage.getItem('token') ? localStorage.getItem('token') : null
 };
@@ -34,7 +32,6 @@ const modalSlice = createSlice({
   },
 });
 
-
 const chatSlice = createSlice({
   name: 'chat',
   initialState :{
@@ -55,33 +52,32 @@ const chatSlice = createSlice({
   },
 });
 
-const socketSlice = createSlice({
-  name: 'socket',
+const profileSlice = createSlice({
+  name: 'profile',
   initialState :{
-    socket : null,
+    profile : null,
   },
   reducers: {
-    setSocket: (state, action) => {
-      state.socket = action.payload;
+    setProfile: (state, action) => {
+      state.profile = action.payload;
     },
   },
 });
 
 
-console.log(modalSlice)
 export const { setToken } = authSlice.actions;
 export const { setSearchFriend } = modalSlice.actions;
 export const { setRegistered } = modalSlice.actions;
 export const { setConversations } = chatSlice.actions;
 export const { setSelectedConversation } = chatSlice.actions;
 export const { setMessages } = chatSlice.actions;
-export const { setSocket } = socketSlice.actions;
+export const { setProfile } = profileSlice.actions;
 
 const reducers = {
   auth: authSlice.reducer,
   modals: modalSlice.reducer,
   chat: chatSlice.reducer,
-  socket: socketSlice.reducer,
+  profile: profileSlice.reducer,
 };
 
 export default reducers;

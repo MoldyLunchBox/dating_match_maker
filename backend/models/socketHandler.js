@@ -1,11 +1,8 @@
 const socketIo = require('socket.io');
-const mysql = require('mysql');
-const { db } = require('./db'); // Assuming you have a separate file for your database connection (db.js)
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { getConversations, sendMessage, requestMessage } = require('./socketEventHandler');
 const { jwtSecret } = require('../config');
-const { profileView } = require('./SocketHandlers/profileView');
+const { profileView, getUserData } = require('./SocketHandlers/profileView');
 
 
 
@@ -31,8 +28,8 @@ const setupSocketServer = (server) => {
       socket.on('sendMessage', (data) => sendMessage(socket, data, id, io) );
       socket.on('requestMessages', (data) => requestMessage(socket, data, id, io) );
       
-      socket.on('profileView', (data) => profileView(socket, data, id, io) );
 
+      socket.on('profileView', (data) => profileView(socket, data, id) )
 
       socket.on('joinRoom', (data) => {
         socket.join(roomId);
