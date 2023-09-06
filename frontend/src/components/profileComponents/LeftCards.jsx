@@ -3,7 +3,7 @@ import { LikeBar } from './LikeBar';
 import { UserNameInfo } from './UserNameInfo';
 import { useSelector } from 'react-redux';
 
-export const LeftCards = () => {
+export const LeftCards = ({socket}) => {
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
     const profile = useSelector((state) => state.profile.profile)
@@ -35,7 +35,7 @@ export const LeftCards = () => {
 
                 {/* secodn card */}
 
-                <LikeBar user={user} />
+                <LikeBar socket={socket}  user={profile ? profile : user} />
                 <div className="bg-white h-40 p-4 shadow-md rounded-md overflow-hidden">
                     {/* Card content for user info */}
                     {/* Replace with actual user info */}

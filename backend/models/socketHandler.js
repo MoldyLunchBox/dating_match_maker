@@ -2,7 +2,7 @@ const socketIo = require('socket.io');
 const jwt = require('jsonwebtoken');
 const { getConversations, sendMessage, requestMessage } = require('./socketEventHandler');
 const { jwtSecret } = require('../config');
-const { profileView, getUserData } = require('./SocketHandlers/profileView');
+const { profileView, getUserData, profileLike } = require('./SocketHandlers/profileView');
 
 
 
@@ -30,6 +30,7 @@ const setupSocketServer = (server) => {
       
 
       socket.on('profileView', (data) => profileView(socket, data, id) )
+      socket.on('profileLike', (data) => profileLike(socket, data, id) )
 
       socket.on('joinRoom', (data) => {
         socket.join(roomId);

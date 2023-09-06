@@ -61,7 +61,7 @@ console.log(profile)
           {/* Profile Picture */}
           <Avatar />
           {/* User Info Cards */}
-          <LeftCards />
+          <LeftCards socket={socket} />
         </div>
       </div>
       <Body />
