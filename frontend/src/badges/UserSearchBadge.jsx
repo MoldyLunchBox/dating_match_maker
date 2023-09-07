@@ -5,7 +5,7 @@ import { setSelectedConversation } from '../redux/reducers/slicer';
 import { useNavigate } from "react-router-dom";
 
 
-export const UserSearchBadge = ({ status, avatar, fname, lname, username, id }) => {
+export const UserSearchBadge = ({ status, avatar, fname, lname, username, id, socket }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
 

@@ -5,20 +5,20 @@ import { Body } from '../profileComponents/Body'
 import { useParams } from 'react-router-dom'
 import { mySocket } from '../../utils/socket'
 import { useDispatch, useSelector } from 'react-redux'
-import { setProfile } from '../../redux/reducers/slicer'
+import { setProfile, setSocket } from '../../redux/reducers/slicer'
 
 
 export const Profil = () => {
   const { username } = useParams();
-  const [socket, setSocket] = useState(null)
+  const [sockets, setSockets] = useState(null)
   const token = useSelector((state) => state.auth.token)
   const profile = useSelector((state) => state.profile.profile)
   const dispatch = useDispatch()
   // init socket
   useEffect(() => {
     const newSocket = mySocket(token);
-    setSocket(newSocket);
-
+    setSockets(newSocket);
+    dispatch(setSocket(newSocket))
     // Clean up the socket when the component unmounts
     return () => {
       newSocket.disconnect();
@@ -27,10 +27,10 @@ export const Profil = () => {
 
   // fetch user data 
   useEffect(() => {
-    if (!socket) return;
+    if (!sockets) return;
 
     // Listen for the event that fetches user data
-    socket.on('profileData', (data) => {
+    sockets.on('profileData', (data) => {
       // Handle the user data received from the server
       console.log("yo yo yo",data)
       if (data.msg)
@@ -38,13 +38,13 @@ export const Profil = () => {
     });
 
     // Emit an event to request user data from the server
-    socket.emit('profileView',{token:token, username: username});
+    sockets.emit('profileView',{token:token, username: username});
 
     // Clean up the event listener when the component unmounts
     return () => {
-      socket.off('user_data');
+      sockets.off('user_data');
     };
-  }, [socket]);
+  }, [sockets]);
   
 useEffect(()=>{
 console.log(profile)
@@ -61,7 +61,7 @@ console.log(profile)
           {/* Profile Picture */}
           <Avatar />
           {/* User Info Cards */}
-          <LeftCards socket={socket} />
+          <LeftCards socket={sockets} />
         </div>
       </div>
       <Body />

@@ -99,16 +99,14 @@ const login = async (req, res) => {
             const token = jwt.sign({ userId: user[0].id }, jwtSecret, {
                 expiresIn: '1h', // Set the token expiration time (adjust as needed)
             });
-
-            //   res.cookie('token', token, {
-            //     httpOnly: true,
-            //     maxAge: 3600000, // Set the cookie expiration time (1 hour in this case)
-            //   });
-
-            // res.status(201).json({ message: true });
-            log("it worked user was found")
-            res.status(201).json({ token: token });
-
+            console.log("here")
+            res.cookie('token', token, {
+                httpOnly: true,
+                maxAge: 1000 * 60 * 60 * 2,
+                domain: "localhost",
+                sameSite: "lax", // Set to "None" for cross-origin requests with Secure
+                secure: false,     // Set to true when using HTTPS
+              }).json({ valid: true });
         }
         else {
             log("nooo user")
@@ -299,8 +297,9 @@ const updateProfil = async (req, res) => {
 }
 
 const validateToken = async (req, res) => {
-    const { token } = req.body;
-
+    // const { token } = req.body;
+    const token = req.cookies.token;
+    console.log(req.cookies)
     if (!token) {
         return res.status(201).json({ valid: false });
     }
@@ -308,24 +307,25 @@ const validateToken = async (req, res) => {
     try {
         // Verify the token using the same secret key used during token generation
         const decoded = jwt.verify(token, jwtSecret);
-    console.log("verifyign tken", decoded, !decoded.userId, !decoded.exp) 
+        console.log("verifyign tken", decoded, !decoded.userId, !decoded.exp)
 
-        if (!decoded || !decoded.userId || !decoded.exp){
-        return res.status(201).json({ valid: false })
-    }
-    const user = await utils.fetchInfo("users", "id", "id =?", decoded.userId)
-    if (user && user.length) {
-        // Get the current Unix timestamp in seconds
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        
-        if (decoded.exp < currentTimestamp) {
-            //   the token has expired
+        if (!decoded || !decoded.userId || !decoded.exp) {
             return res.status(201).json({ valid: false })
-            
         }
-        else{
-            console.log("verifyign is trueeeeeeee") 
-                return res.status(201).json({ valid: true })}
+        const user = await utils.fetchInfo("users", "id", "id =?", decoded.userId)
+        if (user && user.length) {
+            // Get the current Unix timestamp in seconds
+            const currentTimestamp = Math.floor(Date.now() / 1000);
+
+            if (decoded.exp < currentTimestamp) {
+                //   the token has expired
+                return res.status(201).json({ valid: false })
+
+            }
+            else {
+                console.log("verifyign is trueeeeeeee")
+                return res.status(201).json({ valid: true })
+            }
         }
         return res.status(201).json({ valid: false })
 

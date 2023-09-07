@@ -64,6 +64,18 @@ const profileSlice = createSlice({
   },
 });
 
+const socketSlice = createSlice({
+  name: 'socket',
+  initialState :{
+    socket : null,
+  },
+  reducers: {
+    setSocket: (state, action) => {
+      state.socket = action.payload;
+    },
+  },
+});
+
 
 export const { setToken } = authSlice.actions;
 export const { setSearchFriend } = modalSlice.actions;
@@ -72,12 +84,14 @@ export const { setConversations } = chatSlice.actions;
 export const { setSelectedConversation } = chatSlice.actions;
 export const { setMessages } = chatSlice.actions;
 export const { setProfile } = profileSlice.actions;
+export const { setSocket } = socketSlice.actions;
 
 const reducers = {
   auth: authSlice.reducer,
   modals: modalSlice.reducer,
   chat: chatSlice.reducer,
   profile: profileSlice.reducer,
+  socket: socketSlice.reducer,
 };
 
 export default reducers;

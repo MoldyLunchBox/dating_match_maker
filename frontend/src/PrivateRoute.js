@@ -11,14 +11,19 @@ import { setSocket } from './redux/reducers/slicer';
 const PrivateRoute = ({ element, ...rest }) => {
   const [isTokenValid, setIsTokenValid] = useState(null); // Use null as initial value
   const dispatch = useDispatch()
-
+  const config = {
+    headers: {
+       'Content-Type': 'application/json',
+      },
+     withCredentials: true
+   }; 
   useEffect(() => {
     async function checkTokenValidity() {
-      const token = localStorage.getItem('token');
-
-      if (token) {
-        try {
-          const response = await axios.post('http://localhost:3001/api/validateToken', { token });
+      try {
+          console.log(":checking validity")
+          const response = await axios.post('http://localhost:3001/api/validateToken', config);
+          console.log(":response validity")
+         console.log(response)
           setIsTokenValid(response.data.valid);
 
         } catch (error) {
@@ -26,10 +31,9 @@ const PrivateRoute = ({ element, ...rest }) => {
           localStorage.removeItem('token');
           setIsTokenValid(false);
         }
-      } else {
-        setIsTokenValid(false);
       }
-    }
+      
+    
 
     checkTokenValidity();
   }, []);
