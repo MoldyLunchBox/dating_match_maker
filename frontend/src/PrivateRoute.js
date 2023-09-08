@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import io from 'socket.io-client';
 import { setSocket } from './redux/reducers/slicer';
 import { useQuery } from 'react-query';
-import { checkTokenValidity } from './axios/auth';
+import { checkTokenValidity } from './requests/auth';
 
 const PrivateRoute = ({ element, ...rest }) => {
   const [isTokenValid, setIsTokenValid] = useState(null); // Use null as initial value

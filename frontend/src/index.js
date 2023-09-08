@@ -6,14 +6,16 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from './store';
 import { QueryClient, QueryClientProvider } from 'react-query';
-
+import { SocketProvider } from './requests/socket';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const queryClient = new QueryClient();
 root.render(
   <Provider store={store}>
-     <QueryClientProvider client={queryClient}>
-    <App />
-     </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <SocketProvider>
+        <App />
+      </SocketProvider>
+    </QueryClientProvider>
   </Provider>,
 );
 

@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors'); // Import the cors package
 const path = require('path');
 const http = require('http');
-const setupSocketServer = require('./models/socketHandler');
+const {setupSocketServer} = require('./models/socketHandler');
 
 
 const app = express();
