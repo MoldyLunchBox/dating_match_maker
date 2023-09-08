@@ -19,8 +19,8 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json())
-app.use(cookieParser())
 app.use((err, req, res, next) => {
+  console.log("wtf is this unhandled error stuff")
   console.error('Unhandled Error:', err);
   res.status(500).json({ error: 'Internal Server Error' });
 });
@@ -29,10 +29,11 @@ app.use((err, req, res, next) => {
   try {
     // Wait for the database connection to be established before starting the server
     await connectToDatabase();
+    app.use(cookieParser())
     app.use('/', indexRoute);
-    app.use('/api', apiRoute);
+    app.use('/api',   apiRoute);
     // app.use('/', home);
-    app.use('/users', userRoutes);
+    app.use('/users',  userRoutes);
     //this middleware to serve static files from the 'uploads' directory
     setupSocketServer(server)
     app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

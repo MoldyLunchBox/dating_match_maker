@@ -7,36 +7,17 @@ import { Navbar } from './components/Navbar';
 import { useDispatch, useSelector } from 'react-redux';
 import io from 'socket.io-client';
 import { setSocket } from './redux/reducers/slicer';
+import { useQuery } from 'react-query';
+import { checkTokenValidity } from './axios/auth';
 
 const PrivateRoute = ({ element, ...rest }) => {
   const [isTokenValid, setIsTokenValid] = useState(null); // Use null as initial value
   const dispatch = useDispatch()
-  const config = {
-    headers: {
-       'Content-Type': 'application/json',
-      },
-     withCredentials: true
-   }; 
+  const { data, isLoading, isError } = useQuery('userProfile', checkTokenValidity);
   useEffect(() => {
-    async function checkTokenValidity() {
-      try {
-          console.log(":checking validity")
-          const response = await axios.post('http://localhost:3001/api/validateToken', config);
-          console.log(":response validity")
-         console.log(response)
-          setIsTokenValid(response.data.valid);
-
-        } catch (error) {
-          console.error('Error validating token:', error);
-          localStorage.removeItem('token');
-          setIsTokenValid(false);
-        }
-      }
-      
-    
-
-    checkTokenValidity();
-  }, []);
+    if (data)
+      setIsTokenValid(true)
+  }, [data]);
   const PrivateLayout = ({ children }) => {
     return (
       <div className='font-[Poppings]  flex flex-col bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee] max-h-screen min-h-screen '>

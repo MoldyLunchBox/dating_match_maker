@@ -4,7 +4,7 @@ const { getConversations, sendMessage, requestMessage } = require('./socketEvent
 const { jwtSecret } = require('../config');
 const { profileView, getUserData, profileLike } = require('./SocketHandlers/profileView');
 
-
+const connectedSockets = new Map();
 
 const setupSocketServer = (server) => {
   const io = socketIo(server, {
