@@ -18,7 +18,7 @@ const setupSocketServer = (server) => {
   io.on('connection', (socket) => {
     try {
       const cooki =  socket.handshake.headers.cookie
-      console.log(  cookie)
+      console.log( "cookie", cooki)
       const {token} =  cookie.parse(cooki); //does not translate; // Access the token from the query parameter
       console.log('A user connected', token);
       const decodedToken = jwt.verify(token, jwtSecret);
@@ -26,18 +26,13 @@ const setupSocketServer = (server) => {
       connectedSockets.set(id, socket);
       socket.emit("getId", { id: id })
       socket.on('getConversations', (data) => getConversations(socket, data, id));
-
       socket.on('sendMessage', (data) => sendMessage(socket, data, id, io));
       socket.on('requestMessages', (data) => requestMessage(socket, data, id, io));
-
-
       socket.on('profileView', (data) => profileView(socket, data, id))
       socket.on('profileLike', (data) => profileLike(socket, data, id))
-
       socket.on('joinRoom', (data) => {
         socket.join(roomId);
       });
-
       socket.on('disconnect', () => {
         console.log('A user disconnected');
       });

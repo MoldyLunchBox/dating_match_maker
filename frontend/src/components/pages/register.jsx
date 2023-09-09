@@ -127,7 +127,7 @@ export const Register = () => {
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Gender</label>
                             <select required
-                                className="mt-1 block w-full p-2 border rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300"
+                                className="mt-1 block w-full p-2 border rounded-md items-center shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300"
                                 name="gender"
                                 id="gender" onChange={fieldHandler}
                             >

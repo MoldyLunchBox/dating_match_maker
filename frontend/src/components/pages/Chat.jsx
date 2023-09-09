@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ChatBuble } from '../ChatBuble';
 import { setSelectedConversation } from '../../redux/reducers/slicer';
 import {mySocket} from '../../utils/socket'; // Import the socket instance
+import { useSocket } from '../../requests/socket';
 const Chat = () => {
 
     const token = useSelector((state) => state.auth.token);
@@ -12,7 +13,8 @@ const Chat = () => {
     const messages = useSelector((state) => state.chat.messages)
     const selectedConversation = useSelector((state) => state.chat.selectedConversation)
     const messagesRef = useRef();
-    const [socket, setSocket] = useState(null);
+    const socket = useSocket();
+
 
     const [me, setMe] = useState(null)
     const dispatch = useDispatch()
@@ -34,6 +36,8 @@ const Chat = () => {
             // setMessages(updatedMessages);
 
             if (socket) {
+                if (socket)
+                socket.emit("test", { test: "poop" })
                 socket.emit('sendMessage', {
                     message: newMessage,
                     conversation_id: selectedConversation.conversation_id
@@ -52,14 +56,14 @@ const Chat = () => {
         // setMessages([]);
     };
 
-    useEffect(() => {
-        console.log("this is token", token)
-        const newSocket = mySocket(token)
-        setSocket(newSocket);
-        return () => {
-            newSocket.disconnect();
-        };
-    }, []);
+    // useEffect(() => {
+    //     console.log("this is token", token)
+    //     const newSocket = mySocket(token)
+    //     setSocket(newSocket);
+    //     return () => {
+    //         newSocket.disconnect();
+    //     };
+    // }, []);
 
     useEffect(() => {
         if (socket) {

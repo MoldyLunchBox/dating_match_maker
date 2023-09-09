@@ -3,15 +3,17 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedConversation } from '../redux/reducers/slicer';
 import { useNavigate } from "react-router-dom";
+import { useQuery } from 'react-query';
 
 
 export const UserSearchBadge = ({ status, avatar, fname, lname, username, id, socket }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
-
-
+    
+    
     const handleAdd = async (user) => {
         try {
+            const { data, isLoading, isError } = useQuery('userProfile', checkTokenValidity);
             const response = await axios.post('http://localhost:3001/users/addFriend', {
                 username: user,
             }, { withCredentials: true });
