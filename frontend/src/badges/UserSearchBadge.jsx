@@ -9,6 +9,7 @@ import { useQuery } from 'react-query';
 export const UserSearchBadge = ({ status, avatar, fname, lname, username, id, socket }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
+  const { data, isLoading, isError } = useQuery('userProfile', checkTokenValidity);
     
     
     const handleAdd = async (user) => {
