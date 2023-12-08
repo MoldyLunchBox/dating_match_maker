@@ -11,7 +11,7 @@ import { useQuery } from 'react-query';
 import { checkTokenValidity } from './requests/auth';
 
 const PrivateRoute = ({ element, ...rest }) => {
-  const [isTokenValid, setIsTokenValid] = useState(null); // Use null as initial value
+  const [isTokenValid, setIsTokenValid] = useState(null);  
   const dispatch = useDispatch()
   const { data, isLoading, isError } = useQuery('userProfile', checkTokenValidity);
   useEffect(() => {

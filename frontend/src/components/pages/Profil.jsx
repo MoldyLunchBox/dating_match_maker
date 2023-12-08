@@ -16,6 +16,7 @@ export const Profil = () => {
   const dispatch = useDispatch()
   // init socket
   useEffect(() => {
+    console.log("my token first was ", token)
     const newSocket = mySocket(token);
     setSockets(newSocket);
     dispatch(setSocket(newSocket))

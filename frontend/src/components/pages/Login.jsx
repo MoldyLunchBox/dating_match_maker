@@ -19,16 +19,15 @@ export const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      console.log("yo")
       const response = await axios.post('http://localhost:3001/users/login', {
         username: username,
         password: password,
       }, {
         withCredentials: true
       });
-      console.log(response)
       if (response.data && !response.data.error) {
-        navigate('/home');
+        console.log("this is the token at login", response.data)
+        // navigate('/home');
       }
       else
         console.log(response.data.error)

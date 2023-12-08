@@ -5,7 +5,7 @@ const { query, fetchInfo, saveInfo } = require("../../utils/utils");
 const profileView = async (socket, data, id) => {
   try {
     const { token, username } = data
-    console.log("here we go we r in teh getdata", data, id)
+    console.log("here we go we r in teh socket profileView", data, id)
     if (!data || !token || !username || !id) {
       return socket.emit("profileData", { msg: null })
 
@@ -18,9 +18,7 @@ const profileView = async (socket, data, id) => {
       const likes = await fetchInfo("likes", "is_like", "liked_id =?", user[0].id);
       const likesCount = likes.filter(record => record.is_like === 1).length;
       const dislikesCount = likes.filter(record => record.is_like === 0).length;
-      console.log(likes);
-      console.log("likes", likesCount, "dislikes", dislikesCount);
-      
+ 
       const userData = { ...user[0], views: views.length, likes: likesCount, dislikes: dislikesCount }
       socket.emit("profileData", { msg: userData })
     }

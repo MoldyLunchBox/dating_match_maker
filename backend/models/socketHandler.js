@@ -17,11 +17,12 @@ const setupSocketServer = (server) => {
 
   io.on('connection', (socket) => {
     try {
-      const cooki =  socket.handshake.headers.cookie
-      console.log( "cookie", cooki)
-      const {token} =  cookie.parse(cooki); //does not translate; // Access the token from the query parameter
-      console.log('A user connected', token);
-      const decodedToken = jwt.verify(token, jwtSecret);
+      // const cooki =  socket.handshake.headers
+      // console.log("hello")
+      // console.log( "cookie :::::::::: ", cooki.token)
+      // const {token} =  cookie.parse(cooki); //does not translate; // Access the token from the query parameter
+      // console.log('A user connected', token);
+      const decodedToken = jwt.verify(socket.handshake.headers.token, jwtSecret);
       const id = decodedToken.userId; // Attach the user ID to the request object
       connectedSockets.set(id, socket);
       socket.emit("getId", { id: id })
@@ -37,7 +38,8 @@ const setupSocketServer = (server) => {
         console.log('A user disconnected');
       });
     } catch (err) {
-      console.log(err)
+      socket.disconnect();
+      console.log(socket.handshake.headers.token,  ' has a wrong token')
     }
   });
 };
