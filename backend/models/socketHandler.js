@@ -22,6 +22,7 @@ const setupSocketServer = (server) => {
       // console.log( "cookie :::::::::: ", cooki.token)
       // const {token} =  cookie.parse(cooki); //does not translate; // Access the token from the query parameter
       // console.log('A user connected', token);
+      console.log("socker token check", socket.handshake.headers.token)
       const decodedToken = jwt.verify(socket.handshake.headers.token, jwtSecret);
       const id = decodedToken.userId; // Attach the user ID to the request object
       connectedSockets.set(id, socket);

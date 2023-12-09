@@ -12,6 +12,7 @@ const authSlice = createSlice({
     setToken: (state, action) => {
       console.log("action dispatched , this token : ", action.payload)
       state.token = action.payload;
+      localStorage.setItem("token", state.token)
     },
   },
 });

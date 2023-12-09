@@ -106,7 +106,7 @@ const login = async (req, res) => {
                 domain: "localhost",
                 sameSite: "lax", // Set to "None" for cross-origin requests with Secure
                 secure: false,     // Set to true when using HTTPS
-              }).json({ valid: true });
+            }).json({ valid: true, token: token });
         }
         else {
             log("nooo user")
