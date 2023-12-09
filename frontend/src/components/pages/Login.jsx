@@ -5,6 +5,8 @@ import { setToken } from '../../redux/reducers/slicer';
 import { useNavigate } from 'react-router-dom';
 import { Info } from 'react-feather';
 import { InfoModal } from '../../modals/InfoModal';
+import TextField from '@mui/material/TextField';
+
 export const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -39,23 +41,42 @@ export const Login = () => {
 
 
   return (
-    <div className="h-screen bg-indigo-100 flex justify-center items-center">
+    <div className="h-screen bg-cover bg-no-repeat flex justify-center  items-center" style={{ backgroundImage: "url('images/login-bg.jpg')" }}>
       {registered ? <InfoModal /> : null}
       <div className="lg:w-2/5 md:w-1/2 w-2/3 max-w-[509px]">
-        <form onSubmit={handleLogin} className=" bg-white p-10 rounded-lg shadow-lg min-w-full">
-          <h1 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">Log in</h1>
-          <div>
-            <label className="text-gray-800 font-semibold block my-3 text-md" htmlFor="username">Username</label>
-            <input value={username} onChange={(e) => setUsername(e.target.value)} className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="text" name="username" id="username" placeholder="username" />
-          </div>
+        <form onSubmit={handleLogin} className="bg-opacity-75   bg-white p-10 md:px-20 rounded-lg shadow-lg min-w-full">
+          <h1 className="text-center text-5xl text-[#009EE2] font-bold font-sans">WELCOME</h1>
+          <h6 className='text-center text-sm text-gray-500 font-light mb-6'>Login with username</h6>
 
-          <div>
-            <label className="text-gray-800 font-semibold block my-3 text-md" htmlFor="password">Password</label>
-            <input value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="text" name="password" id="password" placeholder="password" />
-          </div>
+          <div className=' flex flex-col gap-4'>
 
-          <button onClick={handleLogin} type="submit" className="w-full  shadow mt-6 mb-3 bg-indigo-100 rounded-lg px-4 py-2 text-lg text-gray-800 tracking-wide font-semibold font-sans">Login</button>
-          <button type="submit" onClick={() => navigate('/register')} className="w-full shadow mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans">Register</button>
+            <TextField
+              value={username} onChange={(e) => setUsername(e.target.value)} className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" type="text" name="username" placeholder="username"
+              required
+              id="outlined-required"
+              label="Username"
+
+            />
+
+            <TextField
+              id="outlined-password-input"
+              label="Password"
+              type="password"
+              autoComplete="current-password"
+              value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none" name="password" placeholder="password"
+
+            />
+            <h1 className='text-sm text-gray-500 text-right hover:cursor-pointer hover:underline'>forgot password ?</h1>
+          </div>
+          <div className=' flex flex-col justify-center items-center'>
+
+            <button onClick={handleLogin} type="submit" className="shadow mt-6 mb-3 bg-[#009EE2] w-auto rounded-lg px-7 py-2 text-lg text-white tracking-wide font-semibold font-sans">Login</button>
+            <div className="flex gap-1 items-center">
+              <span className='text-gray-600 text-sm'>Don’t have account? </span>
+              <span className='hover:underline hover:cursor-pointer' onClick={() => navigate('/register')}>Register Now</span>
+            </div>
+            {/* <button type="submit" onClick={() => navigate('/register')} className="w-full shadow mt-6 bg-indigo-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans">Register</button> */}
+          </div>
         </form>
       </div>
     </div>
