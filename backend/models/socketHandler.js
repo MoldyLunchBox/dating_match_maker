@@ -17,13 +17,13 @@ const setupSocketServer = (server) => {
 
   io.on('connection', (socket) => {
     try {
-      // const cooki =  socket.handshake.headers
-      // console.log("hello")
-      // console.log( "cookie :::::::::: ", cooki.token)
-      // const {token} =  cookie.parse(cooki); //does not translate; // Access the token from the query parameter
+      console.log("hello", socket.handshake)
+      const cooki =  socket.handshake.headers.cookie
+      console.log( "cookie :::::::::: ", cooki)
+      const {token} =  cookie.parse(cooki); //does not translate; // Access the token from the query parameter
       // console.log('A user connected', token);
-      console.log("socker token check", socket.handshake.headers.token)
-      const decodedToken = jwt.verify(socket.handshake.headers.token, jwtSecret);
+      console.log("socker token check", token)
+      const decodedToken = jwt.verify(token, jwtSecret);
       const id = decodedToken.userId; // Attach the user ID to the request object
       connectedSockets.set(id, socket);
       socket.emit("getId", { id: id })
