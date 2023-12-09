@@ -7,6 +7,7 @@ import { Loading } from '../../modals/Loading';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setRegistered } from '../../redux/reducers/slicer';
+import TextField from '@mui/material/TextField';
 
 export const Register = () => {
     const [categories, setCategories] = useState(null)
@@ -98,30 +99,29 @@ export const Register = () => {
                         <UploadPicture file={file} setFile={setFile} />
 
                     </div>
-                    <div>
-                        <label className="label">
-                            <span className="text-base label-text">Username</span>
-                        </label>
-                        <input required name="username" id="username" onChange={fieldHandler} type="text" placeholder="Username" className="w-full input input-bordered" />
-                    </div>
-                    <div>
-                        <label className="label">
-                            <span className="text-base label-text">First name</span>
-                        </label>
-                        <input required name="fname" id="fname" type="text" onChange={fieldHandler} placeholder="First name" className="w-full   input input-bordered" />
-                    </div>
-                    <div>
-                        <label className="label">
-                            <span className="text-base label-text">Last name</span>
-                        </label>
-                        <input required name="lname" id="lname" onChange={fieldHandler} type="text" placeholder="Last name" className="w-full input input-bordered" />
-                    </div>
-                    <div>
-                        <label className="label">
-                            <span className="text-base label-text">Email</span>
-                        </label>
-                        <input required name="email" id="email" onChange={fieldHandler} type="text" placeholder="Email Address" className="w-full input input-bordered" />
-                    </div>
+
+                    <TextField
+                        required name="username" id="username" onChange={fieldHandler} type="text" placeholder="Username" className="w-full input input-bordered"
+                        // id="outlined-required"
+                        label="Username"
+
+                    />
+                    <TextField
+                        required name="fname" id="fname" type="text" onChange={fieldHandler} placeholder="First name" className="w-full   input input-bordered"
+                        // id="outlined-required"
+                        label="First Name"
+                    />
+                    <TextField
+                        required name="lname" id="lname" onChange={fieldHandler} type="text" placeholder="Last name" className="w-full input input-bordered"
+                        // id="outlined-required"
+                        label="Last Name"
+                    />
+                    <TextField
+                        required name="email" id="email" onChange={fieldHandler} type="text" placeholder="Email Address" className="w-full input input-bordered"
+                        // id="outlined-required"
+                        label="email"
+                    />
+                   
                     <div>
 
                         <div>
@@ -184,7 +184,7 @@ export const Register = () => {
                                                             {
                                                                 category.interests.map((interest, index) => (
                                                                     <li key={index} onClick={() => handleInterestToggle(interest)} className='cursor-pointer items-center flex space-y-1 space-x-1'>
-                                                                        <input onChange={()=>{}} checked={selectedInterests.includes(interest)}
+                                                                        <input onChange={() => { }} checked={selectedInterests.includes(interest)}
 
                                                                             type="checkbox" className="checkbox" />
                                                                         <div>
