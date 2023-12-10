@@ -7,7 +7,6 @@ import { Loading } from '../../modals/Loading';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setRegistered } from '../../redux/reducers/slicer';
-import TextField from '@mui/material/TextField';
 
 export const Register = () => {
     const [categories, setCategories] = useState(null)
@@ -99,29 +98,35 @@ export const Register = () => {
                         <UploadPicture file={file} setFile={setFile} />
 
                     </div>
+                    <div className='flex flex-row gap-5'>
+                        <div>
+                            <label className="label">
+                                <span className="text-base label-text">Username</span>
+                            </label>
+                            <input required name="username" id="username" onChange={fieldHandler} type="text" placeholder="Username" className="w-full input input-bordered" />
+                        </div>
+                        <div>
+                            <label className="label">
+                                <span className="text-base label-text">Email</span>
+                            </label>
+                            <input required name="email" id="email" onChange={fieldHandler} type="text" placeholder="Email Address" className="w-full input input-bordered" />
+                        </div>
+                    </div>
+                    <div className='flex flex-row gap-5'>
 
-                    <TextField
-                        required name="username" id="username" onChange={fieldHandler} type="text" placeholder="Username" className="w-full input input-bordered"
-                        // id="outlined-required"
-                        label="Username"
-
-                    />
-                    <TextField
-                        required name="fname" id="fname" type="text" onChange={fieldHandler} placeholder="First name" className="w-full   input input-bordered"
-                        // id="outlined-required"
-                        label="First Name"
-                    />
-                    <TextField
-                        required name="lname" id="lname" onChange={fieldHandler} type="text" placeholder="Last name" className="w-full input input-bordered"
-                        // id="outlined-required"
-                        label="Last Name"
-                    />
-                    <TextField
-                        required name="email" id="email" onChange={fieldHandler} type="text" placeholder="Email Address" className="w-full input input-bordered"
-                        // id="outlined-required"
-                        label="email"
-                    />
-                   
+                        <div>
+                            <label className="label">
+                                <span className="text-base label-text">First name</span>
+                            </label>
+                            <input required name="fname" id="fname" type="text" onChange={fieldHandler} placeholder="First name" className="w-full   input input-bordered" />
+                        </div>
+                        <div>
+                            <label className="label">
+                                <span className="text-base label-text">Last name</span>
+                            </label>
+                            <input required name="lname" id="lname" onChange={fieldHandler} type="text" placeholder="Last name" className="w-full input input-bordered" />
+                        </div>
+                    </div>
                     <div>
 
                         <div>
@@ -139,19 +144,22 @@ export const Register = () => {
                         </div>
 
                     </div>
-                    <div>
-                        <label className="label">
-                            <span className="text-base label-text">Password</span>
-                        </label>
-                        <input required name="password" type="password" placeholder="Enter Password"
-                            className="w-full input input-bordered" />
-                    </div>
-                    <div className='mb-4'>
-                        <label className="label">
-                            <span className="text-base label-text">Confirm Password</span>
-                        </label>
-                        <input required type="password" placeholder="Confirm Password"
-                            className="w-full input input-bordered" />
+                    <div className='flex flex-row gap-5'>
+
+                        <div>
+                            <label className="label">
+                                <span className="text-base label-text">Password</span>
+                            </label>
+                            <input required name="password" type="password" placeholder="Enter Password"
+                                className="w-full input input-bordered" />
+                        </div>
+                        <div className='mb-4'>
+                            <label className="label">
+                                <span className="text-base label-text">Confirm Password</span>
+                            </label>
+                            <input required type="password" placeholder="Confirm Password"
+                                className="w-full input input-bordered" />
+                        </div>
                     </div>
                     <div className='relative '>
                         <label className="   bg-white label">

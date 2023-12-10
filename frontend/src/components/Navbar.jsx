@@ -45,7 +45,7 @@ export const Navbar = () => {
                 <Link to="/match" className="hover:text-gray-500">Match maker</Link>
               </li>
               <li>
-                <Link to="/logout" className="hover:text-gray-500">Log out</Link>
+                <Link to="/profile/real_abdu123" className="hover:text-gray-500">Profile</Link>
               </li>
             </ul>
           </div>
