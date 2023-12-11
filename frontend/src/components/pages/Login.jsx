@@ -2,18 +2,20 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../redux/reducers/slicer';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Info } from 'react-feather';
 import { InfoModal } from '../../modals/InfoModal';
 import TextField from '@mui/material/TextField';
+import axiosInstance from '../../requests/instance'; // Import your custom Axios instance
 
 export const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const registered = useSelector((state) => state.modals.registered)
-
+  const from = location.state?.from?.pathname || "/";
 
 
 
@@ -21,16 +23,14 @@ export const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/users/login', {
+      const response = await axiosInstance.post('http://localhost:3001/users/login', {
         username: username,
         password: password,
-      }, {
-        withCredentials: true
       });
       if (response.data && !response.data.error) {
         console.log("this is the token at login", response.data)
         dispatch(setToken(response.data.token))
-        // navigate('/home');
+        navigate(from, {replace : true});
       }
       else
         console.log(response.data.error)
@@ -38,7 +38,6 @@ export const Login = () => {
       console.error('Login failed:', error);
     }
   };
-
 
   return (
     <div className="h-screen bg-cover bg-no-repeat flex justify-center  items-center" style={{ backgroundImage: "url('images/login-bg.jpg')" }}>
