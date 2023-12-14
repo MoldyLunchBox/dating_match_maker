@@ -16,6 +16,7 @@ export const Login = () => {
   const location = useLocation();
   const registered = useSelector((state) => state.modals.registered)
   const from = location.state?.from?.pathname || "/";
+  const mytoken = useSelector((state) => state.auth.token)
 
 
 

@@ -14,6 +14,7 @@ const PrivateRoute = ({ element, ...rest }) => {
   const [isTokenValid, setIsTokenValid] = useState(null);  
   const dispatch = useDispatch()
   const { data, isLoading, isError } = useQuery('userProfile', checkTokenValidity);
+  console.log("private route was called")
   useEffect(() => {
     if (data)
       setIsTokenValid(true)
