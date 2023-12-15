@@ -9,13 +9,27 @@ import io from 'socket.io-client';
 import { setSocket } from './redux/reducers/slicer';
 import { useQuery } from 'react-query';
 import { checkTokenValidity } from './requests/auth';
+import axiosInstance from './requests/instance'; // Import your custom Axios instance
 
 const PrivateRoute = ({ element, ...rest }) => {
   const [isTokenValid, setIsTokenValid] = useState(null);  
+  const [data, setData] = useState(null)
+  const token = useSelector((state)=>state.auth.token)
+  useEffect(  ()=>{
+    const fetchtheshit = async () => {
+      const response = await axiosInstance.post('/api/validateToken')
+      setData(response.data.valid);
+    }
+     fetchtheshit()
+  },[token])
   const dispatch = useDispatch()
-  const { data, isLoading, isError } = useQuery('userProfile', checkTokenValidity);
+  // const { data, isLoading, isError,refetch } = useQuery('userProfile', checkTokenValidity,{
+  //   fetchPolicy: "no-cache"
+  // });
   console.log("private route was called")
   useEffect(() => {
+  console.log("and data is", data)
+
     if (data)
       setIsTokenValid(true)
   }, [data]);

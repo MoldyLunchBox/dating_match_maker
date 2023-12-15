@@ -31,7 +31,7 @@ export const Login = () => {
       if (response.data && !response.data.error) {
         console.log("this is the token at login", response.data)
         dispatch(setToken(response.data.token))
-        navigate(from, {replace : true});
+        navigate("/home");
       }
       else
         console.log(response.data.error)
